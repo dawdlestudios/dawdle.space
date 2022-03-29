@@ -6,19 +6,21 @@ html {
   background: url(/assets/starfield.gif);
   color: white;
   height: 100%;
+  display: flex;
 }
 
 body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100%;
+  flex: 1;
   margin: 0;
+  padding: 1rem;
 }
 
 header {
   margin-top: 10rem;
-  font-size: 3rem;
+  font-size: calc(3vw + 1rem);
 }
 
 header,
@@ -34,13 +36,18 @@ main {
   flex: 1;
 }
 
+main > img {
+  max-width: calc(100vw - 3rem);
+}
+
 #badges {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 #badges img {
-  padding: 0 0.8rem;
+  padding: 0.4rem 0.8rem;
 }
 
 @keyframes flicker {
