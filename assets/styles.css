@@ -1,12 +1,41 @@
 html {
   font-family: Times, "Times New Roman", serif;
-  letter-spacing: 8px;
+  letter-spacing: 6px;
   font-smooth: never;
   -webkit-font-smoothing: none;
   background-color: black;
   color: white;
   height: 100%;
   display: flex;
+}
+
+pre {
+  letter-spacing: 0px;
+  font-family: monospace;
+}
+
+a {
+  color: white;
+  text-decoration-style: wavy;
+  text-decoration-color: #e7e7e7a4;
+}
+
+a:hover {
+  text-decoration-color: white;
+}
+
+h1,
+p {
+  margin: 0.5rem;
+}
+
+p {
+  line-height: 1.5;
+}
+
+.blog article > p {
+  letter-spacing: 2px;
+  line-height: 2;
 }
 
 ::selection {
@@ -43,7 +72,9 @@ header {
 
 header,
 h1,
-p {
+p.flicker,
+pre,
+time {
   animation-duration: 0.1s;
   animation-name: flicker;
   animation-iteration-count: infinite;
@@ -108,4 +139,19 @@ main > nav > ul > li > a > img {
   100% {
     text-shadow: 2px 0.5px 2px #ea36af, -1px -0.5px 2px #75fa69;
   }
+}
+
+.blog article {
+  max-width: 60rem;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+}
+
+.blog article > div {
+  display: flex;
+  align-items: center;
+}
+.blog article > div > time {
+  margin-left: 1rem;
 }
