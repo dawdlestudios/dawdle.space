@@ -8,11 +8,21 @@
     <link rel="stylesheet" href="assets/styles.css" />
   </head>
   <body>
-    <iframe src="assets/bg.ogg" allow="autoplay" style="display: none">
+    <audio loop id="audio" src="assets/bg.ogg" autoplay></audio>
+    <script>document.onclick = () => document.querySelector("#audio").play()</script>
     </iframe>
-    <header>⌈dawdle.space⌋</header>
+    <header>⌈<b>dawdle</b>.space⌋</header>
     <main>
-      <img src="./assets/sonic.gif" />
+      <nav>
+        <ul> 
+          <li>
+            <a target="_blank" rel="nofollow" href="https://dawdle.123Guestbook.com"><img src="./assets/nav-guestbook.gif">guest- book</a></li>
+          <li>
+            <a href=""><img src="./assets/nav-space.gif">space</a></li>
+          <li>
+            <a href=""><img src="./assets/nav-blog.png">blog</a></li>
+        </ul>
+      </nav>
     </main>
     <footer>
       <div id="badges">
@@ -26,9 +36,3 @@
     </footer>
   </body>
 </html>
-
-<!-- credits
-
-    https://alexibeeart.tumblr.com/post/184626021261/ff16-neonstars
-
--->

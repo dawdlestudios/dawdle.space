@@ -3,10 +3,14 @@ html {
   letter-spacing: 8px;
   font-smooth: never;
   -webkit-font-smoothing: none;
-  background: url(/assets/starfield.gif);
+  background-color: black;
   color: white;
   height: 100%;
   display: flex;
+}
+
+::selection {
+  background: #05ffb441;
 }
 
 body {
@@ -16,6 +20,20 @@ body {
   flex: 1;
   margin: 0;
   padding: 1rem;
+}
+
+html:before {
+  content: " ";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.1;
+  background-image: url(/assets/strobe.gif);
+  pointer-events: none;
 }
 
 header {
@@ -34,6 +52,9 @@ p {
 
 main {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 main > img {
@@ -48,6 +69,35 @@ main > img {
 
 #badges img {
   padding: 0.4rem 0.8rem;
+}
+
+footer > p {
+  text-align: center;
+}
+
+main > nav > ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+}
+
+main > nav > ul > li {
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem 1rem;
+  width: 5rem;
+  text-align: center;
+  align-items: center;
+}
+
+main > nav > ul > li > a {
+  color: white;
+}
+
+main > nav > ul > li > a > img {
+  margin-bottom: 1rem;
+  height: 2rem;
+  max-width: 3rem;
 }
 
 @keyframes flicker {
