@@ -6,6 +6,8 @@ html {
   background-color: black;
   color: white;
   height: 100%;
+  min-height: -webkit-fill-available;
+  min-height: fill-available;
   display: flex;
 }
 
@@ -16,8 +18,11 @@ pre {
 
 a {
   color: white;
-  text-decoration-style: wavy;
-  text-decoration-color: #e7e7e7a4;
+  text-decoration-style: dashed;
+  text-decoration-color: #e7e7e756;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  transition: all ease-in-out .1s;
 }
 
 a:hover {
@@ -107,7 +112,10 @@ footer > p {
 }
 
 main > nav > ul {
+  max-width: 26rem;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   list-style: none;
   padding: 0;
 }
@@ -152,6 +160,22 @@ main > nav > ul > li > a > img {
   display: flex;
   align-items: center;
 }
+
 .blog article > div > time {
   margin-left: 1rem;
+}
+
+@media only screen and (max-width: 50rem) {
+  .blog article > div {
+    flex-direction: column;
+  }
+
+  .blog article > div > p{
+    text-align: justify;
+  }
+
+  .blog article > div > time {
+    margin-left: 0rem;
+    margin-bottom: 1rem;
+  }
 }
