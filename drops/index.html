@@ -13,7 +13,26 @@
     >
     <header>⌈drops⌋</header>
     <main>
-      <h1>Coming Soon :)</h1>
+      <form
+        id="drops"
+        action="https://mailthis.to/drop@dawdle.space"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <label>How did you find dawdle.space?</label>
+        <input type="text" name="alias" placeholder="Sonic" />
+        <br />
+
+        <label>What's your E-Mail address?</label>
+        <input type="email" name="_replyto" placeholder="your@email.com" />
+        <br />
+
+        <input type="hidden" name="_subject" value="New Drop" />
+        <input type="hidden" name="_after" value="https://dawdle.space/" />
+        <input type="hidden" name="_honeypot" value="" />
+        <input type="hidden" name="_confirmation" value="" />
+        <input type="submit" value="Submit" />
+      </form>
     </main>
   </body>
 </html>

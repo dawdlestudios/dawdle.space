@@ -1,5 +1,8 @@
-html {
+* {
   font-family: Times, "Times New Roman", serif;
+}
+
+html {
   letter-spacing: 6px;
   font-smooth: never;
   -webkit-font-smoothing: none;
@@ -9,6 +12,17 @@ html {
   min-height: -webkit-fill-available;
   min-height: fill-available;
   display: flex;
+}
+
+body {
+  cursor: url("/assets/cursor.png"), auto;
+}
+
+a,
+button,
+input[type="submit"],
+input[type="reset"] {
+  cursor: url("/assets/cursor2.png"), auto;
 }
 
 pre {
@@ -73,6 +87,10 @@ html:before {
 header {
   margin-top: 10rem;
   font-size: calc(3vw + 1rem);
+}
+
+header > video {
+  height: 15rem;
 }
 
 header,
@@ -179,4 +197,154 @@ main > nav > ul > li > a > img {
     margin-left: 0rem;
     margin-bottom: 1rem;
   }
+}
+
+button,
+input[type="submit"],
+input[type="reset"] {
+  box-sizing: border-box;
+  border: none;
+  background: #c0c0c0;
+  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #ffffff,
+    inset -2px -2px #808080, inset 2px 2px #dfdfdf;
+  border-radius: 0;
+
+  min-width: 75px;
+  min-height: 23px;
+  padding: 0 12px;
+}
+
+.vertical-bar {
+  width: 4px;
+  height: 20px;
+  background: #c0c0c0;
+  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #ffffff,
+    inset -2px -2px #808080, inset 2px 2px #dfdfdf;
+}
+
+button:not(:disabled):active,
+input[type="submit"]:not(:disabled):active,
+input[type="reset"]:not(:disabled):active {
+  box-shadow: inset -1px -1px #ffffff, inset 1px 1px #0a0a0a,
+    inset -2px -2px #dfdfdf, inset 2px 2px #808080;
+  padding: 2px 11px 0 13px;
+}
+
+@media (not(hover)) {
+  button:not(:disabled):hover,
+  input[type="submit"]:not(:disabled):hover,
+  input[type="reset"]:not(:disabled):hover {
+    box-shadow: inset -1px -1px #ffffff, inset 1px 1px #0a0a0a,
+      inset -2px -2px #dfdfdf, inset 2px 2px #808080;
+  }
+}
+
+button:focus,
+input[type="submit"]:focus,
+input[type="reset"]:focus {
+  outline: 1px dotted #000000;
+  outline-offset: -4px;
+}
+
+button::-moz-focus-inner,
+input[type="submit"]::-moz-focus-inner,
+input[type="reset"]::-moz-focus-inner {
+  border: 0;
+}
+
+:disabled,
+:disabled + label,
+input[readonly],
+input[readonly] + label {
+  color: #808080;
+}
+
+button:disabled,
+input[type="submit"]:disabled,
+input[type="reset"]:disabled,
+:disabled + label {
+  text-shadow: 1px 1px 0 #ffffff;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+select,
+textarea {
+  padding: 3px 4px;
+  border: none;
+  box-shadow: inset -1px -1px #ffffff, inset 1px 1px #808080,
+    inset -2px -2px #dfdfdf, inset 2px 2px #0a0a0a;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 0;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+select {
+  height: 21px;
+}
+input[type="number"] {
+  /* need this 1 pixel to fit the spinner controls in box */
+  height: 22px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"] {
+  /* For some reason descenders are getting cut off without this */
+  line-height: 2;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input {
+  padding: 0.1rem 0.6rem;
+  height: auto;
+  line-height: 2;
+  color: black;
+  margin: 0.3rem;
+}
+
+input[type="email"]:disabled,
+input[type="password"]:disabled,
+input[type="text"]:disabled,
+input[type="number"]:disabled,
+input[type="email"]:read-only,
+input[type="password"]:read-only,
+input[type="text"]:read-only,
+input[type="number"]:read-only,
+textarea:disabled {
+  background-color: #c0c0c0;
+}
+
+select:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+  outline: none;
+}
+
+#drops {
+  display: flex;
+  flex-direction: column;
+}
+
+#drops label {
+  font-size: 1.4rem;
+}
+
+#drops input {
+  font-size: 1.4rem;
 }
