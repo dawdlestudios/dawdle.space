@@ -11,8 +11,15 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v2
-      - name: PNPM
-        uses: pnpm/action-setup@v2.1.0
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - uses: pnpm/action-setup@v2.0.1
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7
       - name: Build
         run: pnpm build
       - name: Deploy
