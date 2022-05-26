@@ -1,0 +1,369 @@
+* {
+  font-family: Times, "Times New Roman", serif;
+}
+
+html {
+  letter-spacing: 6px;
+  font-smooth: never;
+  -webkit-font-smoothing: none;
+  background-color: black;
+  color: white;
+  height: 100%;
+  min-height: -webkit-fill-available;
+  min-height: fill-available;
+  display: flex;
+  height: fit-content;
+}
+
+body {
+  cursor: url("/assets/img/cursor.png"), auto;
+  height: fit-content;
+}
+
+a,
+button,
+input[type="submit"],
+input[type="reset"] {
+  cursor: url("/assets/img/cursor2.png"), auto;
+}
+
+pre {
+  letter-spacing: 0px;
+  font-family: monospace;
+}
+
+a {
+  color: white;
+  text-decoration-style: dashed;
+  text-decoration-color: #e7e7e756;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  transition: all ease-in-out 0.1s;
+}
+
+a:hover {
+  text-decoration-color: white;
+}
+
+h1,
+p {
+  margin: 0.5rem;
+}
+
+p {
+  line-height: 1.5;
+}
+
+.blog article > p {
+  letter-spacing: 2px;
+  line-height: 2;
+}
+
+::selection {
+  background: #05ffb441;
+}
+
+.back-btn {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.534);
+  text-decoration: none;
+}
+
+.back-btn > span {
+  font-size: 1rem;
+}
+
+body {
+  margin: 0;
+  width: 100%;
+}
+
+body > div.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  margin: 0;
+  padding: 1rem;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+html:before {
+  content: " ";
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.1;
+  background-image: url("/assets/img/strobe.gif");
+  pointer-events: none;
+}
+
+header {
+  margin-top: 10rem;
+  font-size: calc(3vw + 1rem);
+}
+
+header > video {
+  height: 15rem;
+}
+
+header,
+h1,
+p.flicker,
+pre,
+.flicker,
+time {
+  animation-duration: 0.1s;
+  animation-name: flicker;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+main > img {
+  max-width: calc(100vw - 3rem);
+}
+
+#badges {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+#badges img {
+  padding: 0.4rem 0.8rem;
+}
+
+footer > p {
+  text-align: center;
+}
+
+main > nav > ul {
+  max-width: 26rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  list-style: none;
+  padding: 0;
+}
+
+main > nav > ul > li {
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem 1rem;
+  width: 5.5rem;
+  text-align: center;
+  align-items: center;
+}
+
+main > nav > ul > li > a {
+  color: white;
+}
+
+main > nav > ul > li > a > img {
+  margin-bottom: 0.3rem;
+  height: 2rem;
+  max-width: 3rem;
+}
+
+@keyframes flicker {
+  0% {
+    text-shadow: 1px 0 0 #ea36af, -2px 0 0 #75fa69;
+  }
+  10%,
+  100% {
+    text-shadow: 2px 0.5px 2px #ea36af, -1px -0.5px 2px #75fa69;
+  }
+}
+
+.blog article {
+  max-width: 60rem;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+}
+
+.blog article > div {
+  display: flex;
+  align-items: center;
+}
+
+.blog article > div > time {
+  margin-left: 1rem;
+}
+
+@media only screen and (max-width: 50rem) {
+  .blog article > div {
+    flex-direction: column;
+  }
+
+  .blog article > div > p {
+    text-align: justify;
+  }
+
+  .blog article > div > time {
+    margin-left: 0rem;
+    margin-bottom: 1rem;
+  }
+}
+
+button,
+input[type="submit"],
+input[type="reset"] {
+  box-sizing: border-box;
+  border: none;
+  background: #c0c0c0;
+  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #ffffff,
+    inset -2px -2px #808080, inset 2px 2px #dfdfdf;
+  border-radius: 0;
+
+  min-width: 75px;
+  min-height: 23px;
+  padding: 0 12px;
+}
+
+.vertical-bar {
+  width: 4px;
+  height: 20px;
+  background: #c0c0c0;
+  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #ffffff,
+    inset -2px -2px #808080, inset 2px 2px #dfdfdf;
+}
+
+button:not(:disabled):active,
+input[type="submit"]:not(:disabled):active,
+input[type="reset"]:not(:disabled):active {
+  box-shadow: inset -1px -1px #ffffff, inset 1px 1px #0a0a0a,
+    inset -2px -2px #dfdfdf, inset 2px 2px #808080;
+  padding: 2px 11px 0 13px;
+}
+
+@media (not(hover)) {
+  button:not(:disabled):hover,
+  input[type="submit"]:not(:disabled):hover,
+  input[type="reset"]:not(:disabled):hover {
+    box-shadow: inset -1px -1px #ffffff, inset 1px 1px #0a0a0a,
+      inset -2px -2px #dfdfdf, inset 2px 2px #808080;
+  }
+}
+
+button:focus,
+input[type="submit"]:focus,
+input[type="reset"]:focus {
+  outline: 1px dotted #000000;
+  outline-offset: -4px;
+}
+
+button::-moz-focus-inner,
+input[type="submit"]::-moz-focus-inner,
+input[type="reset"]::-moz-focus-inner {
+  border: 0;
+}
+
+:disabled,
+:disabled + label,
+input[readonly],
+input[readonly] + label {
+  color: #808080;
+}
+
+button:disabled,
+input[type="submit"]:disabled,
+input[type="reset"]:disabled,
+:disabled + label {
+  text-shadow: 1px 1px 0 #ffffff;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+select,
+textarea {
+  padding: 3px 4px;
+  border: none;
+  box-shadow: inset -1px -1px #ffffff, inset 1px 1px #808080,
+    inset -2px -2px #dfdfdf, inset 2px 2px #0a0a0a;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 0;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+select {
+  height: 21px;
+}
+input[type="number"] {
+  /* need this 1 pixel to fit the spinner controls in box */
+  height: 22px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"] {
+  /* For some reason descenders are getting cut off without this */
+  line-height: 2;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input {
+  padding: 0.1rem 0.6rem;
+  height: auto;
+  line-height: 2;
+  color: black;
+  margin: 0.3rem;
+}
+
+input[type="email"]:disabled,
+input[type="password"]:disabled,
+input[type="text"]:disabled,
+input[type="number"]:disabled,
+input[type="email"]:read-only,
+input[type="password"]:read-only,
+input[type="text"]:read-only,
+input[type="number"]:read-only,
+textarea:disabled {
+  background-color: #c0c0c0;
+}
+
+select:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+  outline: none;
+}
+
+#drops {
+  display: flex;
+  flex-direction: column;
+}
+
+#drops label {
+  font-size: 1.4rem;
+}
+
+#drops input {
+  font-size: 1.4rem;
+}
