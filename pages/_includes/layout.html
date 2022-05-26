@@ -8,16 +8,18 @@ title: dawdle.space
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>dawdle.space</title>
-    <link rel="stylesheet" href="/assets/styles.css" />
+    <link rel="stylesheet" href="/assets/styles.css?v=1" />
     <title>{{ title }}</title>
   </head>
   <body data-barba="wrapper">
+    <canvas id="background"></canvas>
+    <audio id="music" loop></audio>
     <div class="wrapper" data-barba="container">{{{ content }}}</div>
 
     <script
       data-turbo-permanent
       type="module"
-      src="/assets/scripts.js"
+      src="/assets/scripts.js?v=1"
     ></script>
   </body>
 </html>
