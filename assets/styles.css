@@ -12,17 +12,19 @@ html {
   min-height: -webkit-fill-available;
   min-height: fill-available;
   display: flex;
+  height: fit-content;
 }
 
 body {
-  cursor: url("/assets/cursor.png"), auto;
+  cursor: url("/assets/img/cursor.png"), auto;
+  height: fit-content;
 }
 
 a,
 button,
 input[type="submit"],
 input[type="reset"] {
-  cursor: url("/assets/cursor2.png"), auto;
+  cursor: url("/assets/img/cursor2.png"), auto;
 }
 
 pre {
@@ -61,26 +63,43 @@ p {
   background: #05ffb441;
 }
 
+.back-btn {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.534);
+  text-decoration: none;
+}
+
+.back-btn > span {
+  font-size: 1rem;
+}
+
 body {
+  margin: 0;
+  width: 100%;
+}
+
+body > div.wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
   flex: 1;
   margin: 0;
   padding: 1rem;
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
 html:before {
   content: " ";
   display: block;
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   z-index: 0;
   opacity: 0.1;
-  background-image: url(/assets/strobe.gif);
+  background-image: url("/assets/img/strobe.gif");
   pointer-events: none;
 }
 
