@@ -1,2 +1,5 @@
+
+!_site/.nojekyll
+!_site/CNAME
 node_modules 
 _site
