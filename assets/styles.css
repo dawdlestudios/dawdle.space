@@ -2,11 +2,22 @@
   font-family: Times, "Times New Roman", serif;
 }
 
+#background {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: black;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
 html {
   letter-spacing: 6px;
   font-smooth: never;
   -webkit-font-smoothing: none;
-  background-color: black;
   color: white;
   height: 100%;
   min-height: -webkit-fill-available;
@@ -79,6 +90,7 @@ body {
 }
 
 body > div.wrapper {
+  background: #000000b0;
   display: flex;
   flex-direction: column;
   align-items: center;
