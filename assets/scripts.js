@@ -2,12 +2,23 @@ import barba from "https://cdn.skypack.dev/@barba/core@v2.9.7";
 import butterchurn from "https://cdn.skypack.dev/butterchurn@v2.6.7";
 import butterchurnPresets from "https://cdn.skypack.dev/butterchurn-presets@v2.4.7";
 
-barba.init({});
+// const visualizer = ['Idiot - Star Of Annon'];
 
 const audioEl = playSong();
 const [audioCtx, audioNode] = createAudioContext(audioEl);
 const visualizer = setupAudioVisualizer(audioCtx, audioNode);
 connectToAudioAnalyzer(visualizer, audioCtx, audioNode);
+
+barba.init({
+    transitions: [
+      {
+        name: "default-transition",
+        enter() {
+          nextPreset(visualizer);
+        },
+      },
+    ],
+  });
 
 window.playSong = playSong;
 
@@ -21,7 +32,6 @@ window.addEventListener(
 window.addEventListener("click", () => {
   // check if context is in suspended state (autoplay policy)
   if (audioCtx.state === "suspended") audioCtx.resume();
-
   audioEl.play();
 });
 
@@ -57,19 +67,7 @@ function setupAudioVisualizer(audioCtx, audioNode) {
     height: window.innerHeight,
   });
 
-  const presets = butterchurnPresets.getPresets();
-  const preset =
-    presets[
-      Object.keys(presets)[
-        Math.floor(Math.random() * Object.keys(presets).length)
-      ]
-    ];
-
-  console.log(
-    Object.keys(presets)[
-      Math.floor(Math.random() * Object.keys(presets).length)
-    ]
-  );
+  const preset = selectRandomPreset();
 
   visualizer.loadPreset(preset, 0.0);
   window.requestAnimationFrame(loop);
@@ -90,4 +88,18 @@ function connectToAudioAnalyzer(visualizer, audioCtx, sourceNode) {
   gainNode.connect(biquadFilter);
 
   visualizer.connectAudio(biquadFilter);
+}
+
+function selectRandomPreset() {
+  const presets = butterchurnPresets.getPresets();
+  const keys = Object.keys(presets);
+  const key = keys[Math.floor(Math.random() * keys.length)];
+  const preset = presets[key];
+  console.log(key);
+
+  return preset;
+}
+
+function nextPreset(visualizer) {
+  visualizer.loadPreset(selectRandomPreset(), 1.5);
 }
