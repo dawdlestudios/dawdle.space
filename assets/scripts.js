@@ -81,13 +81,16 @@ function setupAudioVisualizer(audioCtx, audioNode) {
 }
 
 function connectToAudioAnalyzer(visualizer, audioCtx, sourceNode) {
-  const gainNode = audioCtx.createGain();
-  const biquadFilter = audioCtx.createBiquadFilter();
-  gainNode.gain.value = 2;
-  sourceNode.connect(gainNode);
-  gainNode.connect(biquadFilter);
 
-  visualizer.connectAudio(biquadFilter);
+  const gainNode = audioCtx.createGain();
+  gainNode.gain.value = 4;
+  sourceNode.connect(gainNode);
+
+  const analyzer = audioCtx.createAnalyser();
+  analyzer.fftSize = 2048;
+  gainNode.connect(analyzer);
+
+  visualizer.connectAudio(analyzer);
 }
 
 function selectRandomPreset() {
