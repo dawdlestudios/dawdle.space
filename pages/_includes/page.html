@@ -1,7 +1,10 @@
 ---
 layout: layout.html
-title: Page
 ---
 
-<a class="back-btn" href="/"><span>back</span></a>
-{{{content}}}
+{{#unless hide-header}}
+<header>
+  ⌈dawdle <b>{{{title}}}</b>⌋
+  <a class="back-btn" href="/"><span>back</span></a>
+</header>
+{{/unless}} {{{content}}}

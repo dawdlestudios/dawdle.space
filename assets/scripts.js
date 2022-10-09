@@ -2,23 +2,23 @@ import barba from "https://cdn.skypack.dev/@barba/core@v2.9.7";
 import butterchurn from "https://cdn.skypack.dev/butterchurn@v2.6.7";
 import butterchurnPresets from "https://cdn.skypack.dev/butterchurn-presets@v2.4.7";
 
-// const visualizer = ['Idiot - Star Of Annon'];
-
 const audioEl = playSong();
 const [audioCtx, audioNode] = createAudioContext(audioEl);
 const visualizer = setupAudioVisualizer(audioCtx, audioNode);
 connectToAudioAnalyzer(visualizer, audioCtx, audioNode);
 
+// https://peerjs.com
+
 barba.init({
-    transitions: [
-      {
-        name: "default-transition",
-        enter() {
-          nextPreset(visualizer);
-        },
+  transitions: [
+    {
+      name: "default-transition",
+      enter() {
+        nextPreset(visualizer);
       },
-    ],
-  });
+    },
+  ],
+});
 
 window.playSong = playSong;
 
@@ -66,7 +66,7 @@ function setupAudioVisualizer(audioCtx, audioNode) {
     width: window.innerWidth,
     height: window.innerHeight,
   });
-
+ 
   const preset = selectRandomPreset();
 
   visualizer.loadPreset(preset, 0.0);
@@ -81,7 +81,6 @@ function setupAudioVisualizer(audioCtx, audioNode) {
 }
 
 function connectToAudioAnalyzer(visualizer, audioCtx, sourceNode) {
-
   const gainNode = audioCtx.createGain();
   gainNode.gain.value = 4;
   sourceNode.connect(gainNode);

@@ -1,5 +1,44 @@
+@font-face {
+  font-family: "Redaction";
+  src: url("./font/Redaction-Regular.woff2");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Redaction";
+  src: url("./font/Redaction-Bold.woff2");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Redaction20";
+  src: url("./font/Redaction_20-Regular.woff2");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Redaction20";
+  src: url("./font/Redaction_20-Bold.woff2");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Redaction50";
+  src: url("./font/Redaction_50-Regular.woff2");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Redaction50";
+  src: url("./font/Redaction_50-Bold.woff2");
+  font-weight: 700;
+}
+
 * {
-  font-family: Times, "Times New Roman", serif;
+  font-family: "Redaction50", "Times New Roman", serif;
+}
+p {
+  font-family: "Redaction", "Times New Roman", serif;
 }
 
 #background {
@@ -50,6 +89,9 @@ a {
   text-underline-offset: 2px;
   text-decoration-thickness: 1px;
   transition: all ease-in-out 0.1s;
+  letter-spacing: 3px;
+  font-family: "Redaction", "Times New Roman", serif;
+  font-weight: 700;
 }
 
 a:hover {
@@ -75,13 +117,12 @@ p {
 }
 
 .back-btn {
-  position: absolute;
-  color: rgba(255, 255, 255, 0.534);
-  text-decoration: none;
+  font-family: "Redaction20";
+  color: rgba(255, 255, 255, 0.945);
 }
 
 .back-btn > span {
-  font-size: 1rem;
+  font-size: 1.3rem;
 }
 
 body {
@@ -101,6 +142,22 @@ body > div.wrapper {
   box-sizing: border-box;
 }
 
+body header.index {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+body header:not(.index) {
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+}
+
+body header:not(.index) b {
+  font-family: "Redaction";
+}
+
 html:before {
   content: " ";
   display: block;
@@ -111,12 +168,11 @@ html:before {
   height: 100%;
   z-index: 0;
   opacity: 0.1;
-  background-image: url("/assets/img/strobe.gif");
+  /* background-image: url("/assets/img/strobe.gif"); */
   pointer-events: none;
 }
 
 header {
-  margin-top: 10rem;
   font-size: calc(3vw + 1rem);
 }
 
@@ -155,6 +211,12 @@ main > img {
 
 #badges img {
   padding: 0.4rem 0.8rem;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  padding: 1rem;
 }
 
 footer > p {
@@ -378,4 +440,37 @@ textarea:focus {
 
 #drops input {
   font-size: 1.4rem;
+}
+
+div.navbar {
+  display: flex;
+  font-size: 1.2rem;
+  padding: 1rem 1.2rem;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  justify-content: flex-end;
+}
+div.navbar a {
+  text-decoration: none;
+  margin: 0 0.3rem;
+  opacity: 0.4;
+  transition: opacity 0.5s;
+}
+
+div.navbar a:hover {
+  margin: 0 0.3rem;
+  opacity: 0.8;
+}
+
+div.navbar:hover {
+  opacity: 1;
+}
+
+@media only screen and (max-width: 50rem) {
+  div.navbar {
+    align-items: center;
+    justify-content: center;
+  }
 }
