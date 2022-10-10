@@ -318,6 +318,10 @@ main > nav > ul > li > a > img {
     margin-left: 0rem;
     margin-bottom: 1rem;
   }
+
+  .things img {
+    display: none;
+  }
 }
 
 button,
