@@ -271,14 +271,16 @@ main > nav > ul > li > a > img {
 .things > div {
   display: flex;
   align-items: center;
+  max-width: 60rem;
+  padding: 1rem;
 }
 
 .things > div > a > img {
   width: 11rem;
   height: auto;
   margin-right: 2rem;
-  border-radius: 10px;
   overflow: hidden;
+  opacity: 0.9;
 }
 
 .things > div > article > a {
@@ -319,8 +321,12 @@ main > nav > ul > li > a > img {
     margin-bottom: 1rem;
   }
 
+  .things > div {
+    flex-direction: column;
+  }
+
   .things img {
-    display: none;
+    margin: 1rem;
   }
 }
 
