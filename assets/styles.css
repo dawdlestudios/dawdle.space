@@ -107,7 +107,7 @@ p {
   line-height: 1.5;
 }
 
-.blog article > p {
+.articles article > p {
   letter-spacing: 2px;
   line-height: 2;
 }
@@ -123,6 +123,13 @@ p {
 
 .back-btn > span {
   font-size: 1.3rem;
+}
+
+.about footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 body {
@@ -261,32 +268,53 @@ main > nav > ul > li > a > img {
   }
 }
 
-.blog article {
+.things > div {
+  display: flex;
+  align-items: center;
+}
+
+.things > div > a > img {
+  width: 11rem;
+  height: auto;
+  margin-right: 2rem;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.things > div > article > a {
+  text-decoration: none;
+}
+
+.things article {
+  margin-bottom: 0 !important;
+}
+
+.articles article {
   max-width: 60rem;
   display: flex;
   flex-direction: column;
   margin-bottom: 2rem;
 }
 
-.blog article > div {
+.articles article > div {
   display: flex;
   align-items: center;
 }
 
-.blog article > div > time {
+.articles article > div > time {
   margin-left: 1rem;
 }
 
 @media only screen and (max-width: 50rem) {
-  .blog article > div {
+  .articles article > div {
     flex-direction: column;
   }
 
-  .blog article > div > p {
+  .articles article > div > p {
     text-align: justify;
   }
 
-  .blog article > div > time {
+  .articles article > div > time {
     margin-left: 0rem;
     margin-bottom: 1rem;
   }
