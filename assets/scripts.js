@@ -94,11 +94,11 @@ function connectToAudioAnalyzer(visualizer, audioCtx, sourceNode) {
 
 function selectRandomPreset() {
   const presets = butterchurnPresets.getPresets();
-  const keys = Object.keys(presets);
-  const key = keys[Math.floor(Math.random() * keys.length)];
+  // const keys = Object.keys(presets);
+  const keys = ["martin - mandelbox explorer - high speed demo version", "Flexi - mindblob mix", "martin + flexi - diamond cutter [prismaticvortex.com] - camille - i wish i wish i wish i was constrained", "Phat+fiShbRaiN+Eo.S_Mandala_Chasers_remix", "Martin - acid wiring", "Flexi, martin + geiss - dedicated to the sherwin maxawow", "Aderrasi - Potion of Spirits",  "flexi + amandio c - organic12-3d-2.milk", "Flexi + stahlregen - jelly showoff parade",  "martin - castle in the air", "$$$ Royal - Mashup (197)", "suksma - heretical crosscut playpen", "Flexi - predator-prey-spirals", "Fumbling_Foo & Flexi, Martin, Orb, Unchained - Star Nova v7b", "martin - another kind of groove"];
+  const randomKey = Math.floor(Math.random() * keys.length);
+  const key = keys[randomKey];
   const preset = presets[key];
-  console.log(key);
-
   return preset;
 }
 
