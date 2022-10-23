@@ -1,17 +1,23 @@
 module.exports = function (eleventyConfig) {
-  // Output directory: _site
-
-  // Copy `assets/` to `_site/assets`
   eleventyConfig.addPassthroughCopy("assets");
 
-  eleventyConfig.addHandlebarsHelper("image", (title, image_url) =>
-    `<a href=${image_url}><figure><img src="${image_url}" alt="${title}"><figcaption>${title}</figcaption></figure></a>`)
-  ;
+  eleventyConfig.addLiquidShortcode(
+    "image",
+    (title, image_url) =>
+      `<a href=${image_url}><figure><img src="${image_url}" alt="${title}"><figcaption>${title}</figcaption></figure></a>`
+  );
+
+  eleventyConfig.addFilter("bust", (url) => {
+    const [urlPart, paramPart] = url.split("?");
+    const params = new URLSearchParams(paramPart || "");
+    params.set("v", Date.now());
+    return `${urlPart}?${params}`;
+  });
 
   return {
     dir: {
       input: "pages",
     },
-    htmlTemplateEngine: "hbs"
+    htmlTemplateEngine: "liquid",
   };
 };

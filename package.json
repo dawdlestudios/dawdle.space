@@ -7,6 +7,12 @@
     "dev": "eleventy --serve --watch"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^1.0.2"
+    "@11ty/eleventy": "^1.0.2",
+    "esbuild": "^0.15.12"
+  },
+  "dependencies": {
+    "@barba/core": "^2.9.7",
+    "butterchurn": "^2.6.7",
+    "butterchurn-presets": "^2.4.7"
   }
 }

@@ -2,9 +2,9 @@
 layout: layout.html
 ---
 
-{{#unless hide-header}}
+{% unless hide-header %}
 <header>
-  ⌈~{{{user}}}/<b>{{{title}}}</b>⌋
-  <a class="back-btn" href="/~{{{user}}}"><span>back</span></a>
+  ⌈~{{user}}/<b>{{title}}</b>⌋
+  <a class="back-btn" href="/~{{user}}"><span>back</span></a>
 </header>
-{{/unless}} {{{content}}}
+{% endunless %} {{content}}

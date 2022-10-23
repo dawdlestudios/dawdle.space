@@ -1,6 +1,6 @@
-import barba from "https://cdn.skypack.dev/@barba/core@v2.9.7";
-import butterchurn from "https://cdn.skypack.dev/butterchurn@v2.6.7";
-import butterchurnPresets from "https://cdn.skypack.dev/butterchurn-presets@v2.4.7";
+import barba from "@barba/core";
+import butterchurn from "butterchurn";
+import butterchurnPresets from "butterchurn-presets";
 
 const audioEl = playSong();
 const [audioCtx, audioNode] = createAudioContext(audioEl);
@@ -16,6 +16,7 @@ barba.init({
       enter() {
         nextPreset(visualizer);
       },
+      prevent: ({ el }) => el.classList && el.classList.contains('prevent')
     },
   ],
 });

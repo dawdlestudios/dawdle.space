@@ -4,7 +4,7 @@ title: dawdle.space
 
 <!DOCTYPE html>
 <html lang="en">
-  <head data-turbo-permanent>
+  <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>dawdle.space</title>
@@ -14,12 +14,7 @@ title: dawdle.space
   <body data-barba="wrapper">
     <canvas id="background"></canvas>
     <audio id="music" loop></audio>
-    <div class="wrapper" data-barba="container">{{{ content }}}</div>
-
-    <script
-      data-turbo-permanent
-      type="module"
-      src="/assets/scripts.js?v=3"
-    ></script>
+    <div class="wrapper" data-barba="container">{{content}}</div>
+    <script type="module" src="{{ '/assets/js/main.js' | bust }}"></script>
   </body>
 </html>
