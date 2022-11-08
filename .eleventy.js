@@ -2,6 +2,12 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("assets");
 
   eleventyConfig.addLiquidShortcode(
+    "lastupdated",
+    () =>
+      Date.now()
+  );
+
+  eleventyConfig.addLiquidShortcode(
     "image",
     (title, image_url) =>
       `<a href=${image_url}><figure><img src="${image_url}" alt="${title}"><figcaption>${title}</figcaption></figure></a>`

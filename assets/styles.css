@@ -281,6 +281,10 @@ main > nav > ul > li > a > img {
   margin-right: 2rem;
   overflow: hidden;
   opacity: 0.9;
+
+  object-fit: cover;
+  aspect-ratio: 16/10;
+  border-radius: 10px;
 }
 
 .things > div > article > a {
