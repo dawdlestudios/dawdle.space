@@ -1,0 +1,140 @@
+/*Sections*/
+
+/*Intro Section*/
+#imglogo {
+  height: 42px;
+  padding-top: 8px;
+}
+#intro {
+  background-image:url('../img/introbg.jpg');
+  background-size: cover;
+  background-color: black;
+  position: relative;
+  margin-top: -32px;
+  width: 100%;
+  height: 125vh;
+}
+canvas {
+  margin-top: -64px;
+  height: 125vh;
+}
+.logo {
+  font-family: 'bebas_neuebook';
+  position: relative;
+  top: 300px;
+  color: white;
+}
+/*Intro Page 2 */
+#Intro2 {
+  background-image:url('../img/intro2bg.jpg');
+  background-size: cover;
+  background-color: #080E1C;
+  position: relative;
+  width: 100%;
+  height: 115vh;
+  margin-top: -19vh;
+}
+.intro2txt {
+  padding-top: 10vh;
+}
+.text1, .text2, .text3, h1 {
+  text-align: left;
+  line-height: 60%;
+  font-size: 13vmin;
+  font-family: 'bebas_neuebold';
+}
+h2 {
+  font-size: 8vmin;
+  font-family: 'bebas_neuebook';
+}
+h1 {
+  line-height: 100%;
+}
+.text1{
+  margin-top: 19vh;
+  font-weight:  400;
+}
+.text2{
+  font-weight:  normal;
+}
+.text3{
+  font-weight: bold;
+}
+.text4{
+  color: white;
+  font-size: 30px;
+}
+#intro2 .container p {
+  font-size: 2.5vmin;
+  margin-top: 30vh;
+  color: rgb(214, 216, 255);
+}
+/*Beispiele */
+#projects {
+  background-image:url('http://localhost:3001/img/beispielebg.jpg');
+  background-size: cover;
+  background-color: black;
+  width: 100%;
+  height: 100vh;
+  margin-top: -40px;
+}
+/* Preise */
+.active {
+  padding: 1px;
+}
+ p {
+  line-height: 15px;
+}
+#pricing {
+  background-image:url('../img/preise.jpg');
+  background-size: cover;
+  background-color: blue;
+  width: 100%;
+  margin-top: -40px;
+}
+
+/* ueber Mich */
+#about {
+  background-image: linear-gradient( rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8) ), url('../img/code.jpg');
+  background-size: cover;
+  background-color: cyan;
+  position: relative;
+  width: 100%;
+  margin-top: -1vh;
+}
+#aboutHeader {
+  font-size: 12vmin;
+  font-weight: 700;
+  color: white;
+}
+.input-field label{
+  color: black;
+}
+.active{
+  color: black;
+}
+#about p {
+  font-weight: 300;
+  font-size: 1.7em;
+}
+#projects h1 {
+  padding-top: 10px;
+  text-align: left;
+  font-size: 13vmin;
+}
+/* -Footer- */
+
+#footer {
+  width: 100%;
+  height: 6em;
+  margin-top: -1vh;
+}
+.logos {
+  padding-top: 0.9em;
+}
+.copyright {
+  margin-top: 4px;
+  color: white;
+  font-weight: 300;
+  font-size: 1.1em;
+}

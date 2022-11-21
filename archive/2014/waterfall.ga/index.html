@@ -1,0 +1,194 @@
+<html>
+<head>
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<script src="https://apis.google.com/js/platform.js" async defer>
+  {lang: 'de'}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.js"></script>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+<audio id="audiotag1" loop="loop" preload"auto">
+  <source src="waterfall.mp3" type="audio/mpeg">
+</audio>
+<style>
+/* SOOOOORY MY CODE IS TOO UGLY DON'T LOOK!
+-------------------------------------------------- */
+
+#loader {
+  position: fixed;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  color: #000;
+}
+
+#loader div {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  line-height: 0;
+}
+#loader div i {
+  position: relative;
+  left: -50%;
+  line-height: 0;
+  font-size: 50px;
+}</style>
+<script>
+$(window).load(function() {
+    $("#loader").delay(10).fadeOut("fast");
+});
+
+setTimeout(function() {document.getElementById('audiotag1').play();},1000);
+
+</script>
+
+
+ <script language="JavaScript">
+<!--
+function random_imglink(){
+var myimages=new Array()
+myimages[1]="http://media.giphy.com/media/G77xHh7ayDQyc/giphy.gif"
+myimages[2]="http://media.giphy.com/media/buQka4dWackLe/giphy.gif"
+myimages[3]="http://media.giphy.com/media/KOo5YDt4hIDmw/giphy.gif"
+
+var ry=Math.floor(Math.random()*myimages.length)
+if (ry==0)
+ry=1
+document.write('<img src="'+myimages[ry]+'">')
+}
+random_imglink()
+//-->
+
+</script>
+
+<style>
+html,body{
+    margin:0;
+    height:100%;
+    overflow:hidden;
+  cursor: crosshair;
+}
+html{
+  margin-bottom: 60;
+    position: relative;
+}
+/* Special class on .container surrounding .navbar, used for positioning it into place. */
+.navbar-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 20;
+}
+h1
+{
+    min-height:100%;
+    min-width:100%;
+    height:auto;
+    width:auto;
+    position:absolute;
+    top:-50%; bottom:-50%;
+    left:-50%; right:-50%;
+    margin:auto;
+}
+img{
+    min-height:100%;
+    min-width:100%;
+    height:auto;
+    width:auto;
+    position:absolute;
+    top:-50%; bottom:-50%;
+    left:-50%; right:-50%;
+    margin:auto;
+}
+.footer {
+  position: fixed;
+  bottom: 10;
+  width: 100%;
+  height: 40;
+  background: rgba(0, 0, 0, 0.6);
+}
+#buttoncool {
+  top: 20;
+  left: 20;
+  position:fixed;
+}
+#buttonnichtcool {
+  top: 20;
+  left: 210;
+  position:fixed;
+}
+#fb {
+  position:fixed;
+  right: 10;
+}
+#github-bjs {
+  position:fixed;
+  right: 20;
+}
+#buttonrandom
+{
+  top: 20;
+  right: 20;
+  position:fixed;
+}
+#buttonaudio{
+  position:fixed;
+  right: 200;
+  top: 20;
+}
+#lol{
+  position:fixed;
+  bottom: 15;
+  right: 20;
+}
+</style>
+</head>
+<body>
+
+    <div id="loader">
+        <div>
+        <div><i class="fa fa-spinner fa-spin"></i></div>
+        </div>
+  </div>
+<a href="#"><button type="button" id="buttoncool" class="btn btn-success"><i class="fa fa-paper-plane"></i>  Wasserfall einsenden</button></a>
+<a href="#"><button type="button" id="buttonnichtcool" class="btn btn-success"><i class="fa fa-plus"></i>  Mehr Websites</button></a>
+<a href="#"><button type="button" id="buttonrandom" class="btn btn-success" onClick="location.reload()">Zuf&auml;lliger Wasserfall  <i class="fa fa-random"></i></button></a>
+<a href="#"><button type="button" id="buttonaudio" class="btn btn-success" onClick="document.getElementById('audiotag1').pause();">Ton aus  <i class="fa fa-pause"></i></button></a>
+
+
+<!-- <img src="" alt=""> -->
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted">
+
+
+<!-- AddToAny BEGIN -->
+<div id="lol" class="a2a_kit a2a_kit_size_32 a2a_default_style">
+<a class="a2a_dd" href="https://www.addtoany.com/share_save?linkurl=http%3A%2F%2Fwaterfall.ga&amp;linkname=Waterfalls"></a>
+<a class="a2a_button_twitter"></a>
+<a class="a2a_button_facebook"></a>
+<a class="a2a_button_google_plus"></a>
+<a class="a2a_button_blogger_post"></a>
+<a class="a2a_button_email"></a>
+<a class="a2a_button_whatsapp"></a>
+<a class="a2a_button_tumblr"></a>
+</div>
+<script type="text/javascript">
+var a2a_config = a2a_config || {};
+a2a_config.linkname = "Waterfalls";
+a2a_config.linkurl = "http://waterfall.ga";
+</script>
+<script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
+<!-- AddToAny END -->
+
+
+</p>
+      </div>
+    </footer>
+
+    </body>
+</html>

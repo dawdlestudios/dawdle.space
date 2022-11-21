@@ -1,0 +1,131 @@
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="http://ququplay.github.io/jquery-mobile-square-ui-theme/css/jquery.mobile.squareui.css" />
+  <script src="http://ququplay.github.io/jquery-mobile-square-ui-theme/js/jquery.min.js"></script>
+  <script src="http://ququplay.github.io/jquery-mobile-square-ui-theme/js/jqm.min.js"></script>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+<audio id="audiotag1" loop="loop" preload"auto">
+  <source src="waterfall.mp3" type="audio/mpeg">
+</audio>
+
+  <style>
+  /* Pageload
+  -------------------------------------------------- */
+
+  #loader {
+    position: fixed;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    color: #000;
+  }
+
+  #loader div {
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    line-height: 0;
+  }
+  #loader div i {
+    position: relative;
+    left: -50%;
+    line-height: 0;
+    font-size: 50px;
+  }
+  </style>
+  <script>
+  $(window).load(function() {
+      $("#loader").delay(100).fadeOut("fast");
+  });
+
+  setTimeout(function() {document.getElementById('audiotag1').play();},1000);
+
+  </script>
+<script language="JavaScript">
+<!--
+function random_imglink(){
+var myimages=new Array()
+myimages[1]="http://media.giphy.com/media/G77xHh7ayDQyc/giphy.gif"
+myimages[2]="http://media.giphy.com/media/buQka4dWackLe/giphy.gif"
+myimages[3]="http://media.giphy.com/media/KOo5YDt4hIDmw/giphy.gif"
+
+var ry=Math.floor(Math.random()*myimages.length)
+if (ry==0)
+ry=1
+document.write('<img src="'+myimages[ry]+'">')
+}
+random_imglink()
+//-->
+
+</script>
+<style>
+<style>
+html,body{
+    margin:0;
+    height:100%;
+    overflow:hidden;
+  cursor: crosshair;
+}
+html{
+  margin-bottom: 60;
+    position: relative;
+}
+/* Special class on .container surrounding .navbar, used for positioning it into place. */
+.navbar-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 20;
+}
+h1
+{
+    min-height:100%;
+    min-width:100%;
+    height:auto;
+    width:auto;
+    position:absolute;
+    top:-50%; bottom:-50%;
+    left:-50%; right:-50%;
+    margin:auto;
+}
+img{
+    min-height:100%;
+    min-width:100%;
+    height:auto;
+    width:auto;
+    position:absolute;
+    top:-50%; bottom:-50%;
+    left:-50%; right:-50%;
+    margin:auto;
+}
+</style>
+<img src="" alt="">
+</head>
+<body>
+  <div id="loader">
+      <div>
+      <div><i class="fa fa-spinner fa-spin"></i></div>
+      </div>
+</div>
+
+    <div data-role="header">
+      <a data-iconpos="notext" data-role="button" data-icon="home" title="Home">Home</a>
+      <h1>Waterfall.ga</h1>
+      <a data-iconpos="notext" data-role="button" data-icon="flat-menu"></a>
+    </div>
+
+    <div data-role="content" role="main">
+
+    </div>
+  </div>
+
+  <div id="highlight"> </div>
+</body>
+</html>
