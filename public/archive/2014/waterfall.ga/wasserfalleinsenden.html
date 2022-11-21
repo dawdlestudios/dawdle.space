@@ -1,0 +1,113 @@
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<script src="https://apis.google.com/js/platform.js" async defer>
+  {lang: 'de'}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.js"></script>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+
+<style>
+/* Pageload
+-------------------------------------------------- */
+
+#loader {
+  position: fixed;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  color: #000;
+}
+
+#loader div {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  line-height: 0;
+}
+#loader div i {
+  position: relative;
+  left: -50%;
+  line-height: 0;
+  font-size: 50px;
+}</style>
+<script>
+$(window).load(function() {
+    $("#loader").delay(10).fadeOut("fast");
+});
+</script>
+
+
+<style>
+html,body{
+    margin:0;
+    height:100%;
+    overflow:hidden;
+	cursor: crosshair;
+}
+html{
+	margin-bottom: 60px;
+    position: relative;
+}
+/* Special class on .container surrounding .navbar, used for positioning it into place. */
+.navbar-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 20;
+}
+h1
+{
+    min-height:100%;
+    min-width:100%;
+    height:auto;
+    width:auto;
+    position:absolute;
+    top:-50%; bottom:-50%;
+    left:-50%; right:-50%;
+    margin:auto;
+}
+iframe{
+    min-height:100%;
+    min-width:100%;
+    height:auto;
+    width:auto;
+    position:absolute;
+    top:-50%; bottom:-50%;
+    left:-50%; right:-50%;
+    margin:auto;
+}
+.footer {
+  position: absolute;
+  bottom: 10;
+  width: 100%;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.6);
+}
+#buttoncool {
+  top: 20;
+  left: 20;
+  position:absolute;
+}
+
+
+</style>
+<div id="loader">
+    <div>
+    <div><i class="fa fa-spinner fa-spin"></i></div>
+    </div>
+</div>
+<iframe src="https://docs.google.com/forms/d/1pc5ZGuKc5R0GKys78V8acG-qoCSuJLdOd8eNOO1yDOo/viewform?embedded=true" width="" height="" frameborder="0" marginheight="0" marginwidth="0">Wird geladen...</iframe>
+
+<a href="index.html"><button type="button" id="buttoncool" class="btn btn-success">Wasserfall bewundern</button></a>
+
+<img src="" alt="">
+    <footer class="footer">
+      <div class="container">
+		<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://waterfall.ga" data-text="Schau dir Wasserfaelle an!" data-via="ExplodingCamera" data-lang="de" data-hashtags="wasserfall">Twittern</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<h1> Ok. </h1>
+	</div>
+    </footer>

@@ -1,0 +1,25 @@
+{
+  "levelsettings": {
+    "chapters": {
+      "1": "Test Chapter",
+      "2": "name"
+    },
+    "storyname": "Shattered Past"
+  },
+  "items": {
+    "1": "Öllampe",
+    "2": "Messer",
+    "3": "",
+    "4": ""
+  },
+  "startitems": ["1"],
+  "startskills": {
+    "1": 10,
+    "2": 2,
+    "3": 3,
+    "4": 2
+  },
+  "achievements": {
+    "1": "You did it! You finaly got the holy shovel!"
+  }
+}

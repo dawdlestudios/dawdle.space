@@ -1,0 +1,35 @@
+{
+    "h1": "Chapter 2: To be continued...",
+    "rooms": {
+        "1": {
+            "text": "",
+            "runFunction": "",
+            "possibleoptions": {
+                "Gehe links": {
+                    "nextroom": "3",
+                    "removeItem": "3",
+                    "getSkill": {
+                        "1": "1"
+                    },
+                    "runFunction": "alert('hi')"
+                },
+                "Gehe Rechts": {
+                    "text": "Shovel got!",
+                    "getItem": "3",
+                    "runFunction": "game.achievementGet(1)"
+                },
+                "Gehe zurück": {
+                    "nextroom": "3"
+                },
+                "Nehme &Ouml;llampe": {
+                    "getItem": "1"
+                },
+                "Nehme Messer": {
+                    "getItem": "2"
+                },
+                "Umschauen": {}
+            }
+        },
+        "2": {}
+    }
+}

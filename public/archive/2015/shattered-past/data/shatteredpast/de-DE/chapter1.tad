@@ -1,0 +1,34 @@
+{
+    "h1": "Chapter 1: Die Verdammung...",
+    "rooms": {
+        "1": {
+            "Comment": "1. Raum",
+            "text": "Tip : Benutz SCHAUEN um einen besseren Überblick zu bekommen.\r\n George blinzelt einige Male. Er fühlt sich unwohl. Ihm ist kalt, kälter als ihm jemals war. Es ist keine normale Kälte wie im Winter, es ist viel einsamer und schmerzvoller. Sein Kopf pocht unglaublich Intensiv und Qualvoll. Er spürt etwas Warmes, flüssiges an seinem Rücken, doch er kommt nicht darauf was es ist. Sein Arm scheint gebrochen zu sein. Georges Augenlicht kommt langsam zurück. Durch seine halb verschlossenen Lider erkennt er, dass er in einem dunklen Zimmer liegt. Für den Bruchteil einer Sekunde sieht er den Himmel an der Zimmerdecke. Ein Flugzeug überquert das Firnament. Die Wolken die Sonne... Alles wirkt so fern und doch so Stark. Sein Ohr fiept plötzlich unerträglich. Er schließt die Augen und schüttelt den Kopf . „Hör auf, Hör auf, Hör auf!“ jault er . Plötzlich ist alles ist wieder still. George entscheidet sich die Augen langsam wieder zu öffnen. Zunächst sieht er nur verschwommene rote Umrisse. Nun erkennt er was vor ihm liegt: ein menschliches Gehirn. George kann eine Delle an der Rückseite erkennen. Es blutet wie verrückt und hat George schon ganz eingenässt. Alle seine Schmerzen scheinen verschwunden zu sein. Schnell rennt er in die linke Ecke des Raumes. „Oh mein Gott!“, schreit er. „Was zur Hölle ist das? Wo bin ich?“ George atmet nur noch schwer als er einen kleinen Tisch neben sich entdeckt. Auf diesem steht eine brennende Öllampe und ein Messer. Er entdeckt einen kleinen Zettel neben dem Messer. Auf diesem steht: „Entscheide mit Bedacht“",
+            "runFunction": "",
+            "possibleoptions": {
+                "Gehe links": {
+                    "text": "Er verspürt das Gefühl nach links zu gehen, obwohl dort ein Tisch steht. Er Probiert es trotzdem. George schlägt mit seiner Hüfte gegen den Tisch. „Das wird einen blauen Fleck geben…“ denkt er sich. Da er nicht weiß was er tun soll stellt er sich wieder neben den Tisch."
+                },
+                "Gehe Rechts": {
+                    "text": "Rechts von ihm sieht er eine Wand. „Vielleicht kann ich hier hochklettern“, denkt er sich. Er geht einen Schritt in die Richtung von eben dieser. Nun steht George direkt vor der Betonwand. Er versucht krampfhaft an den kahlen Wänden Halt zu finden, doch scheitert weil sie zu glatt ist. Er dreht sich wieder Richtung Tisch, in der Hoffnung dass vielleicht dessen Inhalt ihn weiterbringen könnte."
+                },
+                "Gehe zurück": {
+                    "text": "George möchte sich in Richtung des Gehirnes bewegen, in der Hoffnung dort etwas über seine Ankunft zu finden. Er versucht es, kann aber nicht. Zu tief sitzt noch der Schock über den Anblick des blutenden Hirns."
+                },
+                "Nehme Öllampe": {
+                    "runFunction": "if(!game['save'+game.currentSave].inventory.indexOf('2') > -1) {game.invAdd('1', game.currentSave)}else{$('.game p').append('<br>' + 'George versucht krankhaft das Messer und die Öllampe zu halten, schafft es aber nicht aufgrund seines verwundeten Armes.' + '<br>');}"
+                },
+                "Nehme Messer": {
+                    "runFunction": "if(!game['save'+game.currentSave].inventory.indexOf('1') > -1) {game.invAdd('2', game.currentSave)}else{$('.game p').append('<br>' + 'George versucht krankhaft das Messer und die Öllampe zu halten, schafft es aber nicht aufgrund seines verwundeten Armes.' + '<br>');}"
+                },
+                "Umschauen": {
+                    "text": ""
+                }
+            }
+        },
+        "2": {
+          "Comment": "Kommt nach umschauen",
+          "text": ""
+        }
+    }
+}

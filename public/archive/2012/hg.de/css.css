@@ -1,0 +1,126 @@
+@charset "utf-8";
+/* CSS Document */
+body {
+        color:#fff;
+        background:#000;
+        font-family:"century gothic",Verdana, Geneva, sans-serif
+}
+a {
+color:#fff;
+}
+h2 {
+font-style:italic;
+font-size:16px;
+font-weight:normal;
+}
+#wrapper {
+width:1280px;
+
+overflow:hidden;
+margin:0 auto;
+padding:250px 0 250px 75px;
+background:url(wrapper.jpg) center top no-repeat;
+}
+#wrapper_text{
+width:1280px;
+overflow:hidden;
+margin:0 auto;
+height:auto;
+background:url(wrapper.jpg) center top no-repeat;
+}
+div.img_link {
+float:left;
+margin:0 0 10px 0;
+}
+div.space{
+margin:0 10px 0 0;
+}
+a img {
+border:none;
+}
+
+p.vita_gross {
+        font-size:16px;
+        padding:0 0 0 125px ;
+}
+.bg_wrapper {
+background:url(black_bg.png) top left repeat;
+        width:1000px;
+        margin:0 auto 150px auto;
+        height:auto;
+        overflow:hidden;
+        padding:150px 25px 10px  25px;
+}
+
+.col_3 {
+width:30%;
+padding:0 0 0 0;
+float:left;
+}
+.col_7 {
+width:67%;
+padding:0 3% 0 0;
+float:left;
+}
+
+ul li {
+line-height:25px;
+}
+
+.col_3 img{
+display:block;
+}
+
+p.link {
+        margin:0 0 50px 0;
+        width:300px;
+        float:left;
+        display:block;
+        overflow:hidden;
+}
+a.back_link {
+width:auto;
+display:block;
+font-weight:bold;
+font-size:30px;
+float:right;
+color:#fff;
+text-decoration:none;
+}
+
+
+.contactfields span {
+width:120px;
+height:20px;
+display:block;
+float:left;
+}
+.contactfields input {
+width:250px;
+height:20px;
+float:left;
+display:block;
+}
+
+.contactfields textarea {
+width:250px;
+height:105px;
+
+}
+
+.contactfields input.submit {
+margin:0 0 0 270px;
+}
+
+
+p.vita_gross {
+        font-size:16px;
+        padding:0 0 0 125px ;
+}
+ a.close_button {
+font-size:24px;
+text-decoration:none;
+color:#fff;
+float:right;
+font-weight:bold;
+}
