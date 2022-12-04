@@ -9,6 +9,12 @@ module.exports = function (eleventyConfig) {
   );
 
   eleventyConfig.addLiquidShortcode(
+    "initials",
+    (author) =>
+      author.split(" ").map((name) => name[0]).join("")
+  );
+
+  eleventyConfig.addLiquidShortcode(
     "image",
     (title, image_url) =>
       `<a href=${image_url}><figure><img src="${image_url}" alt="${title}"><figcaption>${title}</figcaption></figure></a>`

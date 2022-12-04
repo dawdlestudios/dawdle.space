@@ -12,6 +12,9 @@ connectToAudioAnalyzer(visualizer, audioCtx, audioNode);
 barba.init({
   transitions: [
     {
+      afterEnter() {
+        document.dispatchEvent(new CustomEvent("page:afterEnter"));
+      },
       name: "default-transition",
       enter() {
         nextPreset(visualizer);
@@ -46,10 +49,14 @@ function debounce(func) {
 
 function playSong(song = "/assets/sound/lounge.ogg") {
   let audioEl = document.querySelector("#music");
-  audioEl.volume = 0.1;
-  audioEl.loop = true;
-  audioEl.src = song;
-  audioEl.play();
+
+  try {
+    audioEl.volume = 0.1;
+    audioEl.loop = true;
+    audioEl.src = song;
+    audioEl.play();
+  } catch (_) {}
+
   return audioEl;
 }
 
