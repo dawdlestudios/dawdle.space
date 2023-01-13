@@ -49,5 +49,3 @@ export const randomize = function() {
     tops[i].style.top = `${280 - randomHeight}px`;
   });
 }
-
-document.addEventListener("page:afterEnter", randomize);

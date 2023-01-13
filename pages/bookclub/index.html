@@ -1,6 +1,7 @@
 ---
 layout: page.html
 title: bookclub
+namespace: bookclub
 ---
 
 <style>
@@ -121,6 +122,7 @@ title: bookclub
   }
 
   .bookshelf {
+    margin-top: 2rem;
     width: 100%;
     display: flex;
     flex-wrap: wrap;
@@ -224,12 +226,12 @@ title: bookclub
 <script type="module">
   import { randomize } from "/assets/js/bookshelf.js";
   randomize();
+  console.log(1);
 </script>
 
 <main class="bookclub">
   <h2 class="flicker">current book</h2>
-  <span class="current">Metro 2033 by Dmitry Glukhovsky</span>
-
+  <span class="current">The Stranger by Albert Camus</span>
   <h2 class="flicker">bookshelf</h2>
   <div class="bookshelf">
     {%- for book in collections.book -%}

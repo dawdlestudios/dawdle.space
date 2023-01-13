@@ -14,7 +14,13 @@ title: dawdle.space
   <body data-barba="wrapper">
     <canvas id="background"></canvas>
     <audio id="music" loop></audio>
-    <div class="wrapper" data-barba="container">{{content}}</div>
+    <div
+      class="wrapper"
+      data-barba="container"
+      data-barba-namespace="{{ namespace }}"
+    >
+      {{content}}
+    </div>
     <script type="module" src="{{ '/assets/js/main.js' | bust }}"></script>
   </body>
 </html>
