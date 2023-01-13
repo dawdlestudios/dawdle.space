@@ -11,7 +11,12 @@
   <body data-barba="wrapper">
     <canvas id="background"></canvas>
     <audio id="music" loop></audio>
-    <div class="wrapper" data-barba="container">
+    <div
+      class="wrapper"
+      data-barba="container"
+      data-barba-namespace="bookclub"
+    >
+      
 
 <header>
   ⌈dawdle/<b>bookclub</b>⌋
@@ -136,6 +141,7 @@
   }
 
   .bookshelf {
+    margin-top: 2rem;
     width: 100%;
     display: flex;
     flex-wrap: wrap;
@@ -239,12 +245,12 @@
 <script type="module">
   import { randomize } from "/assets/js/bookshelf.js";
   randomize();
+  console.log(1);
 </script>
 
 <main class="bookclub">
   <h2 class="flicker">current book</h2>
-  <span class="current">Metro 2033 by Dmitry Glukhovsky</span>
-
+  <span class="current">The Stranger by Albert Camus</span>
   <h2 class="flicker">bookshelf</h2>
   <div class="bookshelf"><a href="/bookclub/convenience-store-woman/" class="book">
       <div class="side top"></div>
@@ -253,12 +259,34 @@
         <div class="spine-title">Convenience Store Woman</div>
         <div class="spine-author">SM</div>
       </div>
+     </a><a href="/bookclub/metro-2033/" class="book">
+      <div class="side top"></div>
+      <div class="side cover" style="background-image: url(https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1379621430i/17274667.jpg)"></div>
+      <div class="spine">
+        <div class="spine-title">Metro 2033</div>
+        <div class="spine-author">DG</div>
+      </div>
+     </a><a href="/bookclub/whatever/" class="book">
+      <div class="side top"></div>
+      <div class="side cover" style="background-image: url(https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1385167410i/58372.jpg)"></div>
+      <div class="spine">
+        <div class="spine-title">Whatever</div>
+        <div class="spine-author">MH</div>
+      </div>
+     </a><a href="/bookclub/the-stranger/" class="book">
+      <div class="side top"></div>
+      <div class="side cover" style="background-image: url(https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1590930002i/49552.jpg)"></div>
+      <div class="spine">
+        <div class="spine-title">The Stranger</div>
+        <div class="spine-author">AC</div>
+      </div>
      </a></div>
     </main>
   </div>
 </main>
 
-</div>
-    <script type="module" src="/assets/js/main.js?v=1670113129954"></script>
+
+    </div>
+    <script type="module" src="/assets/js/main.js?v=1673633210221"></script>
   </body>
 </html>
