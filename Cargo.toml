@@ -37,8 +37,8 @@ argon2={version="0.5", features=["std"]}
 # ssh server dependencies
 bollard="0.17"
 ed25519-dalek="2.1"
-russh="0.45"
-russh-keys="0.45"
+russh="0.46"
+russh-keys="0.46"
 russh-sftp="2.0"
 ssh-key={version="0.6", features=["ed25519"]}
 
