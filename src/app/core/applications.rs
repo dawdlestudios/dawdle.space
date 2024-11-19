@@ -53,7 +53,7 @@ impl AppApplications {
             })
         });
 
-        Ok(applications.try_collect::<Vec<_>>().await?)
+        applications.try_collect::<Vec<_>>().await
     }
 
     pub async fn approve(&self, id: &str) -> Result<()> {
