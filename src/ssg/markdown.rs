@@ -1,6 +1,6 @@
 use comrak::{
-    plugins::syntect::SyntectAdapterBuilder, ExtensionOptions, ParseOptions, Plugins,
-    RenderOptions, RenderPlugins,
+    plugins::syntect::SyntectAdapter, ExtensionOptions, ParseOptions, Plugins, RenderOptions,
+    RenderPlugins,
 };
 
 pub fn md_to_html(buf: &str) -> String {
@@ -11,10 +11,7 @@ pub fn md_to_html(buf: &str) -> String {
             .front_matter_delimiter("---".to_string())
             .build(),
     };
-
-    let syntax_highlighter = SyntectAdapterBuilder::default()
-        .theme("base16-ocean.dark")
-        .build();
+    let syntax_highlighter = SyntectAdapter::new(Some("base16-ocean.dark"));
 
     let renderer = RenderPlugins::builder()
         .codefence_syntax_highlighter(&syntax_highlighter)
