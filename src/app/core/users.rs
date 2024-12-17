@@ -176,15 +176,15 @@ impl AppUsers {
         Ok(())
     }
 
-    pub async fn update_role(&self, username: &str, role: Option<&str>) -> Result<()> {
-        self.conn
-            .execute(
-                "UPDATE users SET role = ? WHERE username = ?",
-                params![role, username],
-            )
-            .await?;
-        Ok(())
-    }
+    // pub async fn update_role(&self, username: &str, role: Option<&str>) -> Result<()> {
+    //     self.conn
+    //         .execute(
+    //             "UPDATE users SET role = ? WHERE username = ?",
+    //             params![role, username],
+    //         )
+    //         .await?;
+    //     Ok(())
+    // }
 
     pub async fn update_minecraft_username(
         &self,

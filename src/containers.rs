@@ -25,8 +25,8 @@ pub struct Attach {
 
 #[derive(Clone)]
 pub struct Pty {
-    pub pty_term: Option<String>,
-    pub pty_modes: Option<Vec<(russh::Pty, u32)>>,
+    // pub pty_term: Option<String>,
+    // pub pty_modes: Option<Vec<(russh::Pty, u32)>>,
     pub pty_size: Option<(u16, u16)>,
 }
 

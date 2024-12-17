@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 mod core;
 mod refinery_libsql;
-pub use core::{Session, User};
+pub use core::Session;
 
 use crate::{chat::state::ChatState, config::Config};
 

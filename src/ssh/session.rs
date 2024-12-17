@@ -4,6 +4,7 @@ use eyre::{bail, eyre, Result};
 use futures::TryStreamExt;
 use log::{debug, info};
 use russh_keys::key::parse_public_key;
+use ssh_key::PublicKey;
 use tokio::io::AsyncWriteExt;
 use tokio::sync::Mutex;
 
@@ -50,7 +51,7 @@ pub struct SshChannel {
 #[derive(Debug)]
 struct SshUser {
     username: String,
-    keys: Vec<russh_keys::key::PublicKey>,
+    keys: Vec<PublicKey>,
 }
 
 pub struct SshSession {
@@ -110,7 +111,7 @@ impl SshSession {
                 if !key.algorithm().is_ed25519() {
                     eyre::bail!("only ed25519 keys are supported")
                 }
-                let x = parse_public_key(&key.to_bytes()?, None)?;
+                let x = parse_public_key(&key.to_bytes()?)?;
                 Ok(x)
             })
             .collect::<Result<Vec<_>>>()?;
@@ -138,7 +139,7 @@ impl russh::server::Handler for SshSession {
     async fn auth_publickey_offered(
         &mut self,
         user: &str,
-        public_key: &russh_keys::key::PublicKey,
+        public_key: &PublicKey,
     ) -> Result<Auth, Self::Error> {
         debug!("offered credentials: {}, {:?}", user, public_key);
         let user = self.get_user(user).await?;
@@ -158,7 +159,7 @@ impl russh::server::Handler for SshSession {
     async fn auth_publickey(
         &mut self,
         user: &str,
-        _public_key: &russh_keys::key::PublicKey,
+        _public_key: &PublicKey,
     ) -> Result<Auth, Self::Error> {
         let _ = self.get_user(user).await?;
         Ok(Auth::Accept)
@@ -194,7 +195,7 @@ impl russh::server::Handler for SshSession {
     async fn pty_request(
         &mut self,
         channel: ChannelId,
-        term: &str,
+        _term: &str,
         col_width: u32,
         row_height: u32,
         _pix_width: u32,
@@ -205,8 +206,8 @@ impl russh::server::Handler for SshSession {
         log::debug!("pty_request: {:?}", modes);
         self.channels.alter(&channel, |_k, mut v| {
             v.pty = Some(Pty {
-                pty_term: Some(term.to_string()),
-                pty_modes: Some(modes.to_vec()),
+                // pty_term: Some(term.to_string()),
+                // pty_modes: Some(modes.to_vec()),
                 pty_size: Some((col_width as u16, row_height as u16)),
             });
             v

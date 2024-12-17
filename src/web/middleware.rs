@@ -1,5 +1,5 @@
 use super::errors::APIError;
-use crate::app::{App, Session, User};
+use crate::app::{App, Session};
 use crate::web::api::SESSION_COOKIE_NAME;
 use async_trait::async_trait;
 use axum::{
@@ -62,7 +62,9 @@ impl FromRequestParts<App> for WebdavAuth {
     }
 }
 
-pub struct Admin(pub User);
+pub struct Admin(
+    // pub User
+);
 
 #[async_trait]
 impl FromRequestParts<App> for Admin {
@@ -82,7 +84,7 @@ impl FromRequestParts<App> for Admin {
             return Err(unauthorized("not an admin"));
         }
 
-        Ok(Admin(user))
+        Ok(Admin())
     }
 }
 

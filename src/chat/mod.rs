@@ -20,7 +20,7 @@ pub struct ChatMessage {
 #[serde(tag = "type", rename_all = "camelCase")]
 pub enum ChatRequest {
     Message { room: Room, message: String },
-    Join { room: Room },
+    Join { _room: Room },
     History { room: Room },
     Info,
 }

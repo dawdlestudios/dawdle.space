@@ -4,11 +4,10 @@ mod sftp;
 use std::{net::SocketAddr, sync::Arc, time::Duration};
 
 use crate::containers::Containers;
-use ed25519_dalek::SecretKey;
 use eyre::{Ok, Result};
 use russh::server::Server;
-use russh_keys::key::KeyPair;
 use session::SshSession;
+use ssh_key::PrivateKey;
 
 #[derive(Clone)]
 pub struct SshServer {
@@ -30,20 +29,21 @@ impl SshServer {
         Ok(())
     }
 
-    pub fn get_key(&self) -> Result<KeyPair> {
+    pub fn get_key(&self) -> Result<PrivateKey> {
         let path = self.state.config.ssh_key_path();
 
         let key = if !path.exists() {
-            let key = ed25519_dalek::SigningKey::generate(&mut rand::thread_rng());
+            let key =
+                ssh_key::PrivateKey::random(&mut rand::rngs::OsRng, ssh_key::Algorithm::Ed25519)?;
+
             std::fs::create_dir_all(path.parent().unwrap())?;
-            std::fs::write(&path, key.to_bytes())?;
+            std::fs::write(&path, key.to_bytes()?)?;
             key
         } else {
-            let key: SecretKey = std::fs::read(&path)?.try_into().expect("key is 32 bytes");
-            ed25519_dalek::SigningKey::from_bytes(&key)
+            PrivateKey::from_bytes(&std::fs::read(&path)?)?
         };
 
-        Ok(KeyPair::Ed25519(key))
+        Ok(key)
     }
 
     pub fn new(containers: Containers, state: crate::app::App) -> Self {

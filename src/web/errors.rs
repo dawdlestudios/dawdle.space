@@ -25,12 +25,6 @@ pub trait ApiErrorExt<T> {
     {
         self.api_error(StatusCode::NOT_FOUND, None)
     }
-    fn api_bad_request(self) -> Result<T, APIError>
-    where
-        Self: Sized,
-    {
-        self.api_error(StatusCode::BAD_REQUEST, None)
-    }
     fn api_unauthorized(self) -> Result<T, APIError>
     where
         Self: Sized,
