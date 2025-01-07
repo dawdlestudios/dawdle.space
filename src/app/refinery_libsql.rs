@@ -1,4 +1,4 @@
-use axum::async_trait;
+use async_trait::async_trait;
 use libsql::{Connection, Error as RqlError};
 use refinery::Migration;
 use refinery_core::traits::r#async::{AsyncQuery, AsyncTransaction};

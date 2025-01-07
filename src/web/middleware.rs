@@ -1,7 +1,6 @@
 use super::errors::APIError;
 use crate::app::{App, Session};
 use crate::web::api::SESSION_COOKIE_NAME;
-use async_trait::async_trait;
 use axum::{
     body::Body,
     extract::FromRequestParts,
@@ -23,7 +22,6 @@ pub fn unauthorized(message: &str) -> Response {
     APIError::new(StatusCode::UNAUTHORIZED, message).into_response()
 }
 
-#[async_trait]
 impl FromRequestParts<App> for WebdavAuth {
     type Rejection = Response;
 
@@ -66,7 +64,6 @@ pub struct Admin(
     // pub User
 );
 
-#[async_trait]
 impl FromRequestParts<App> for Admin {
     type Rejection = Response;
 
@@ -97,7 +94,6 @@ impl OptionalSession {
     }
 }
 
-#[async_trait]
 impl FromRequestParts<App> for OptionalSession {
     type Rejection = Response;
 
@@ -131,7 +127,6 @@ impl RequiredSession {
     }
 }
 
-#[async_trait]
 impl FromRequestParts<App> for RequiredSession {
     type Rejection = Response;
     async fn from_request_parts(parts: &mut Parts, _state: &App) -> Result<Self, Self::Rejection> {

@@ -1,27 +1,17 @@
-use crate::{
-    app::{App, Website},
-    web::errors::APIError,
-};
-use axum::{
-    body::Body,
-    extract::Request,
-    handler::HandlerWithoutStateExt,
-    http::{header, HeaderValue, StatusCode},
-    response::IntoResponse,
-    routing::*,
-    Router,
-};
+use crate::app::{App, Website};
+use crate::web::errors::{APIError, APIResult, NOT_FOUND};
 
+use axum::body::Body;
+use axum::extract::Request;
+use axum::http::{header, HeaderValue, Response, StatusCode};
+use axum::response::IntoResponse;
+use axum::routing::*;
+use axum::{Router, ServiceExt as AxumServiceExt};
 use errors::ApiErrorExt;
 use eyre::Result;
-use std::net::SocketAddr;
-use tower::{Service, ServiceBuilder, ServiceExt};
+use std::{convert::Infallible, net::SocketAddr};
+use tower::{Service, ServiceBuilder, ServiceExt as TowerServiceExt};
 use tower_http::set_header::SetResponseHeaderLayer;
-
-use self::{
-    errors::{APIResult, NOT_FOUND},
-    files::create_dir_service,
-};
 
 mod api;
 mod api_admin;
@@ -58,7 +48,7 @@ pub async fn run(state: App, addr: SocketAddr) -> Result<()> {
         .join("sites")
         .join("dawdle.space");
 
-    let router = Router::new()
+    let api_router = Router::new()
         .nest(
             "/api",
             Router::new()
@@ -80,16 +70,22 @@ pub async fn run(state: App, addr: SocketAddr) -> Result<()> {
         )
         .route("/api/webdav", any(webdav::handler))
         .route("/api/webdav/", any(webdav::handler))
-        .route("/api/webdav/*rest", any(webdav::handler))
-        .fallback_service(create_dir_service(
+        .route("/api/webdav/{*rest}", any(webdav::handler))
+        .fallback_service(files::create_dir_service(
             www_path.clone(),
             www_path.join("404.html"),
             NOT_FOUND,
         ))
         .with_state(state.clone());
 
-    // only construct the router service once
-    let mut router_service = ServiceBuilder::new()
+    let listener = tokio::net::TcpListener::bind(addr).await?;
+
+    let service = DawdleService {
+        api_service: api_router,
+        state,
+    };
+
+    let x = ServiceBuilder::new()
         .layer(SetResponseHeaderLayer::if_not_present(
             header::SERVER,
             HeaderValue::from_static("dawdle.space"),
@@ -110,53 +106,76 @@ pub async fn run(state: App, addr: SocketAddr) -> Result<()> {
             header::X_XSS_PROTECTION,
             HeaderValue::from_static("1; mode=block"),
         ))
-        .service(router.into_service::<Body>());
+        .service(service);
 
-    router_service.ready().await?;
-
-    // Use a different service based on the hostname
-    let app = |request: Request| async move {
-        let hostname_header = request
-            .headers()
-            .get("HOST")
-            .api_error(StatusCode::BAD_REQUEST, Some("no hostname"))?
-            .to_str()
-            .api_error(StatusCode::BAD_REQUEST, Some("invalid hostname"))?;
-
-        let site = match select_service(hostname_header) {
-            Ok(SelectedService::DawdleSpace) => {
-                return APIResult::Ok(router_service.call(request).await.into_response());
-            }
-            Ok(SelectedService::Subdomain(subdomain)) => state.sites.get(&subdomain),
-            Ok(SelectedService::CustomDomain(hostname)) => state.sites.get(&hostname),
-            Err(err) => return APIResult::Err(err),
-        };
-
-        let Some(site) = site else {
-            return APIResult::Ok(NOT_FOUND.into_response());
-        };
-
-        match site.value() {
-            Website::User(username) => {
-                let path = state.config.user_public_path(username).api_not_found()?;
-                let service = create_dir_service(path.clone(), path.join("404.html"), NOT_FOUND);
-                let res = service.oneshot(request).await;
-                APIResult::Ok(res.into_response())
-            }
-            Website::Site(username, path) => {
-                let path = state.config.project_path(username, path).api_not_found()?;
-                let service = create_dir_service(path.clone(), path.join("404.html"), NOT_FOUND);
-                let res = service.oneshot(request).await;
-
-                APIResult::Ok(res.into_response())
-            }
-        }
-    };
-
-    let listener = tokio::net::TcpListener::bind(addr).await?;
-    axum::serve(listener, app.into_service()).await?;
-
+    axum::serve(listener, x.into_make_service()).await?;
     Ok(())
+}
+
+#[derive(Clone)]
+struct DawdleService {
+    api_service: Router,
+    state: App,
+}
+
+impl Service<Request> for DawdleService {
+    type Response = axum::http::Response<Body>;
+    type Error = Infallible;
+    type Future = std::pin::Pin<
+        Box<dyn std::future::Future<Output = Result<Response<Body>, Infallible>> + Send>,
+    >;
+
+    fn poll_ready(
+        &mut self,
+        _cx: &mut std::task::Context<'_>,
+    ) -> std::task::Poll<Result<(), Infallible>> {
+        std::task::Poll::Ready(Ok(()))
+    }
+
+    fn call(&mut self, req: Request) -> Self::Future {
+        let state = self.state.clone();
+        let mut api_service = self.api_service.clone();
+
+        Box::pin(async move {
+            let Some(Ok(hostname_header)) = req.headers().get("HOST").map(|h| h.to_str()) else {
+                return Ok(NOT_FOUND.into_response());
+            };
+
+            let site = match select_service(hostname_header) {
+                Ok(SelectedService::DawdleSpace) => {
+                    return Ok(api_service.call(req).await.unwrap())
+                }
+                Ok(SelectedService::Subdomain(subdomain)) => state.sites.get(&subdomain),
+                Ok(SelectedService::CustomDomain(hostname)) => state.sites.get(&hostname),
+                Err(_err) => return Ok(NOT_FOUND.into_response()),
+            };
+
+            let Some(site) = site else {
+                return Ok(NOT_FOUND.into_response());
+            };
+
+            match site.value() {
+                Website::User(username) => {
+                    let Some(path) = state.config.user_public_path(username) else {
+                        return Ok(NOT_FOUND.into_response());
+                    };
+                    let service =
+                        files::create_dir_service(path.clone(), path.join("404.html"), NOT_FOUND);
+                    let res = service.oneshot(req).await;
+                    Ok(res.into_response())
+                }
+                Website::Site(username, path) => {
+                    let Some(path) = state.config.project_path(username, path) else {
+                        return Ok(NOT_FOUND.into_response());
+                    };
+                    let service =
+                        files::create_dir_service(path.clone(), path.join("404.html"), NOT_FOUND);
+                    let res = service.oneshot(req).await;
+                    Ok(res.into_response())
+                }
+            }
+        })
+    }
 }
 
 #[derive(Debug)]

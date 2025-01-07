@@ -61,7 +61,7 @@ pub enum ChatResponse {
 }
 
 fn response(chat_response: ChatResponse) -> Message {
-    Message::Text(serde_json::to_string(&chat_response).unwrap())
+    Message::Text(serde_json::to_string(&chat_response).unwrap().into())
 }
 
 pub async fn handle_chat_socket(stream: WebSocket, username: Option<String>, state: App) {

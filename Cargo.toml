@@ -46,16 +46,16 @@ dav-server={version="0.7"}
 
 # web dependencies
 tower-http={version="0.6", features=["set-header"]}
-tower={version="0.5", features=["util"]}
-axum={version="0.7", features=["macros", "ws"]}
-axum-extra={version="0.9", features=["cookie", "typed-header"]}
+tower={version="0.5", features=["util", "steer"]}
+axum={version="0.8", features=["macros", "ws"]}
+axum-extra={version="0.10", features=["cookie", "typed-header"]}
 addr="0.15"
 percent-encoding="2.3"
 httpdate="1.0"
 mime_guess="2.0"
 http-range-header="0.4"
 tokio-util={version="0.7", features=["io"]}
-comrak="0.31"
+comrak="0.33"
 reqwest={version="0.12", default-features=false, features=["rustls-tls", "json"]}
 
 [profile.release]
