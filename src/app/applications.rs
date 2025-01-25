@@ -2,81 +2,87 @@ use std::path::Path;
 
 use cuid2::cuid;
 use eyre::{bail, OptionExt, Result};
-use futures::{StreamExt, TryStreamExt};
-use libsql::{params, Connection};
 use serde::{Deserialize, Serialize};
+use sqlx::SqlitePool;
+use utoipa::ToSchema;
 
-use crate::utils::{hash_pw, is_valid_username, to_time};
+use crate::utils::{hash_pw, is_valid_username};
 
 #[derive(Clone)]
 pub struct AppApplications {
-    conn: Connection,
+    conn: SqlitePool,
     config: crate::config::Config,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 pub struct Application {
     pub id: String,
     pub username: String,
     pub email: String,
     pub about: String,
     #[serde(with = "time::serde::rfc3339")]
-    pub date: time::OffsetDateTime,
+    pub created_at: time::OffsetDateTime,
     pub approved: bool,
     pub claimed: bool,
     pub claim_token: Option<String>,
 }
 
 impl AppApplications {
-    pub fn new(conn: Connection, config: crate::config::Config) -> Self {
+    pub fn new(conn: SqlitePool, config: crate::config::Config) -> Self {
         Self { conn, config }
     }
 
     pub async fn all(&self) -> Result<Vec<Application>> {
-        let mut stmt = self
-            .conn
-            .prepare("SELECT application_id, requested_username, email, about, approved, claimed, claim_token, created_at FROM applications")
-            .await?;
-        let rows = stmt.query(()).await?;
+        // let mut stmt = self
+        //     .conn
+        //     .prepare("SELECT application_id, requested_username, email, about, approved, claimed, claim_token, created_at FROM applications")
+        //     .await?;
+        // let rows = stmt.query(()).await?;
 
-        let applications = rows.into_stream().map(|row| {
-            let row = row?;
-            eyre::Ok(Application {
-                id: row.get(0)?,
-                username: row.get(1)?,
-                email: row.get(2)?,
-                about: row.get(3)?,
-                approved: row.get(4)?,
-                claimed: row.get(5)?,
-                claim_token: row.get(6)?,
-                date: to_time(row.get(7)?)?,
-            })
-        });
+        // let applications = rows.into_stream().map(|row| {
+        //     let row = row?;
+        //     eyre::Ok(Application {
+        //         id: row.get(0)?,
+        //         username: row.get(1)?,
+        //         email: row.get(2)?,
+        //         about: row.get(3)?,
+        //         approved: row.get(4)?,
+        //         claimed: row.get(5)?,
+        //         claim_token: row.get(6)?,
+        //         date: to_time(row.get(7)?)?,
+        //     })
+        // });
 
-        applications.try_collect::<Vec<_>>().await
+        // applications.try_collect::<Vec<_>>().await
+        let applications = sqlx::query_as!(
+            Application,
+            r#"
+            SELECT application_id AS id, requested_username AS username, email, about, approved, claimed, claim_token, created_at
+            FROM applications
+            "#,
+        ).fetch_all(&self.conn).await?;
+        Ok(applications)
     }
 
     pub async fn approve(&self, id: &str) -> Result<()> {
         let token = cuid();
-
-        self.conn
-            .execute(
-                "UPDATE applications SET approved = 1, claim_token = ? WHERE application_id = ?",
-                params![token, id],
-            )
-            .await?;
-
+        sqlx::query!(
+            "UPDATE applications SET approved = 1, claim_token = ? WHERE application_id = ?",
+            token,
+            id,
+        )
+        .execute(&self.conn)
+        .await?;
         Ok(())
     }
 
     pub async fn unapprove(&self, id: &str) -> Result<()> {
-        self.conn
-            .execute(
-                "UPDATE applications SET approved = 0 WHERE application_id = ? AND claimed = 0",
-                params![id],
-            )
-            .await?;
-
+        sqlx::query!(
+            "UPDATE applications SET approved = 0 WHERE application_id = ? AND claimed = 0",
+            id,
+        )
+        .execute(&self.conn)
+        .await?;
         Ok(())
     }
 
@@ -86,22 +92,20 @@ impl AppApplications {
             bail!("invalid username");
         }
 
-        self.conn
-            .execute(
-                "UPDATE applications SET requested_username = ? WHERE application_id = ? AND claimed = 0",
-                params![username, id],
-            )
-            .await?;
+        sqlx::query!(
+            "UPDATE applications SET requested_username = ? WHERE application_id = ? AND claimed = 0",
+            username,
+            id,
+        )
+        .execute(&self.conn)
+        .await?;
 
         Ok(())
     }
 
     pub async fn delete(&self, id: &str) -> Result<()> {
-        self.conn
-            .execute(
-                "DELETE FROM applications WHERE application_id = ?",
-                params![id],
-            )
+        sqlx::query!("DELETE FROM applications WHERE application_id = ?", id,)
+            .execute(&self.conn)
             .await?;
         Ok(())
     }
@@ -113,13 +117,16 @@ impl AppApplications {
             bail!("invalid username");
         }
 
-        self
-            .conn
-            .execute(
-                "INSERT INTO applications (application_id, requested_username, email, about) VALUES (?, ?, ?, ?)",
-                params![cuid(), username, email, about],
-            )
-            .await?;
+        let application_id = cuid();
+        sqlx::query!(
+            "INSERT INTO applications (application_id, requested_username, email, about) VALUES (?, ?, ?, ?)",
+            application_id,
+            username,
+            email,
+            about,
+        )
+        .execute(&self.conn)
+        .await?;
 
         Ok(())
     }
@@ -130,44 +137,41 @@ impl AppApplications {
             bail!("invalid username");
         }
 
-        let tx = self.conn.transaction().await?;
+        let mut tx = self.conn.begin().await?;
 
-        let mut stmt = tx
-            .prepare(
-                "SELECT application_id, approved, claimed, requested_username FROM applications WHERE claim_token = ?",
-            )
-            .await?;
-        let application = stmt.query_row([token]).await?;
+        let application = sqlx::query!(
+            "SELECT application_id, approved, claimed, requested_username FROM applications WHERE claim_token = ?",
+            token,
+        )
+        .fetch_one(&mut *tx)
+        .await?;
 
-        let (app_id, app_approved, app_claimed, app_username) = (
-            application.get::<String>(0)?,
-            application.get::<bool>(1)?,
-            application.get::<bool>(2)?,
-            application.get::<String>(3)?,
-        );
-
-        if !app_approved {
+        if !application.approved {
             bail!("application not approved");
         }
 
-        if app_claimed {
+        if application.claimed {
             bail!("application already claimed");
         }
 
-        if app_username != username {
+        if application.requested_username != username {
             return Ok(()); // silently ignore
         }
 
-        tx.execute(
+        sqlx::query!(
             "UPDATE applications SET claimed = 1 WHERE application_id = ?",
-            params![app_id],
+            application.application_id,
         )
+        .execute(&mut *tx)
         .await?;
 
-        tx.execute(
+        let password_hash = hash_pw(pw)?;
+        sqlx::query!(
             "INSERT INTO users (username, password_hash) VALUES (?, ?)",
-            params![username.clone(), hash_pw(pw)?],
+            username,
+            password_hash,
         )
+        .execute(&mut *tx)
         .await?;
 
         self.create_home(&username)?;

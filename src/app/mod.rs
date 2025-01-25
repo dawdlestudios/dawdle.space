@@ -1,24 +1,26 @@
-use core::{AppApplications, AppSessions, AppUsers};
+mod applications;
+mod sessions;
+mod users;
+
+pub use applications::{AppApplications, Application};
+pub use sessions::{AppSessions, Session};
+use sqlx::{migrate, sqlite::SqlitePoolOptions};
+pub use users::{AppUsers, User};
+
 use std::sync::Arc;
 
 use dashmap::DashMap;
 use eyre::Result;
-use refinery_libsql::LibsqlConn;
 use serde::{Deserialize, Serialize};
 
-mod core;
-mod refinery_libsql;
-pub use core::Session;
-
-use crate::{chat::state::ChatState, config::Config};
+use crate::config::Config;
 
 #[derive(Clone)]
 pub struct App {
     pub users: AppUsers,
     pub applications: AppApplications,
     pub sessions: AppSessions,
-    pub chat: Arc<crate::chat::state::ChatState>,
-
+    // pub chat: Arc<crate::chat::state::ChatState>,
     pub config: Config,
     pub sites: Arc<DashMap<String, Website>>,
 }
@@ -32,21 +34,19 @@ pub enum Website {
     Site(Username, RelativeProjectPath),
 }
 
-refinery::embed_migrations!("src/migrations");
-
 impl App {
     pub async fn new(config: Config) -> Result<Self> {
         std::fs::create_dir_all(config.db_path().parent().unwrap())?;
-        let db = libsql::Builder::new_local(config.db_path()).build().await?;
-        let conn = db.connect()?;
 
-        let mut runner = migrations::runner();
-        runner.set_migration_table_name("migrations");
-        runner.run_async(&mut LibsqlConn(conn.clone())).await?;
+        let pool = SqlitePoolOptions::new()
+            .connect(&config.db_path().to_string_lossy())
+            .await?;
 
-        let users = AppUsers::new(conn.clone(), config.clone());
-        let applications = AppApplications::new(conn.clone(), config.clone());
-        let sessions = AppSessions::new(conn.clone());
+        migrate!("src/migrations").run(&pool).await?;
+
+        let users = AppUsers::new(pool.clone(), config.clone());
+        let applications = AppApplications::new(pool.clone(), config.clone());
+        let sessions = AppSessions::new(pool.clone());
 
         let sites = {
             DashMap::from_iter(
@@ -69,7 +69,7 @@ impl App {
             sessions,
             config,
             sites: Arc::new(sites),
-            chat: Arc::new(ChatState::new()),
+            // chat: Arc::new(ChatState::new()),
         })
     }
 

@@ -1,8 +1,3 @@
-use axum::{
-    body::Body,
-    http::Response,
-    response::{Html, IntoResponse},
-};
 use eyre::Result;
 use frontmatter::FrontMatter;
 use std::path::PathBuf;
