@@ -5,12 +5,12 @@ mod utils;
 mod web;
 
 pub use app::App;
-use log::{info, LevelFilter};
+use log::LevelFilter;
 use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 use std::str::FromStr;
 use tokio::select;
 
-#[tokio::main]
+#[actix_web::main]
 async fn main() -> eyre::Result<()> {
     env_logger::builder().filter_level(LevelFilter::Info).init();
 
@@ -27,7 +27,6 @@ async fn main() -> eyre::Result<()> {
     );
 
     let api_server = web::run(app.clone(), api_addr);
-    info!("api server listening on {}", api_addr);
 
     select! {
         r = api_server => r

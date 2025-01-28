@@ -8,6 +8,17 @@ create table users (
     minecraft_uuid text
 );
 
+create table sites (
+    site_id text primary key not null,
+    domain text not null,
+    owner text not null,
+    created_at datetime not null default (strftime('%s', 'now')),
+    custom_domain text,
+    redirect_to_custom_domain boolean not null default false,
+    access_token text not null,
+    foreign key (owner) references users (username) on delete cascade
+);
+
 create table user_public_keys (
     username text not null,
     name text not null,

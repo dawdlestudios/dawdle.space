@@ -14,17 +14,15 @@ path="src/main.rs"
 eyre="0.6"
 env_logger="0.11"
 log="0.4"
-async-trait="0.1"
 futures="0.3"
 tokio={version="1.42", features=["full", "macros"]}
 data-encoding="2.7"
-futures-util="0.3"
 
 # common dependencies
 serde="1.0"
 serde_json="1.0"
 toml="0.8"
-serde_yml="0.0.12"
+serde_yaml="0.9"
 cuid2="0.1"
 dashmap="6.0"
 rand="0.8"
@@ -37,16 +35,12 @@ dav-server={version="0.7", features=["actix-web", "actix-compat"]}
 
 # web dependencies
 addr="0.15"
-percent-encoding="2.3"
-httpdate="1.0"
-mime_guess="2.0"
-http-range-header="0.4"
-tokio-util={version="0.7", features=["io"]}
 comrak="0.35"
-reqwest={version="0.12", default-features=false, features=["rustls-tls", "json"]}
+awc={version="3.0", features=["rustls"]}
 
-sqlx={version="0.8.3", features=["sqlite", "time"]}
+sqlx={version="0.8.3", features=["runtime-tokio", "sqlite", "time"]}
 actix-web={version="4.9", features=["cookies"]}
+actix-files="0.6"
 utoipa={version="5.3", features=["time", "actix_extras"]}
 utoipa-actix-web={version="0.1"}
 utoipa-swagger-ui={version="9.0", features=["actix-web", "vendored"]}

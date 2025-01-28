@@ -1,7 +1,7 @@
 use std::path::Path;
 
 use cuid2::cuid;
-use eyre::{bail, OptionExt, Result};
+use eyre::{bail, Result};
 use serde::{Deserialize, Serialize};
 use sqlx::SqlitePool;
 use utoipa::ToSchema;
@@ -11,7 +11,7 @@ use crate::utils::{hash_pw, is_valid_username};
 #[derive(Clone)]
 pub struct AppApplications {
     conn: SqlitePool,
-    config: crate::config::Config,
+    _config: crate::config::Config,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
@@ -29,7 +29,10 @@ pub struct Application {
 
 impl AppApplications {
     pub fn new(conn: SqlitePool, config: crate::config::Config) -> Self {
-        Self { conn, config }
+        Self {
+            conn,
+            _config: config,
+        }
     }
 
     pub async fn all(&self) -> Result<Vec<Application>> {
@@ -155,7 +158,7 @@ impl AppApplications {
         }
 
         if application.requested_username != username {
-            return Ok(()); // silently ignore
+            bail!("username does not match");
         }
 
         sqlx::query!(
@@ -174,44 +177,7 @@ impl AppApplications {
         .execute(&mut *tx)
         .await?;
 
-        self.create_home(&username)?;
         tx.commit().await?;
         Ok(())
     }
-
-    fn create_home(&self, username: &str) -> Result<()> {
-        // copy the default home folder to the user's new home folder
-        let default_home = self.config.default_user_home();
-        let user_home = self
-            .config
-            .user_home(username)
-            .ok_or_eyre("invalid username")?;
-
-        if !user_home.exists() {
-            std::fs::create_dir_all(&user_home)?;
-        }
-
-        log::info!(
-            "copying default home folder ({default_home:?}) to {}",
-            user_home.to_str().unwrap()
-        );
-
-        copy_dir_all(default_home, &user_home)?;
-        Ok(())
-    }
-}
-
-fn copy_dir_all(src: impl AsRef<Path>, dst: impl AsRef<Path>) -> std::io::Result<()> {
-    std::fs::create_dir_all(&dst)?;
-    for entry in std::fs::read_dir(src)? {
-        let entry = entry?;
-        let ty = entry.file_type()?;
-        if ty.is_dir() {
-            copy_dir_all(entry.path(), dst.as_ref().join(entry.file_name()))?;
-        } else {
-            std::fs::copy(entry.path(), dst.as_ref().join(entry.file_name()))?;
-        }
-    }
-
-    Ok(())
 }

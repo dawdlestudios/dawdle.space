@@ -7,7 +7,7 @@ use utoipa_actix_web::service_config::ServiceConfig;
 use super::errors::{ErrorResponse, ErrorResponseExt};
 use super::{sessions, SuccessResponse};
 
-use crate::app::{App, Website};
+use crate::app::App;
 
 use actix_web::web::{Data, Json};
 use serde::{Deserialize, Serialize};
@@ -192,7 +192,13 @@ pub async fn claim(
         .await
         .api_internal_error()?;
 
-    app.set_site(token.username.clone(), Website::User(token.username));
+    app.sites
+        .create(
+            &format!("{username}.dawdle.space", username = token.username),
+            &token.username,
+        )
+        .await
+        .api_internal_error()?;
 
     Ok(Json(SuccessResponse { success: true }))
 }

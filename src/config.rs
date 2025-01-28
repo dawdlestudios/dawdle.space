@@ -1,4 +1,4 @@
-use crate::utils::{is_valid_project_path, is_valid_username};
+use eyre::Result;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -16,7 +16,7 @@ pub struct FileSystemConfig {
     pub data_dir: String,
 
     /// The directory for all user files
-    pub user_dir: String,
+    pub site_dir: String,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -65,49 +65,22 @@ impl Config {
         Ok(config)
     }
 
-    pub fn user_bin_dir(&self) -> std::path::PathBuf {
-        resolve_path(&self.fs.user_dir).join("bin")
-    }
-
-    pub fn default_user_home(&self) -> std::path::PathBuf {
-        resolve_path(&self.fs.user_dir).join("default-home")
-    }
-
-    pub fn user_home(&self, username: &str) -> Option<std::path::PathBuf> {
-        if !is_valid_username(username) {
-            return None;
-        }
-        let path = resolve_path(&self.fs.user_dir)
-            .join("home")
-            .join(username.to_ascii_lowercase());
-        Some(path)
-    }
-
-    pub fn user_public_path(&self, username: &str) -> Option<std::path::PathBuf> {
-        self.user_home(username).map(|path| path.join("public"))
-    }
-
     pub fn db_path(&self) -> std::path::PathBuf {
-        resolve_path(&self.fs.data_dir)
-            .join("database")
-            .join("db.sqlite")
+        resolve_path(&self.fs.data_dir).join("db.sqlite")
+    }
+
+    pub fn site_dir(&self, site_id: &str) -> Result<std::path::PathBuf> {
+        if !cuid2::is_slug(site_id) {
+            return Err(eyre::eyre!("invalid site id"));
+        }
+
+        Ok(resolve_path(&self.fs.site_dir).join(site_id))
     }
 
     pub fn ssh_key_path(&self) -> std::path::PathBuf {
         resolve_path(&self.fs.data_dir)
             .join("ssh")
             .join("id_ed25519")
-    }
-
-    pub fn project_path(&self, username: &str, project_path: &str) -> Option<std::path::PathBuf> {
-        if !is_valid_username(username) || !is_valid_project_path(project_path) {
-            return None;
-        }
-        let path = resolve_path(&self.fs.user_dir)
-            .join("home")
-            .join(username.to_ascii_lowercase())
-            .join(project_path);
-        Some(path)
     }
 }
 

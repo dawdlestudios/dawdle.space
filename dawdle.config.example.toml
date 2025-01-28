@@ -1,5 +1,5 @@
 [fs]
-user_dir="./.dawdle/users"
+site_dir="./.dawdle/sites"
 data_dir="./.dawdle/data"
 
 [ssh]
