@@ -1,10 +1,6 @@
 use crate::utils::{is_valid_project_path, is_valid_username};
 use serde::{Deserialize, Serialize};
 
-pub const DOCKER_IMAGE: &str = "ghcr.io/dawdlestudios/container";
-pub const DOCKER_TAG: &str = "latest";
-pub const DOCKER_CONTAINER_PREFIX: &str = "dawdle-home-";
-
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Config {
     pub fs: FileSystemConfig,

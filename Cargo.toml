@@ -33,7 +33,7 @@ argon2={version="0.5", features=["std"]}
 ssh-key={version="0.6", features=["ed25519"]}
 
 # webdav
-dav-server={version="0.7", features=["actix-web"]}
+dav-server={version="0.7", features=["actix-web", "actix-compat"]}
 
 # web dependencies
 addr="0.15"
@@ -50,10 +50,6 @@ actix-web={version="4.9", features=["cookies"]}
 utoipa={version="5.3", features=["time", "actix_extras"]}
 utoipa-actix-web={version="0.1"}
 utoipa-swagger-ui={version="9.0", features=["actix-web", "vendored"]}
-
-[profile.release]
-strip=true
-lto="thin"
 
 [profile.dev.package.sqlx-macros]
 opt-level=3

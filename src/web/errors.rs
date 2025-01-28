@@ -6,6 +6,7 @@ use actix_web::ResponseError;
 #[derive(Clone)]
 pub struct ErrorResponse(StatusCode, String);
 
+#[allow(unused)]
 impl ErrorResponse {
     pub fn new(status: StatusCode, message: &str) -> Self {
         Self(status, message.to_string())
@@ -17,6 +18,18 @@ impl ErrorResponse {
 
     pub fn internal_error(message: &str) -> Self {
         Self(StatusCode::INTERNAL_SERVER_ERROR, message.to_string())
+    }
+
+    pub fn bad_request(message: &str) -> Self {
+        Self(StatusCode::BAD_REQUEST, message.to_string())
+    }
+
+    pub fn not_found(message: &str) -> Self {
+        Self(StatusCode::NOT_FOUND, message.to_string())
+    }
+
+    pub fn forbidden(message: &str) -> Self {
+        Self(StatusCode::FORBIDDEN, message.to_string())
     }
 }
 
@@ -48,6 +61,7 @@ impl ResponseError for ErrorResponse {
     }
 }
 
+#[allow(unused)]
 pub trait ErrorResponseExt<T> {
     fn api_error(self, status: StatusCode, message: Option<&str>) -> Result<T, ErrorResponse>;
     fn api_internal_error(self) -> Result<T, ErrorResponse>
@@ -70,6 +84,18 @@ pub trait ErrorResponseExt<T> {
         Self: Sized,
     {
         self.api_error(StatusCode::UNAUTHORIZED, None)
+    }
+    fn api_bad_request(self) -> Result<T, ErrorResponse>
+    where
+        Self: Sized,
+    {
+        self.api_error(StatusCode::BAD_REQUEST, None)
+    }
+    fn api_forbidden(self) -> Result<T, ErrorResponse>
+    where
+        Self: Sized,
+    {
+        self.api_error(StatusCode::FORBIDDEN, None)
     }
 }
 

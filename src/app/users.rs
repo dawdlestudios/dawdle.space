@@ -140,7 +140,9 @@ impl AppUsers {
             "DELETE FROM user_public_keys WHERE username = ? AND name = ?",
             username,
             name
-        );
+        )
+        .execute(&self.conn)
+        .await?;
         Ok(())
     }
 

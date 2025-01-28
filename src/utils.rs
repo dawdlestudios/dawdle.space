@@ -1,10 +1,5 @@
 use argon2::PasswordHasher;
-use eyre::Result;
 use std::fmt::{self, Debug, Formatter};
-
-pub fn to_time(timestamp: i64) -> Result<time::OffsetDateTime> {
-    Ok(time::OffsetDateTime::from_unix_timestamp(timestamp)?)
-}
 
 pub fn is_valid_username(username: &str) -> bool {
     !username.is_empty()

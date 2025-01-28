@@ -2,6 +2,7 @@ pub mod admin;
 pub mod auth;
 pub mod me;
 pub mod public;
+pub mod webdav;
 
 use super::{errors, sessions};
 

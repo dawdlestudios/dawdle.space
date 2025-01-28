@@ -42,5 +42,5 @@ pub async fn get_sites(app: Data<App>) -> Result<impl Responder, ErrorResponse> 
         })
         .collect::<serde_json::Value>();
 
-    Ok((Json(sites)))
+    Ok(Json(sites))
 }
