@@ -4,7 +4,7 @@ use crate::{app::App, web::errors::ErrorResponse};
 use actix_web::http::StatusCode;
 use actix_web::web::{Data, Path};
 use actix_web::{Either, HttpResponse, Responder};
-use dav_server::{actix::DavRequest, actix::DavResponse, DavHandler};
+use dav_server::{DavHandler, actix::DavRequest, actix::DavResponse};
 use dav_server::{fakels::FakeLs, localfs::LocalFs};
 
 use crate::utils::is_valid_username;

@@ -7,11 +7,10 @@ use crate::{
     },
 };
 use actix_web::{
-    get,
+    Responder, get,
     http::StatusCode,
     post,
     web::{Data, Json},
-    Responder,
 };
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;

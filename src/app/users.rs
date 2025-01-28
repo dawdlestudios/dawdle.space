@@ -1,5 +1,5 @@
 use argon2::PasswordVerifier;
-use eyre::{eyre, Result};
+use eyre::{Result, eyre};
 use serde::{Deserialize, Serialize};
 use sqlx::SqlitePool;
 use utoipa::ToSchema;

@@ -4,8 +4,8 @@ use time::Duration;
 
 use super::errors::ErrorResponse;
 use futures::{
-    future::{self, FutureExt, LocalBoxFuture},
     TryFutureExt,
+    future::{self, FutureExt, LocalBoxFuture},
 };
 
 pub const SESSION_COOKIE_MAX_AGE: Duration = Duration::days(7);

@@ -1,5 +1,5 @@
 use super::errors::{ErrorResponse, ErrorResponseExt};
-use super::{sessions, SuccessResponse};
+use super::{SuccessResponse, sessions};
 
 use crate::app::{App, Application, User};
 

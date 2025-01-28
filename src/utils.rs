@@ -34,6 +34,7 @@ impl<T: Debug> Debug for RingBuffer<T> {
     }
 }
 
+#[allow(dead_code)]
 impl<T: Clone + Debug> RingBuffer<T> {
     pub fn new(capacity: usize) -> Self {
         RingBuffer {

@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use dashmap::DashMap;
 use eyre::Result;
-use sqlx::{prelude::FromRow, SqlitePool};
+use sqlx::{SqlitePool, prelude::FromRow};
 use time::OffsetDateTime;
 
 #[derive(Clone, FromRow)]

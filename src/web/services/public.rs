@@ -1,8 +1,7 @@
-use crate::{web::errors::ErrorResponse, App};
+use crate::{App, web::errors::ErrorResponse};
 use actix_web::{
-    get,
+    Responder, get,
     web::{Data, Json},
-    Responder,
 };
 use serde_json::json;
 use utoipa_actix_web::service_config::ServiceConfig;

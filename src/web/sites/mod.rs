@@ -1,7 +1,7 @@
 use actix_files::NamedFile;
-use actix_web::{web::Data, HttpRequest, Responder};
+use actix_web::{HttpRequest, Responder, web::Data};
 
-use crate::{web::errors::ErrorResponse, App};
+use crate::{App, web::errors::ErrorResponse};
 
 use super::errors::ErrorResponseExt;
 

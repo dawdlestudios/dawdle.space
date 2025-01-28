@@ -1,7 +1,5 @@
-use std::path::Path;
-
 use cuid2::cuid;
-use eyre::{bail, Result};
+use eyre::{Result, bail};
 use serde::{Deserialize, Serialize};
 use sqlx::SqlitePool;
 use utoipa::ToSchema;

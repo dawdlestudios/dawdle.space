@@ -1,11 +1,11 @@
 use actix_web::cookie::{Cookie, SameSite};
 use actix_web::http::StatusCode;
-use actix_web::{post, HttpRequest, HttpResponse, HttpResponseBuilder, Responder};
+use actix_web::{HttpRequest, HttpResponse, HttpResponseBuilder, Responder, post};
 use utoipa::ToSchema;
 use utoipa_actix_web::service_config::ServiceConfig;
 
 use super::errors::{ErrorResponse, ErrorResponseExt};
-use super::{sessions, SuccessResponse};
+use super::{SuccessResponse, sessions};
 
 use crate::app::App;
 

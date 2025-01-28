@@ -1,17 +1,16 @@
 use std::net::SocketAddr;
 
 use actix_web::{
-    guard,
+    App, HttpServer, guard,
     middleware::Logger,
     web::{self, Data},
-    App, HttpServer,
 };
 use eyre::Result;
 use utoipa::{
-    openapi::security::{ApiKeyValue, SecurityScheme},
     OpenApi,
+    openapi::security::{ApiKeyValue, SecurityScheme},
 };
-use utoipa_actix_web::{scope, AppExt};
+use utoipa_actix_web::{AppExt, scope};
 use utoipa_swagger_ui::SwaggerUi;
 
 pub mod errors;
