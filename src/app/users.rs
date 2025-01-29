@@ -1,5 +1,5 @@
 use argon2::PasswordVerifier;
-use eyre::{Result, eyre};
+use eyre::{eyre, Result};
 use serde::{Deserialize, Serialize};
 use sqlx::SqlitePool;
 use utoipa::ToSchema;
@@ -108,42 +108,6 @@ impl AppUsers {
         .await?;
 
         Ok(user)
-    }
-
-    pub async fn get_public_keys(&self, username: &str) -> Result<Vec<(String, String)>> {
-        let rows = sqlx::query!(
-            "SELECT public_key, name FROM user_public_keys WHERE username = ?",
-            username
-        )
-        .map(|row| (row.public_key, row.name))
-        .fetch_all(&self.conn)
-        .await?;
-
-        Ok(rows)
-    }
-
-    pub async fn add_public_key(&self, username: &str, public_key: &str, name: &str) -> Result<()> {
-        sqlx::query!(
-            "INSERT INTO user_public_keys (username, name, public_key) VALUES (?, ?, ?)",
-            username,
-            name,
-            public_key
-        )
-        .execute(&self.conn)
-        .await?;
-
-        Ok(())
-    }
-
-    pub async fn remove_public_key(&self, username: &str, name: &str) -> Result<()> {
-        sqlx::query!(
-            "DELETE FROM user_public_keys WHERE username = ? AND name = ?",
-            username,
-            name
-        )
-        .execute(&self.conn)
-        .await?;
-        Ok(())
     }
 
     pub async fn update_password(&self, username: &str, password: &str) -> Result<()> {

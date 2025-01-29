@@ -1,9 +1,7 @@
-use actix_files::NamedFile;
-use actix_web::{HttpRequest, Responder, web::Data};
-
-use crate::{App, web::errors::ErrorResponse};
-
 use super::errors::ErrorResponseExt;
+use crate::{web::errors::ErrorResponse, App};
+use actix_files::NamedFile;
+use actix_web::{web::Data, HttpRequest, Responder};
 
 pub async fn handle(req: HttpRequest, app: Data<App>) -> Result<impl Responder, ErrorResponse> {
     let info = req.connection_info();
@@ -15,6 +13,9 @@ pub async fn handle(req: HttpRequest, app: Data<App>) -> Result<impl Responder, 
     } else {
         (hostname, "80")
     };
+
+    #[cfg(debug_assertions)]
+    let hostname = hostname.strip_suffix(".localhost").unwrap_or(hostname);
 
     let Ok(domain) = addr::parse_domain_name(hostname) else {
         return Err(ErrorResponse::bad_request("invalid hostname"));

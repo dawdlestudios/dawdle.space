@@ -1,6 +1,7 @@
 mod app;
 mod config;
 mod minecraft;
+mod ssh;
 mod utils;
 mod web;
 
@@ -19,6 +20,10 @@ async fn main() -> eyre::Result<()> {
 
     if let Some((username, password)) = config.clone().create_admin_user {
         let _ = app.users.create(&username, &password, Some("admin")).await;
+        let _ = app
+            .sites
+            .create(&format!("{}.dawdle.space", username), &username)
+            .await;
     }
 
     let api_addr = SocketAddr::new(
@@ -26,9 +31,16 @@ async fn main() -> eyre::Result<()> {
         app.config.web.port,
     );
 
+    let ssh_addr = SocketAddr::new(
+        IpAddr::from_str(&app.config.ssh.interface).unwrap_or(Ipv4Addr::UNSPECIFIED.into()),
+        app.config.ssh.port,
+    );
+
     let api_server = web::run(app.clone(), api_addr);
+    let ssh_server = ssh::run(app.clone(), ssh_addr);
 
     select! {
-        r = api_server => r
+        res = api_server => res,
+        res = ssh_server => res,
     }
 }

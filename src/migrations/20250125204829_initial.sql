@@ -15,16 +15,8 @@ create table sites (
     created_at datetime not null default (strftime('%s', 'now')),
     custom_domain text,
     redirect_to_custom_domain boolean not null default false,
-    access_token text not null,
+    access_token text,
     foreign key (owner) references users (username) on delete cascade
-);
-
-create table user_public_keys (
-    username text not null,
-    name text not null,
-    public_key text not null,
-    primary key (username, public_key),
-    foreign key (username) references users (username) on delete cascade
 );
 
 create table sessions (
@@ -46,3 +38,6 @@ create table applications (
     claim_token text,
     created_at datetime not null default (strftime('%s', 'now'))
 );
+
+insert into users (username, password_hash, role) values ('system', '', 'admin');
+insert into sites (site_id, domain, owner) values ('www', 'dawdle.space', 'system');

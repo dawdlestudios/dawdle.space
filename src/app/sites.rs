@@ -1,9 +1,11 @@
 use std::sync::Arc;
 
 use dashmap::DashMap;
-use eyre::Result;
-use sqlx::{SqlitePool, prelude::FromRow};
+use eyre::{bail, Result};
+use sqlx::{prelude::FromRow, SqlitePool};
 use time::OffsetDateTime;
+
+static DEFAULT_HTML: &str = include_str!("../../static/default.html");
 
 #[derive(Clone, FromRow)]
 pub struct Site {
@@ -16,7 +18,7 @@ pub struct Site {
 
     // token required to update the site via sftp/webdav/etc.
     // this is generated when the site is created, and can be reset by the owner.
-    pub access_token: String,
+    pub access_token: Option<String>,
 }
 
 #[derive(Clone)]
@@ -71,7 +73,10 @@ impl AppSites {
     pub fn validate_token(&self, site_id: &str, secret: &str) -> bool {
         self.sites
             .get(site_id)
-            .map(|site| site.access_token == secret)
+            .map(|site| match &site.access_token {
+                Some(token) => token == secret && !secret.is_empty(),
+                None => false,
+            })
             .unwrap_or(false)
     }
 
@@ -91,12 +96,12 @@ impl AppSites {
             created_at: OffsetDateTime::now_utc(),
             custom_domain: None,
             redirect_to_custom_domain: false,
-            access_token: access_token.clone(),
+            access_token: Some(access_token.clone()),
         };
 
-        self.domain_to_site_id
-            .insert(domain.to_string(), site_id.clone());
-        self.sites.insert(site_id.clone(), site.clone());
+        if self.domain_to_site_id.contains_key(domain) {
+            bail!("domain already in use");
+        };
 
         sqlx::query!(
             "INSERT INTO sites (site_id, domain, owner, created_at, access_token) VALUES (?, ?, ?, ?, ?)",
@@ -108,6 +113,14 @@ impl AppSites {
         )
         .execute(&self.conn)
         .await?;
+
+        self.domain_to_site_id
+            .insert(domain.to_string(), site_id.clone());
+        self.sites.insert(site_id.clone(), site.clone());
+
+        let dir = self._config.site_dir(&site_id)?;
+        tokio::fs::create_dir_all(&dir).await?;
+        tokio::fs::write(dir.join("index.html"), DEFAULT_HTML).await?;
 
         Ok(site)
     }
@@ -143,7 +156,7 @@ impl AppSites {
         .await?;
 
         if let Some(mut site) = self.sites.get_mut(site_id) {
-            site.access_token = access_token.clone();
+            site.access_token = Some(access_token.clone());
         }
 
         Ok(access_token)
