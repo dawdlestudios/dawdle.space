@@ -1,0 +1,21 @@
+---
+import { Chat } from "../../components/Chat/chat";
+import Base from "../../layouts/Base.astro";
+---
+
+<Base title="Chat">
+  <main>
+    <Chat client:only="react" />
+  </main>
+</Base>
+
+<style>
+  main {
+    margin: 0;
+    padding: 0;
+    background-color: var(--background);
+    color: #fff;
+    display: flex;
+    flex: 1;
+  }
+</style>

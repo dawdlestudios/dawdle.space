@@ -1,0 +1,23 @@
+---
+import { getCollection } from "astro:content";
+import Post from "../../components/Post.astro";
+import Layout from "../../layouts/Layout.astro";
+export async function getStaticPaths() {
+	const wikiEntries = await getCollection("wiki");
+	return wikiEntries.map((entry) => ({
+		params: { slug: entry.slug },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<Layout title={entry.data.title}>
+  <Post>
+    <a href="/wiki">← Back to Wiki</a>
+    <h1 class="title">{entry.data.title}</h1>
+    <Content />
+  </Post>
+</Layout>

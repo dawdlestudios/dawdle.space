@@ -1,0 +1,32 @@
+---
+import { ClientRouter } from "astro:transitions";
+import "@fontsource-variable/victor-mono";
+import "./../global.css";
+
+interface Props {
+	title: string;
+	maxWidth?: string;
+}
+
+const { title, maxWidth } = Astro.props;
+---
+
+<html lang="en" transition:animate="none">
+  <head>
+    <ClientRouter />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" href="data:," />
+    <title>{title}</title>
+    <slot name="head" />
+  </Head>
+  <body>
+    <slot />
+    <style define:vars={{ maxWidth }}>
+      :global(body) {
+        --max-width: var(--maxWidth);
+      }
+    </style>
+    <script is:inline type="module" src="https://a.explodingcamera.com/script.js" data-entity="dawdle.space"></script>
+  </body>
+</html>

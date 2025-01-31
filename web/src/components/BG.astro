@@ -1,0 +1,19 @@
+<div transition:persist id="backgroundcontainer" class="bg"></div>
+
+<script>
+  // for some reason, css keyframes reset when the element is moved to the next page AaaAAAAA 🤬
+  // so we have to do it in js (HOW IS THERE A DIFFERENCE BETWEEN CSS AND JS KEYFRAMES???)
+
+  const bg = document.getElementById("backgroundcontainer");
+  const keyframes = [
+    { backgroundPosition: "0 0" },
+    { backgroundPosition: "-1920px 0" },
+  ];
+  const options = {
+    duration: 60000,
+    iterations: Infinity,
+    easing: "linear",
+  };
+
+  bg!.animate(keyframes, options);
+</script>

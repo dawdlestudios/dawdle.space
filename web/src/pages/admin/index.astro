@@ -1,0 +1,10 @@
+---
+import { AdminTools } from "../../components/AdminTools";
+import "../../components/AdminTools/style.module.css";
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout title="admin">
+  <meta name="robots" content="noindex" slot="head" />
+  <AdminTools client:only="react" />
+</Layout>

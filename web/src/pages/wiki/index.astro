@@ -1,0 +1,89 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+import { getCollection } from "astro:content";
+const wikiEntries = (await getCollection("wiki"))
+	.filter((entry) => entry.data.draft !== true)
+	.sort((a, b) => {
+		if (a.data.title < b.data.title) return -1;
+		if (a.data.title > b.data.title) return 1;
+		return 0;
+	});
+
+const guideEntries = (await getCollection("guide"))
+	.filter((entry) => entry.data.draft !== true)
+	.sort((a, b) => {
+		if (a.data.title < b.data.title) return -1;
+		if (a.data.title > b.data.title) return 1;
+		return 0;
+	});
+---
+
+<Layout title="Wiki Overview">
+  <main>
+    <h1>Wiki</h1>
+    <p>Welcome to the dawdle.space wiki!</p>
+    <p>
+      If you're new here, check out the <a href="/wiki/guide/creating-websites"
+        >Creating Websites</a
+      > guide to get started.
+    </p> 
+
+    <h2>All Wiki Pages</h2>
+    <ul>
+      {
+        wikiEntries.map((entry) => (
+          <li>
+            <a href={`/wiki/${entry.slug}`}>{entry.data.title}</a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <h2>Guides</h2>
+    <ul>
+      {
+        guideEntries.map((entry) => (
+          <li>
+            <a href={`/wiki/guide/${entry.slug}`}>{entry.data.title}</a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <style>
+      h1 {
+        margin-bottom: 0.5rem;
+      }
+
+      h2 {
+        margin-top: 1rem;
+      }
+
+      p {
+        margin-bottom: 1rem;
+      }
+
+      ul {
+        padding-left: 1.2rem;
+
+        li {
+          padding-bottom: 0.15rem;
+          padding-left: 0.2rem;
+        }
+      }
+
+      main {
+        padding: 1rem;
+        height: fit-content;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        justify-content: center;
+        margin: 0 auto;
+        max-width: 40rem;
+        width: 100%;
+      }
+    </style>
+  </main>
+</Layout>

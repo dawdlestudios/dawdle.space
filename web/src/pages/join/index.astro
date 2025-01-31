@@ -1,0 +1,135 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout title="join dawdle.space">
+  <main>
+    <h3>Already a member? <a href="/login">Login</a></h3>
+    <h2>Thanks for your interest in joining dawdle.space!</h2>
+    <form id="joinform">
+      <label for="username">Username (required)</label>
+      <input
+        type="text"
+        id="username"
+        name="username"
+        pattern="^[A-Za-z0-9]{1,20}$"
+        required
+        minlength="3"
+        maxlength="20"
+        placeholder="Your desired username"
+      />
+      <label for="email">Email/Discord Username (required)</label>
+      <input
+        type="text"
+        autocomplete="email"
+        id="email"
+        name="email"
+        required
+        placeholder="Your email address"
+      />
+
+      <label for="about">About yourself (optional)</label>
+      <textarea
+        name="about"
+        id="about"
+        cols="30"
+        rows="10"
+        placeholder="Tell us a little about yourself, why you want to join, how you found out about us, etc."
+      ></textarea>
+
+      <p>
+        <br />
+        We will never share your email address with anyone and will never send you automated emails, it is only
+        used for sending you your confirmation email and for contacting you if
+        there are any issues with your site.
+        <br />
+        <br />
+        While we try to keep light moderation, we do have a few rules so we can keep
+        the site safe and fun for everyone.
+        <br />
+      </p>
+      <div></div>
+      <label for="terms">
+        <input type="checkbox" id="terms" name="terms" required />
+        I have read and agree to the <a target="_blank" href="/terms"
+          >rules/terms</a
+        >.
+      </label>
+      <input type="submit" value="Submit" />
+    </form>
+  </main>
+</Layout>
+
+<script>
+  import { sendApplication } from "../../utils/api.ts";
+  import { navigate } from "astro:transitions/client";
+
+  const handleSubmit = async (e: Event) => {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+    const [username, email, about] = [
+      formData.get("username"),
+      formData.get("email"),
+      formData.get("about") || "no about provided",
+    ];
+
+    if (!username || !email || !about) {
+      (
+        form.querySelector("input[type=submit]") as HTMLInputElement
+      )?.setCustomValidity("Something went wrong. Please try again later.");
+      return;
+    }
+
+    sendApplication({
+      username: username as string,
+      email: email as string,
+      about: about as string,
+    })
+      .then(() => {
+        form.reset();
+        navigate("/join/success", { history: "replace" });
+      })
+      .catch(() => {
+        (
+          form.querySelector("input[type=submit]") as HTMLInputElement
+        )?.setCustomValidity("Something went wrong. Please try again later.");
+      });
+  };
+
+  document.addEventListener("astro:page-load", () => {
+    const form = document.getElementById("joinform");
+    form?.addEventListener("submit", handleSubmit);
+  });
+</script>
+
+<style>
+  form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+
+    label {
+      margin-top: 1rem;
+    }
+  }
+
+  h3 {
+    margin-bottom: 3rem;
+  }
+
+  h2 {
+    margin-bottom: 1rem;
+  }
+
+  main {
+    padding: 1rem;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: center;
+    margin: 0 auto;
+    max-width: 40rem;
+  }
+</style>

@@ -1,0 +1,22 @@
+---
+import { FileBrowser } from "../../components/FileBrowser";
+import "../../components/FileBrowser/styles.module.css";
+import SettingsLayout from "../../layouts/SettingsLayout.astro";
+---
+
+<SettingsLayout title="dawdle.space">
+  <section class="files">
+    <FileBrowser transition:persist="filebrowser" client:only="react" />
+  </section>
+</SettingsLayout>
+
+<style>
+  .files {
+    flex: 1;
+    display: flex;
+
+    h2 {
+      padding: 1rem;
+    }
+  }
+</style>

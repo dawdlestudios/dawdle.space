@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+
+set -e
+
+help() {
+    echo "Usage: $0 <command>"
+    echo "Available commands:"
+    echo "  help        Show this help message"
+    echo "  web         Start the web client"
+    echo "  server      Start the API server"
+    echo "  deploy-web  Deploy the web client"
+    echo "  deploy-api  Deploy the API server"
+}
+
+web() {
+    cd web
+    bun run dev
+}
+
+server() {
+    cargo run --bin dawdle-server
+}
+
+deploy-web() {
+    echo "Deploying web client..."
+    cd web
+
+    echo "  > Building web client..."
+    bun run build
+
+    echo "  > Copying files to remote host..."
+    rsync -avzP dist genoa:~/dawdle/sites/www
+
+    echo "  > Done!"
+}
+
+deploy-server() {
+    echo "Deploying server..."
+
+    echo "  > Building server..."
+    cargo zigbuild --release --target aarch64-unknown-linux-musl
+
+    echo "  > Copying server to remote host..."
+    rsync -avzP target/aarch64-unknown-linux-musl/release/dawdle-server genoa:~/dawdle/dawdle-server
+
+    echo "  > Restarting service..."
+    ssh genoa "sudo systemctl restart dawdle.service"
+
+    echo "  > Done!"
+}
+
+if [[ $# -eq 0 ]]; then
+    echo "Error: No command provided"
+    help
+    exit 1
+fi
+
+case "$1" in
+    web) web ;;
+    server) server ;;
+    deploy-web) deploy-web ;;
+    deploy-api) deploy-server ;;
+    help|--help|-h) help ;;
+    *) echo "Error: Unknown command '$1'"; help; exit 1 ;;
+esac
