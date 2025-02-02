@@ -1,12 +1,12 @@
 ---
-import { FileBrowser } from "../../components/FileBrowser";
 import "../../components/FileBrowser/styles.module.css";
+import { UserSites } from "../../components/Sites";
 import SettingsLayout from "../../layouts/SettingsLayout.astro";
 ---
 
 <SettingsLayout title="dawdle.space">
   <section class="files">
-    <FileBrowser transition:persist="filebrowser" client:only="react" />
+    <UserSites transition:persist="filebrowser" client:only="react" />
   </section>
 </SettingsLayout>
 

@@ -20,12 +20,12 @@ const url = new URL(Astro.request.url);
     <li data-active={url.pathname === "/"}>
       <a href="/">home</a>
     </li>
-    <li data-active={url.pathname.startsWith("/wiki")}>
+    <!-- <li data-active={url.pathname.startsWith("/wiki")}>
       <a href="/wiki">wiki</a>
-    </li>
-    <li data-active={url.pathname.startsWith("/chat")}>
+    </li> -->
+    <!-- <li data-active={url.pathname.startsWith("/chat")}>
       <a href="/chat">chat</a>
-    </li>
+    </li> -->
     <LoginLink client:only="react" transition:persist />
   </ul>
   <div class="page">
@@ -79,7 +79,7 @@ const url = new URL(Astro.request.url);
     }
 
     :global(li) {
-      &[data-active] {
+      &[data-active="true"] {
         background: var(--border-color);
         a {
           color: #000000;
@@ -127,8 +127,7 @@ const url = new URL(Astro.request.url);
 
   header {
     display: flex;
-    padding-top: 2.5rem;
-    padding-bottom: 1.5rem;
+    padding-bottom: .5rem;
     align-items: baseline;
     gap: 0.5rem;
 

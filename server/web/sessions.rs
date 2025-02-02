@@ -1,18 +1,19 @@
 use crate::app::{App, Session};
-use actix_web::FromRequest;
+use actix_web::{web::Data, FromRequest};
 use time::Duration;
 
 use super::errors::ErrorResponse;
 use futures::{
-    TryFutureExt,
     future::{self, FutureExt, LocalBoxFuture},
+    TryFutureExt,
 };
 
 pub const SESSION_COOKIE_MAX_AGE: Duration = Duration::days(7);
 pub const USERNAME_COOKIE_MAX_AGE: Duration = Duration::days(7);
-pub const USERNAME_COOKIE_NAME: &str = "clientside_username";
-pub const ROLE_COOKIE_NAME: &str = "clientside_role";
-pub const SESSION_COOKIE_NAME: &str = "session_token";
+
+pub const USERNAME_COOKIE_NAME: &str = "dawdle-user-client";
+pub const ROLE_COOKIE_NAME: &str = "dawdle-role-client";
+pub const SESSION_COOKIE_NAME: &str = "dawdle-session";
 
 pub struct Admin();
 
@@ -24,7 +25,7 @@ impl FromRequest for Admin {
         req: &actix_web::HttpRequest,
         payload: &mut actix_web::dev::Payload,
     ) -> Self::Future {
-        let state = req.app_data::<App>().unwrap().clone();
+        let state = req.app_data::<Data<App>>().unwrap().clone();
 
         RequiredSession::from_request(req, payload)
             .and_then(|session| async move {
@@ -62,7 +63,7 @@ impl FromRequest for OptionalSession {
             return future::ok(OptionalSession(None)).boxed_local();
         };
 
-        let state = req.app_data::<App>().unwrap().clone();
+        let state = req.app_data::<Data<App>>().unwrap().clone();
 
         async move {
             match state.sessions.verify(session_token.value()).await {

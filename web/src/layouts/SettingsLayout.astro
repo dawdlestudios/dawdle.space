@@ -10,10 +10,10 @@ const url = new URL(Astro.request.url);
 ---
 
 <Layout title={title}>
-  <SettingsHeader  client:load />
+  <!-- <SettingsHeader  client:load /> -->
   <ul>
     <li data-active={url.pathname === "/user"}>
-      <a href="/user">Your Files</a>
+      <a href="/user">Your Sites</a>
     </li>
     <li data-active={url.pathname === "/user/settings"}>
       <a href="/user/settings">Settings</a>
@@ -59,9 +59,8 @@ const url = new URL(Astro.request.url);
     padding: 0;
     margin: 0;
     border-bottom: var(--border);
-    border-top: var(--border);
 
-    li[data-active] {
+    li[data-active="true"] {
       background: var(--border-color);
       a {
         color: #141f28;

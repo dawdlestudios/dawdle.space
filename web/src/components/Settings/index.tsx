@@ -14,12 +14,12 @@ export const SettingsHeader = () => {
 				{(username && `Welcome ${username}!`) || <>&nbsp;</>}
 				{username && <a href={`https://${username}.dawdle.space`}>&#10697; {username}.dawdle.space</a>}
 			</h2>
-			<p>
+			{/* <p>
 				You can upload files to your account below. Alternatively, you can also connect via{" "}
 				<a href="/wiki/guide/ssh">SSH</a> or using a folder on your computer with{" "}
 				<a href="/wiki/guide/webdav">WebDAV</a>. If your new here, check out the{" "}
 				<a href="/wiki">wiki</a> for more information.
-			</p>
+			</p> */}
 		</main>
 	);
 };

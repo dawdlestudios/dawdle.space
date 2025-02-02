@@ -5,7 +5,7 @@ export const getUser = () => {
 
 	const username = document.cookie
 		.split("; ")
-		.find((row) => row.startsWith("clientside_username="))
+		.find((row) => row.startsWith("dawdle-user-client="))
 		?.split("=")[1];
 	return username;
 };
@@ -20,7 +20,7 @@ export const getRole = () => {
 	if (typeof window === "undefined") return "";
 	const username = document.cookie
 		.split("; ")
-		.find((row) => row.startsWith("clientside_role="))
+		.find((row) => row.startsWith("dawdle-role-client="))
 		?.split("=")[1];
 	return username;
 };

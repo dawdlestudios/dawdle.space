@@ -45,7 +45,7 @@ pub async fn run(state: crate::app::App, addr: SocketAddr) -> Result<()> {
     let state = Data::new(state);
 
     let server = HttpServer::new(move || {
-        let api_host = guard::Any(guard::Host("dawdle.space")).or(guard::Host("dawdle.localhost"));
+        let api_host = guard::Any(guard::Host("dawdle.space")).or(guard::Host("localhost"));
 
         let (app, _api) = App::new()
             .into_utoipa_app()

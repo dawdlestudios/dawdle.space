@@ -10,7 +10,7 @@ create table users (
 
 create table sites (
     site_id text primary key not null,
-    domain text not null,
+    domain text not null unique,
     owner text not null,
     created_at datetime not null default (strftime('%s', 'now')),
     custom_domain text,

@@ -4,8 +4,8 @@ use super::{sessions, SuccessResponse};
 use crate::app::{App, Application, User};
 
 use actix_web::web::{Data, Json, Path};
-use actix_web::{delete, get, post};
-use serde::Deserialize;
+use actix_web::{delete, get, post, HttpResponse, Responder};
+use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 use utoipa_actix_web::service_config::ServiceConfig;
 
@@ -172,4 +172,45 @@ pub async fn delete_user(
     let id = path.into_inner().0;
     state.users.delete(&id).await.api_internal_error()?;
     Ok(Json(SuccessResponse { success: true }))
+}
+
+#[derive(Debug, Serialize, ToSchema)]
+pub struct AdminSiteResponse {
+    id: String,
+    owner: String,
+    #[serde(rename = "createdAt")]
+    created_at: time::OffsetDateTime,
+    domain: String,
+    #[serde(rename = "customDomain")]
+    custom_domain: Option<String>,
+}
+
+#[utoipa::path(
+    tag = ADMIN,
+    responses(
+        (status = 200, body = Vec<AdminSiteResponse>),
+        (status = 500, description = "failed to get sites")
+    )
+)]
+#[get("/sites")]
+pub async fn get_sites(
+    _user: sessions::Admin,
+    state: Data<App>,
+) -> Result<impl Responder, ErrorResponse> {
+    let sites = state
+        .sites
+        .all()
+        .into_iter()
+        .map(|site| AdminSiteResponse {
+            id: site.site_id,
+            owner: site.owner,
+            created_at: site.created_at,
+            domain: site.domain,
+            custom_domain: site.custom_domain,
+        })
+        .collect::<Vec<_>>();
+
+    Ok(HttpResponse::Ok()
+        .insert_header(("Cache-Control", "no-store"))
+        .json(sites))
 }

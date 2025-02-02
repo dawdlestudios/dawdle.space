@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { navigate } from "astro:transitions/client";
-import type { FileStat } from "webdav";
+import type { FileStat, WebDAVClient } from "webdav";
 
 import styles from "./styles.module.css";
 
@@ -10,7 +10,8 @@ import { useQuery } from "../../utils/query";
 import { ContextMenu } from "./context-menu";
 import { type FileType, icons } from "./icons";
 import { formatSize, sortFiles } from "./util";
-import { createWebDAVClient } from "./webdav";
+import { useWebDav } from "./webdav";
+import type { Site } from "../../api";
 
 export type DawdleFile = {
 	name: string;
@@ -28,19 +29,16 @@ const toFile = (file: FileStat): DawdleFile => ({
 	lastModified: +new Date(file.lastmod),
 });
 
-const webdav = createWebDAVClient();
 const username = getUser();
 
-let location: Location;
-if (typeof window !== "undefined") {
-	location = window.location;
-} else {
-	location = {} as Location;
-}
+export const FileBrowser = ({
+	site,
+}: {
+	site: Site;
+}) => {
+	const { webdav, changeDirectory, directory } = useWebDav(site.id);
 
-export const FileBrowser = () => {
-	const [directory, setDirectory] = useState(location?.hash?.slice(1));
-	const path = `home/${username}${directory}`;
+	const path = `/${username}${directory}`;
 	const uploadRef = useRef<HTMLInputElement>(null);
 
 	const {
@@ -53,22 +51,6 @@ export const FileBrowser = () => {
 			const files = (await webdav.getDirectoryContents(directory)) as FileStat[];
 			return sortFiles(files.map(toFile));
 		},
-	});
-
-	const changeDirectory = useCallback((path: string) => {
-		setDirectory(path);
-		navigate(`${window.location.href.split("#")[0]}${path && `#${path}`}`);
-	}, []);
-
-	useEffect(() => {
-		const onLoad = () => setDirectory(location.hash.slice(1));
-		const hashChangeHandler = () => setDirectory(location.hash.slice(1));
-		window.addEventListener("hashchange", hashChangeHandler);
-		document.addEventListener("astro:page-load", onLoad);
-		return () => {
-			window.removeEventListener("hashchange", hashChangeHandler);
-			document.removeEventListener("astro:page-load", onLoad);
-		};
 	});
 
 	const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,6 +80,7 @@ export const FileBrowser = () => {
 				multiple
 			/>
 			<Directory
+				webdav={webdav}
 				canGoBack={directory !== ""}
 				goBack={() => {
 					const newDir = directory.split("/").slice(0, -1).join("/");
@@ -134,6 +117,7 @@ const Directory = (props: {
 	path: string;
 	goBack: () => void;
 	refresh: () => void;
+	webdav: WebDAVClient;
 }) => {
 	if (props.loading) {
 		return (
@@ -156,19 +140,19 @@ const Directory = (props: {
 					navigate(`/user/edit#${file.fullPath}`);
 				}}
 				onRemove={(file) => {
-					webdav.deleteFile(file.fullPath);
+					props.webdav.deleteFile(file.fullPath);
 					props.refresh();
 				}}
 				onMove={(file, newPath) => {
-					webdav.moveFile(file.fullPath, newPath);
+					props.webdav.moveFile(file.fullPath, newPath);
 					props.refresh();
 				}}
 				onCreateFile={(name) => {
-					webdav.putFileContents(`${props.path}/${name}`, "");
+					props.webdav.putFileContents(`${props.path}/${name}`, "");
 					props.refresh();
 				}}
 				onCreateFolder={(name) => {
-					webdav.createDirectory(`${props.path}/${name}`);
+					props.webdav.createDirectory(`${props.path}/${name}`);
 					props.refresh();
 				}}
 				items={props.files.map((file, i) => ({

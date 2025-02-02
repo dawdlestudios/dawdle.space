@@ -1,15 +1,11 @@
-use crate::{
-    app::App,
-    web::{
-        errors::{ErrorResponse, ErrorResponseExt},
-        sessions::RequiredSession,
-    },
+use crate::web::{
+    errors::{ErrorResponse, ErrorResponseExt},
+    sessions::RequiredSession,
 };
-use actix_web::{
-    get, post,
-    web::{Data, Json},
-    Responder,
-};
+use crate::App;
+
+use actix_web::web::{Data, Json};
+use actix_web::{delete, get, post, HttpResponse, Responder};
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 use utoipa_actix_web::service_config::ServiceConfig;
@@ -22,7 +18,10 @@ pub fn configure(config: &mut ServiceConfig) {
     config
         .service(get_me)
         .service(change_password)
-        .service(update_minecraft_username);
+        .service(update_minecraft_username)
+        .service(sites)
+        .service(get_site_token)
+        .service(reset_site_token);
 }
 
 #[derive(Debug, Deserialize, Serialize, ToSchema)]
@@ -53,6 +52,129 @@ pub async fn get_me(
     Ok(Json(MeResponse {
         username: session.username().to_string(),
         minecraft_username: user.minecraft_username,
+    }))
+}
+
+#[derive(Debug, Serialize, ToSchema)]
+struct SiteResponse {
+    id: String,
+    domain: String,
+    #[serde(rename = "customDomain")]
+    custom_domain: Option<String>,
+}
+
+#[utoipa::path(
+    tag = ME,
+    responses(
+        (status = 200, description = "information about the requesting user's sites", body = Vec<SiteResponse>),
+    )
+)]
+#[get("/sites")]
+pub async fn sites(
+    session: RequiredSession,
+    app: Data<App>,
+) -> Result<HttpResponse, ErrorResponse> {
+    let sites = app
+        .sites
+        .by_username(session.username())
+        .into_iter()
+        .map(|site| SiteResponse {
+            id: site.site_id,
+            domain: site.domain,
+            custom_domain: site.custom_domain,
+        })
+        .collect::<Vec<_>>();
+
+    //    since this is an authenticated endpoint, we need to add a header to not cache the response
+    Ok(HttpResponse::Ok()
+        .insert_header(("Cache-Control", "no-store"))
+        .json(sites))
+}
+
+#[derive(Debug, Serialize, ToSchema)]
+pub struct SiteTokenResponse {
+    pub token: String,
+}
+
+// token can be read or reset, with `get` and `delete` methods respectively
+#[utoipa::path(
+    tag = ME,
+    responses(
+        (status = 200, description = "token retrieved successfully", body = SiteTokenResponse),
+        (status = 204, description = "token reset successfully"),
+    )
+)]
+#[get("/sites/{site_id}/token")]
+pub async fn get_site_token(
+    session: RequiredSession,
+    app: Data<App>,
+    site_id: String,
+) -> Result<HttpResponse, ErrorResponse> {
+    let site = app.sites.get(&site_id).api_not_found()?;
+    if site.owner != session.username() {
+        return Err(ErrorResponse::forbidden("you do not own this site"));
+    }
+
+    Ok(HttpResponse::Ok()
+        .insert_header(("Cache-Control", "no-store"))
+        .json(SiteTokenResponse {
+            token: site.access_token.unwrap_or_default(),
+        }))
+}
+
+#[utoipa::path(
+    tag = ME,
+    responses(
+        (status = 204, description = "token reset successfully", body = SiteTokenResponse),
+    )
+)]
+#[delete("/sites/{site_id}/token")]
+pub async fn reset_site_token(
+    session: RequiredSession,
+    app: Data<App>,
+    site_id: String,
+) -> Result<Json<SiteTokenResponse>, ErrorResponse> {
+    if !app.sites.is_owner(&site_id, session.username()) {
+        return Err(ErrorResponse::forbidden("you do not own this site"));
+    }
+
+    let new_token = app.sites.reset_token(&site_id).await.api_internal_error()?;
+    Ok(Json(SiteTokenResponse { token: new_token }))
+}
+
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
+pub struct CreateSiteRequest {
+    name: String,
+}
+
+#[utoipa::path(
+    tag = ME,
+    responses(
+        (status = 201, description = "site created successfully", body = SiteResponse),
+    )
+)]
+#[post("/site")]
+pub async fn create_site(
+    session: RequiredSession,
+    app: Data<App>,
+    body: Json<CreateSiteRequest>,
+) -> Result<Json<SiteResponse>, ErrorResponse> {
+    if app.users.get(&body.name).await.api_not_found()?.is_some() {
+        return Err(ErrorResponse::bad_request(
+            "site or user with this name already exists",
+        ));
+    }
+
+    let site = app
+        .sites
+        .create(session.username(), &body.name)
+        .await
+        .api_internal_error()?;
+
+    Ok(Json(SiteResponse {
+        id: site.site_id,
+        domain: site.domain,
+        custom_domain: site.custom_domain,
     }))
 }
 

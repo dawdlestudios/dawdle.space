@@ -63,6 +63,18 @@ impl AppSites {
         self.sites.iter().map(|s| s.value().clone()).collect()
     }
 
+    pub fn get(&self, site_id: &str) -> Option<Site> {
+        self.sites.get(site_id).map(|s| s.value().clone())
+    }
+
+    pub fn by_username(&self, username: &str) -> Vec<Site> {
+        self.sites
+            .iter()
+            .filter(|s| s.value().owner == username)
+            .map(|s| s.value().clone())
+            .collect()
+    }
+
     pub fn is_owner(&self, site_id: &str, user: &str) -> bool {
         self.sites
             .get(site_id)
