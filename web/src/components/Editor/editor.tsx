@@ -4,9 +4,10 @@ import { Editor as EditorMonaco, type OnMount } from "@monaco-editor/react";
 import { ArrowLeft, Save } from "lucide-react";
 
 import { getUser } from "../../utils/auth";
-import { createWebDAVClient } from "../FileBrowser/webdav";
+import { useWebDav } from "../FileBrowser/webdav";
 import { disabledFileTypes } from "./disabled-files";
 import styles from "./editor.module.css";
+import useQueryParams from "@scaleway/use-query-params";
 
 import type { editor } from "monaco-editor";
 import type { FileStat } from "webdav";
@@ -20,7 +21,6 @@ const dawdleTheme: editor.IStandaloneThemeData = {
 	colors: { "editor.background": "#080f14" },
 };
 
-const webdav = createWebDAVClient();
 const user = getUser();
 
 const loadFile = async (path: string) => {
@@ -47,6 +47,8 @@ export const Editor = () => {
 	const editorRef = useRef<editor.IStandaloneCodeEditor | undefined>(undefined);
 	const [fileName, setFilename] = useState<string>();
 	const [active, setActive] = useState(false);
+
+	const url = new URL(window.location.href);
 
 	const { data, isLoading, error } = useQuery({
 		queryKey: ["webdav", fileName],

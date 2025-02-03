@@ -37,7 +37,7 @@ struct MeResponse {
         (status = 200, description = "information about the requesting user", body = MeResponse),
     )
 )]
-#[get("/")]
+#[get("")]
 pub async fn get_me(
     session: RequiredSession,
     app: Data<App>,

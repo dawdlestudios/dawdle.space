@@ -27,7 +27,7 @@ export const SettingsHeader = () => {
 export const UserSettings = () => {
 	const { data, error, isLoading, refetch } = useQuery({
 		queryKey: ["me"],
-		queryFn: () => api["/api/me/"].get().json(),
+		queryFn: () => api["/api/me"].get().json(),
 	});
 
 	const [changePasswordNote, setChangePasswordNote] = useState<string | null>(null);

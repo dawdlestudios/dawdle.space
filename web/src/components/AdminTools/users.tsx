@@ -5,13 +5,7 @@ import { api } from "../../api";
 import { useQuery } from "../../utils/query";
 import styles from "./style.module.css";
 
-type User = {
-	username: string;
-	created_at: string;
-	role?: string;
-	minecraft_username?: string;
-	minecraft_uuid?: string;
-};
+import { themeQuartz } from "ag-grid-community";
 
 export const AdminUsers = () => {
 	const { data, isLoading } = useQuery({
@@ -27,8 +21,9 @@ export const AdminUsers = () => {
 		);
 
 	return (
-		<div className={`ag-theme-quartz-dark ${styles.table}`}>
+		<div className={`${styles.table}`} data-ag-theme-mode="dark">
 			<AgGridReact
+				theme={themeQuartz}
 				gridOptions={{
 					autoSizeStrategy: {
 						type: "fitGridWidth",
