@@ -3,11 +3,11 @@ use std::net::SocketAddr;
 
 use actix_web::middleware::Logger;
 use actix_web::web::{self, Data};
-use actix_web::{guard, App, HttpServer};
+use actix_web::{App, HttpServer, guard};
 
-use utoipa::openapi::security::{ApiKeyValue, SecurityScheme};
 use utoipa::OpenApi;
-use utoipa_actix_web::{scope, AppExt};
+use utoipa::openapi::security::{ApiKeyValue, SecurityScheme};
+use utoipa_actix_web::{AppExt, scope};
 
 pub mod errors;
 pub mod sessions;
@@ -65,6 +65,9 @@ pub async fn run(state: crate::app::App, addr: SocketAddr) -> Result<()> {
 
         app
     });
+
+    #[cfg(debug_assertions)]
+    log::info!("[debug mode] serving dawdle.space on http://dawdle.space.localhost:8008");
 
     server.bind(addr)?.run().await?;
     Ok(())

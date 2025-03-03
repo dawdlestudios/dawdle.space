@@ -32,7 +32,7 @@ const url = new URL(Astro.request.url);
     <slot />
   </div>
   <div class="footer">
-    <a href="https://henry.dawdle.space">made by ~henry</a>
+    <!-- <a href="https://henry.dawdle.space">made by ~henry</a> -->
     <a href="/imprint">imprint</a>
     <a href="/privacy">privacy</a>
     <a href="/terms">terms</a>
@@ -49,9 +49,9 @@ const url = new URL(Astro.request.url);
       margin-right: 0.5rem;
       font-size: 0.9rem;
 
-      &:first-of-type {
+      /* &:first-of-type {
         color: var(--accent);
-      }
+      } */
     }
   }
 
@@ -80,7 +80,7 @@ const url = new URL(Astro.request.url);
 
     :global(li) {
       &[data-active="true"] {
-        background: var(--border-color);
+        background: var(--accent);
         a {
           color: #000000;
         }
