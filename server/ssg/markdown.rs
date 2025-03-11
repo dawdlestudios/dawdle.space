@@ -1,6 +1,6 @@
 use comrak::{
-    plugins::syntect::SyntectAdapter, ExtensionOptions, ParseOptions, Plugins, RenderOptions,
-    RenderPlugins,
+    ExtensionOptions, ParseOptions, Plugins, RenderOptions, RenderPlugins,
+    plugins::syntect::SyntectAdapter,
 };
 
 pub fn md_to_html(buf: &str) -> String {

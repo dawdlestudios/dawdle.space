@@ -1,11 +1,11 @@
 use crate::app::{App, Session};
-use actix_web::{web::Data, FromRequest};
+use actix_web::{FromRequest, web::Data};
 use time::Duration;
 
 use super::errors::ErrorResponse;
 use futures::{
-    future::{self, FutureExt, LocalBoxFuture},
     TryFutureExt,
+    future::{self, FutureExt, LocalBoxFuture},
 };
 
 pub const SESSION_COOKIE_MAX_AGE: Duration = Duration::days(7);

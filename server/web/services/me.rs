@@ -1,11 +1,11 @@
+use crate::App;
 use crate::web::{
     errors::{ErrorResponse, ErrorResponseExt},
     sessions::RequiredSession,
 };
-use crate::App;
 
 use actix_web::web::{Data, Json};
-use actix_web::{delete, get, post, HttpResponse, Responder};
+use actix_web::{HttpResponse, Responder, delete, get, post};
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 use utoipa_actix_web::service_config::ServiceConfig;

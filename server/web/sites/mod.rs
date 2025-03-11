@@ -1,9 +1,9 @@
 use std::path::{Path, PathBuf};
 
 use super::errors::ErrorResponseExt;
-use crate::{web::errors::ErrorResponse, App};
+use crate::{App, web::errors::ErrorResponse};
 use actix_files::NamedFile;
-use actix_web::{web::Data, Either, HttpRequest, HttpResponse};
+use actix_web::{Either, HttpRequest, HttpResponse, web::Data};
 
 pub async fn handle(
     req: HttpRequest,

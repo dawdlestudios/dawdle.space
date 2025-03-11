@@ -34,7 +34,7 @@ dav-server={version="0.7", features=["actix-web", "actix-compat"]}
 
 # web dependencies
 addr="0.15"
-comrak="0.35"
+comrak="0.36"
 awc={version="3.0", features=["rustls"]}
 
 russh={version="0.50"}

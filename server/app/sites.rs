@@ -1,8 +1,8 @@
 use std::sync::Arc;
 
 use dashmap::DashMap;
-use eyre::{bail, Result};
-use sqlx::{prelude::FromRow, SqlitePool};
+use eyre::{Result, bail};
+use sqlx::{SqlitePool, prelude::FromRow};
 use time::OffsetDateTime;
 
 static DEFAULT_HTML: &str = include_str!("../static/default.html");

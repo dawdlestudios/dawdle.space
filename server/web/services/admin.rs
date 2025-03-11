@@ -1,10 +1,10 @@
 use super::errors::{ErrorResponse, ErrorResponseExt};
-use super::{sessions, SuccessResponse};
+use super::{SuccessResponse, sessions};
 
 use crate::app::{App, Application, User};
 
 use actix_web::web::{Data, Json, Path};
-use actix_web::{delete, get, post, HttpResponse, Responder};
+use actix_web::{HttpResponse, Responder, delete, get, post};
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 use utoipa_actix_web::service_config::ServiceConfig;
