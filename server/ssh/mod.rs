@@ -6,12 +6,12 @@ use std::time::Duration;
 use dashmap::DashMap;
 use eyre::Result;
 use log::{error, info};
-use rand::rngs::OsRng;
 use russh::server::{Auth, Msg, Server as _, Session};
 use russh::{Channel, ChannelId};
 use russh_sftp::protocol::{
     Attrs, Data, File, FileAttributes, Handle, Name, OpenFlags, Packet, Status, StatusCode, Version,
 };
+use ssh_key::rand_core::OsRng;
 
 pub async fn run(app: crate::app::App, addr: SocketAddr) -> Result<()> {
     let config = russh::server::Config {

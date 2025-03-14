@@ -72,7 +72,9 @@ pub fn hash_pw(password: &str) -> eyre::Result<String> {
     Ok(argon2::Argon2::default()
         .hash_password(
             password.as_bytes(),
-            &argon2::password_hash::SaltString::generate(&mut rand::rngs::OsRng),
+            &argon2::password_hash::SaltString::generate(
+                &mut argon2::password_hash::rand_core::OsRng,
+            ),
         )?
         .to_string())
 }
