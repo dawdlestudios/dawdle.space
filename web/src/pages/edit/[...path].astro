@@ -3,7 +3,6 @@ import { Editor } from "./../../components/Editor";
 import Layout from "./../../layouts/Layout.astro";
 
 import "monaco-editor/min/vs/editor/editor.main.css";
-import "./../../components/Editor/editor.module.css";
 
 // I can't figure out why this isn't included anymore after switching pages.
 // It's no where to be found in the source of monaco or monaco react.
@@ -14,15 +13,13 @@ import type { GetStaticPaths } from "astro";
 export const getStaticPaths = (() => {
 	return [{ params: { path: "edit" } }];
 }) satisfies GetStaticPaths;
-
-export const prerender = false;
 ---
 
 <Layout title="dawdle.space - editor">
   <main>
-    <Editor client:only />
+    <Editor client:only="react" />
   </main>
-</Layout> 
+</Layout>
 
 <style>
   main {

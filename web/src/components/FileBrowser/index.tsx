@@ -6,10 +6,10 @@ import type { FileStat, WebDAVClient } from "webdav";
 import styles from "./styles.module.css";
 
 import { useQuery } from "../../utils/query";
+import { stripPrefix, useSite, useWebDav } from "../../utils/webdav";
 import { ContextMenu } from "./context-menu";
 import { type FileType, icons } from "./icons";
 import { formatSize, sortFiles } from "./util";
-import { useWebDav } from "./webdav";
 
 export type DawdleFile = {
 	name: string;
@@ -28,7 +28,7 @@ const toFile = (file: FileStat): DawdleFile => ({
 });
 
 export const FileBrowser = () => {
-	const { dir, setDir, siteId } = useSite();
+	const { path: dir, setPath: setDir, siteId } = useSite();
 	const webdav = useWebDav(siteId);
 	const uploadRef = useRef<HTMLInputElement>(null);
 
@@ -210,28 +210,4 @@ const FileBrowserItem = ({
 const FileIcon = ({ type, className }: { className: string; type: keyof typeof icons }) => {
 	const File = icons[type];
 	return <File className={className} />;
-};
-
-const useSite = () => {
-	const siteId = window.location.pathname.split("/")[2];
-	const [dir, setDirInner] = useState(() => {
-		const dir = window.location.pathname.split("/").slice(3).join("/");
-		return dir;
-	});
-
-	const setDir = (dir: string) => {
-		setDirInner(stripPrefix(dir));
-		window.history.pushState({}, "", `/site/${siteId}/${stripPrefix(dir)}`);
-	};
-
-	return {
-		siteId,
-		dir,
-		setDir,
-	};
-};
-
-const stripPrefix = (path: string) => {
-	if (path.startsWith("/")) return path.slice(1);
-	return path;
 };

@@ -1,14 +1,11 @@
 ---
 import type { GetStaticPaths } from "astro";
-import "../../components/FileBrowser/styles.module.css";
 import { UserSite } from "../../components/Site";
 import SettingsLayout from "../../layouts/SettingsLayout.astro";
 
 export const getStaticPaths = (() => {
 	return [{ params: { path: "site" } }];
 }) satisfies GetStaticPaths;
-
-export const prerender = false;
 ---
 
 <SettingsLayout title="dawdle.space">

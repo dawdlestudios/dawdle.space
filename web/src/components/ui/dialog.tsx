@@ -34,7 +34,7 @@ export const Dialog = ({
 			})}
 			<RadixDialog.Portal>
 				<RadixDialog.Overlay className={styles.DialogOverlay} />
-				<RadixDialog.Content className={styles.DialogContent}>
+				<RadixDialog.Content className={styles.DialogContent} aria-describedby={undefined}>
 					{title && <RadixDialog.Title className={styles.DialogTitle}>{title}</RadixDialog.Title>}
 
 					{description && (

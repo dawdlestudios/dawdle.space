@@ -2,8 +2,8 @@ use crate::web::errors::ErrorResponseExt;
 use crate::web::sessions::OptionalSession;
 use crate::{app::App, web::errors::ErrorResponse};
 use actix_web::http::StatusCode;
-use actix_web::web::{Data, Path};
-use actix_web::{Either, FromRequest, HttpResponse, Responder};
+use actix_web::web::Data;
+use actix_web::{Either, HttpResponse, Responder};
 use dav_server::{DavHandler, actix::DavRequest, actix::DavResponse};
 use dav_server::{fakels::FakeLs, localfs::LocalFs};
 
@@ -25,7 +25,7 @@ pub async fn handler(
         .next()
         .ok_or_else(|| ErrorResponse::bad_request("invalid path"))?;
 
-    if !cuid2::is_slug(&*site_id) {
+    if !cuid2::is_slug(site_id) {
         return Err(ErrorResponse::bad_request("invalid site id"));
     }
 
@@ -53,11 +53,11 @@ pub async fn handler(
                 return Err(ErrorResponse::bad_request("invalid username"));
             }
 
-            if !app.sites.is_owner(&site_id, username) {
+            if !app.sites.is_owner(site_id, username) {
                 return Err(ErrorResponse::not_found("site not found"));
             }
 
-            if !app.sites.validate_token(&site_id, token) {
+            if !app.sites.validate_token(site_id, token) {
                 return Err(ErrorResponse::unauthorized("invalid token"));
             }
         }
@@ -65,7 +65,7 @@ pub async fn handler(
         // authentication via session cookie
         None => match session.username() {
             Some(username) => {
-                if !app.sites.is_owner(&site_id, username) {
+                if !app.sites.is_owner(site_id, username) {
                     return Err(ErrorResponse::not_found("site not found"));
                 };
             }
@@ -83,7 +83,7 @@ pub async fn handler(
 
     let path = app
         .config
-        .site_dir(&site_id)
+        .site_dir(site_id)
         .api_error(StatusCode::NOT_FOUND, Some("site not found"))?;
 
     let dav_server = DavHandler::builder()

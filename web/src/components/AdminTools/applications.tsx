@@ -32,7 +32,7 @@ export const AdminApplications = () => {
 		);
 
 	return (
-		<div className={`ag-theme-quartz-dark ${styles.table}`}>
+		<div className={`${styles.table}`} data-ag-theme-mode="dark">
 			<AgGridReact
 				gridOptions={{
 					autoSizeStrategy: {

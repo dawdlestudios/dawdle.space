@@ -6,7 +6,7 @@ pub mod webdav;
 
 use super::{errors, sessions};
 
-use actix_web::web::{self, resource};
+use actix_web::web;
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 use utoipa_actix_web::{scope, service_config::ServiceConfig};

@@ -4,14 +4,13 @@ import { Editor as EditorMonaco, type OnMount } from "@monaco-editor/react";
 import { ArrowLeft, Save } from "lucide-react";
 
 import { getUser } from "../../utils/auth";
-import { useWebDav } from "../FileBrowser/webdav";
 import { disabledFileTypes } from "./disabled-files";
 import styles from "./editor.module.css";
-import useQueryParams from "@scaleway/use-query-params";
 
 import type { editor } from "monaco-editor";
-import type { FileStat } from "webdav";
+import type { FileStat, WebDAVClient } from "webdav";
 import { useQuery } from "../../utils/query";
+import { useSite, useWebDav } from "../../utils/webdav";
 
 const zshFiles = [".zshrc", ".zshenv", ".zprofile", ".zlogin", ".zlogout", ".zsh", ".zsh-theme"];
 const dawdleTheme: editor.IStandaloneThemeData = {
@@ -23,7 +22,7 @@ const dawdleTheme: editor.IStandaloneThemeData = {
 
 const user = getUser();
 
-const loadFile = async (path: string) => {
+const loadFile = async (path: string, webdav: WebDAVClient) => {
 	const size = (await webdav.stat(path)) as FileStat;
 
 	// 1MB
@@ -37,7 +36,7 @@ const loadFile = async (path: string) => {
 	return content as string;
 };
 
-const saveFile = async (path: string, content: string) => {
+const saveFile = async (path: string, content: string, webdav: WebDAVClient) => {
 	await webdav.putFileContents(path, content, {
 		overwrite: true,
 	});
@@ -45,18 +44,17 @@ const saveFile = async (path: string, content: string) => {
 
 export const Editor = () => {
 	const editorRef = useRef<editor.IStandaloneCodeEditor | undefined>(undefined);
-	const [fileName, setFilename] = useState<string>();
+	const { siteId, path } = useSite();
+	const webdav = useWebDav(siteId);
+
 	const [active, setActive] = useState(false);
 
-	const url = new URL(window.location.href);
-
 	const { data, isLoading, error } = useQuery({
-		queryKey: ["webdav", fileName],
-		queryFn: () => loadFile(fileName as string),
+		queryKey: ["webdav", path],
+		queryFn: () => loadFile(path as string, webdav),
 	});
 
 	useEffect(() => {
-		setFilename(window?.location?.hash.slice(1));
 		setActive(true);
 		editorRef.current?.render();
 		return () => editorRef.current?.dispose();
@@ -64,11 +62,11 @@ export const Editor = () => {
 
 	const onSave = () => {
 		const value = editorRef.current?.getValue();
-		if (value && fileName) saveFile(fileName, value);
+		if (value && path) saveFile(path, value, webdav);
 	};
 
 	const onMount: OnMount = (editor, monaco) => {
-		if (!fileName) return;
+		if (!path) return;
 
 		for (const model of monaco.editor.getModels()) {
 			model.dispose();
@@ -77,9 +75,9 @@ export const Editor = () => {
 		editor.setModel(null);
 
 		let lang = undefined;
-		if (zshFiles.includes(fileName.split("/").pop() as string)) lang = "shell";
+		if (zshFiles.includes(path.split("/").pop() as string)) lang = "shell";
 
-		editor.setModel(monaco.editor.createModel(data || "", lang, monaco.Uri.file(fileName)));
+		editor.setModel(monaco.editor.createModel(data || "", lang, monaco.Uri.file(path)));
 
 		editorRef.current = editor;
 		monaco.editor.defineTheme("dawdle", dawdleTheme);
@@ -94,12 +92,10 @@ export const Editor = () => {
 
 	let loadingMessage = null;
 
-	if (active && !fileName) loadingMessage = <div className={styles.error}>Missing file path.</div>;
+	if (active && !path) loadingMessage = <div className={styles.error}>Missing file path.</div>;
 
-	if (active && disabledFileTypes.includes(fileName?.split(".").pop() || ""))
+	if (active && disabledFileTypes.includes(path?.split(".").pop() || ""))
 		loadingMessage = <div className={styles.error}>File type not supported.</div>;
-
-	const path = active ? `home/${user}${fileName}` : "home/";
 
 	return (
 		<div className={styles.root}>
