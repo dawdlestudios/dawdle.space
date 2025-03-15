@@ -6,7 +6,7 @@ pub mod webdav;
 
 use super::{errors, sessions};
 
-use actix_web::web::resource;
+use actix_web::web::{self, resource};
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 use utoipa_actix_web::{scope, service_config::ServiceConfig};
@@ -28,5 +28,5 @@ pub fn configure(config: &mut ServiceConfig) {
         .service(scope("/auth").configure(auth::configure))
         .service(scope("/me").configure(me::configure))
         .service(scope("/public").configure(public::configure))
-        .map(|c| c.service(resource("/webdav/{id}").to(webdav::handler)));
+        .service(scope("/webdav").map(|c| c.default_service(web::to(webdav::handler))));
 }

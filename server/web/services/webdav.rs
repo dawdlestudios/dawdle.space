@@ -3,18 +3,28 @@ use crate::web::sessions::OptionalSession;
 use crate::{app::App, web::errors::ErrorResponse};
 use actix_web::http::StatusCode;
 use actix_web::web::{Data, Path};
-use actix_web::{Either, HttpResponse, Responder};
+use actix_web::{Either, FromRequest, HttpResponse, Responder};
 use dav_server::{DavHandler, actix::DavRequest, actix::DavResponse};
 use dav_server::{fakels::FakeLs, localfs::LocalFs};
 
 use crate::utils::is_valid_username;
 
 pub async fn handler(
-    site_id: Path<String>,
     session: OptionalSession,
     app: Data<App>,
     req: DavRequest,
 ) -> Result<Either<impl Responder, HttpResponse>, ErrorResponse> {
+    let path = req.request.uri().path().to_string();
+    println!("path: {}", path);
+    let path = path
+        .strip_prefix("/api/webdav/")
+        .ok_or_else(|| ErrorResponse::bad_request("invalid path"))?;
+
+    let site_id = path
+        .split('/')
+        .next()
+        .ok_or_else(|| ErrorResponse::bad_request("invalid path"))?;
+
     if !cuid2::is_slug(&*site_id) {
         return Err(ErrorResponse::bad_request("invalid site id"));
     }

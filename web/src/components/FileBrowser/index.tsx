@@ -1,17 +1,15 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import { navigate } from "astro:transitions/client";
 import type { FileStat, WebDAVClient } from "webdav";
 
 import styles from "./styles.module.css";
 
-import { getUser } from "../../utils/auth";
 import { useQuery } from "../../utils/query";
 import { ContextMenu } from "./context-menu";
 import { type FileType, icons } from "./icons";
 import { formatSize, sortFiles } from "./util";
 import { useWebDav } from "./webdav";
-import type { Site } from "../../api";
 
 export type DawdleFile = {
 	name: string;
@@ -29,16 +27,9 @@ const toFile = (file: FileStat): DawdleFile => ({
 	lastModified: +new Date(file.lastmod),
 });
 
-const username = getUser();
-
-export const FileBrowser = ({
-	site,
-}: {
-	site: Site;
-}) => {
-	const { webdav, changeDirectory, directory } = useWebDav(site.id);
-
-	const path = `/${username}${directory}`;
+export const FileBrowser = () => {
+	const { dir, setDir, siteId } = useSite();
+	const webdav = useWebDav(siteId);
 	const uploadRef = useRef<HTMLInputElement>(null);
 
 	const {
@@ -46,9 +37,9 @@ export const FileBrowser = ({
 		isLoading,
 		refetch,
 	} = useQuery({
-		queryKey: ["webdav", "dir", directory],
+		queryKey: ["webdav", "dir", dir],
 		queryFn: async () => {
-			const files = (await webdav.getDirectoryContents(directory)) as FileStat[];
+			const files = (await webdav.getDirectoryContents(dir)) as FileStat[];
 			return sortFiles(files.map(toFile));
 		},
 	});
@@ -58,9 +49,7 @@ export const FileBrowser = ({
 
 		const promises = Array.from(e.target.files)
 			.filter((file) => file)
-			.map(async (file) =>
-				webdav.putFileContents(`${directory}/${file.name}`, await file.arrayBuffer()),
-			);
+			.map(async (file) => webdav.putFileContents(`${dir}/${file.name}`, await file.arrayBuffer()));
 
 		e.target.value = "";
 		Promise.all(promises).then(() => refetch());
@@ -69,7 +58,7 @@ export const FileBrowser = ({
 	return (
 		<div className={styles.root}>
 			<div>
-				<BreadCrumbs goto={changeDirectory} path={path} />
+				<BreadCrumbs goto={setDir} path={dir} />
 			</div>
 			{/* allow multiple files */}
 			<input
@@ -81,19 +70,19 @@ export const FileBrowser = ({
 			/>
 			<Directory
 				webdav={webdav}
-				canGoBack={directory !== ""}
+				canGoBack={dir !== ""}
 				goBack={() => {
-					const newDir = directory.split("/").slice(0, -1).join("/");
-					changeDirectory(newDir);
+					const newDir = dir.split("/").slice(0, -1).join("/");
+					setDir(newDir);
 				}}
 				loading={isLoading}
 				files={files || []}
-				path={directory}
+				path={dir}
 				refresh={refetch}
 				onUploadFile={() => uploadRef.current?.click()}
 				onClickFile={(file) => {
-					if (file.type === "directory") return changeDirectory(file.fullPath);
-					navigate(`/user/edit#${file.fullPath}`);
+					if (file.type === "directory") return setDir(file.fullPath);
+					navigate(`/edit/${siteId}/${stripPrefix(file.fullPath)}`);
 				}}
 			/>
 		</div>
@@ -173,23 +162,17 @@ const Directory = (props: {
 
 const BreadCrumbs = ({ path }: { path: string; goto: (path: string) => void }) => {
 	const crumbs = path.split("/").filter((crumb) => crumb !== "");
-	const [first, user, ...rest] = crumbs;
 
 	return (
 		<div className={styles.breadcrumbs}>
 			<button type="button" className={styles.crumb}>
 				<span className={styles.slash}>{"/"}</span>
-				{first}
-			</button>
-			<button type="button" className={styles.crumb}>
-				<span className={styles.slash}>{"/"}</span>
-				{user}
 			</button>
 
-			{rest.map((crumb) => (
+			{crumbs.map((crumb) => (
 				<button type="button" key={crumb} className={styles.crumb}>
-					<span className={styles.slash}>{"/"}</span>
 					{crumb}
+					<span className={styles.slash}>{"/"}</span>
 				</button>
 			))}
 		</div>
@@ -227,4 +210,28 @@ const FileBrowserItem = ({
 const FileIcon = ({ type, className }: { className: string; type: keyof typeof icons }) => {
 	const File = icons[type];
 	return <File className={className} />;
+};
+
+const useSite = () => {
+	const siteId = window.location.pathname.split("/")[2];
+	const [dir, setDirInner] = useState(() => {
+		const dir = window.location.pathname.split("/").slice(3).join("/");
+		return dir;
+	});
+
+	const setDir = (dir: string) => {
+		setDirInner(stripPrefix(dir));
+		window.history.pushState({}, "", `/site/${siteId}/${stripPrefix(dir)}`);
+	};
+
+	return {
+		siteId,
+		dir,
+		setDir,
+	};
+};
+
+const stripPrefix = (path: string) => {
+	if (path.startsWith("/")) return path.slice(1);
+	return path;
 };

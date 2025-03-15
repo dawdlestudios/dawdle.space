@@ -23,5 +23,5 @@ export default defineConfig({
 		preview: { proxy },
 		css: { transformer: "lightningcss" },
 	},
-	trailingSlash: "never",
+	trailingSlash: "ignore",
 });
