@@ -4,7 +4,7 @@ import { LoginLink } from "../components/auth";
 import Base from "../layouts/Base.astro";
 interface Props {
 	title: string;
-	maxWidth?: string;
+	background?: string;
 }
 const props = Astro.props;
 const url = new URL(Astro.request.url);
@@ -39,7 +39,7 @@ const url = new URL(Astro.request.url);
   </div>
 </Base>
 
-<style>
+<style define:vars={{ overridebg: props.background}}>
   .footer {
     letter-spacing: -1px;
     margin-top: 0.8rem;
@@ -64,8 +64,8 @@ const url = new URL(Astro.request.url);
     border: var(--border);
     border-top-left-radius: var(--border-radius);
     border-top-right-radius: var(--border-radius);
-    overflow: hidden;
     border-bottom: none;
+    height: fit-content;
 
     :global(li a) {
       padding: 0 1.2rem;
@@ -120,6 +120,7 @@ const url = new URL(Astro.request.url);
     background-size: 224px;
     padding: 2rem;
     justify-content: center;
+    align-items: center;
     @media (max-width: 600px) {
       padding: 1rem 1rem;
     }
@@ -159,7 +160,7 @@ const url = new URL(Astro.request.url);
 
   .page {
     flex-direction: column;
-    background: var(--background);
+    background: var(--overridebg, var(--background));
     display: flex;
     border: var(--border);
     border-bottom-left-radius: var(--border-radius);
@@ -182,6 +183,8 @@ const url = new URL(Astro.request.url);
     font-size: 1rem;
     line-height: 1.5;
     flex-direction: column;
+    min-height: 50rem;
+    max-height: calc(100vh - 6rem);
   }
 
   header h1 {

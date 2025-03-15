@@ -5,7 +5,7 @@ export const LoginLink = () => {
 	if (username) {
 		return (
 			<li className="login">
-				<a href="/user">{username}</a>
+				<a href="/me">{username}</a>
 			</li>
 		);
 	}

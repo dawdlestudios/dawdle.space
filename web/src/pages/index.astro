@@ -1,15 +1,15 @@
 ---
 import Layout from "../layouts/Layout.astro";
 ---
-
+<!-- ground="linear-gradient(90deg, rgba(0, 0, 255, 0.04), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0), rgba(255, 0, 0, 0.04))" -->
 <Layout title="dawdle.space">
-  <main>
+<main>
     <pre>
-    |              ||
- ___| ___       ___||  ___     ___  ___  ___  ___  ___ 
-|   ||   ||   /|   /| |___)   |___ |   ||   ||    |___
-|___||__/||/\/ |__/ | |__   .  __/ |__/ |__/||___ |___
-                                   |</pre>
+<span class="dawdle">    |              ||</span>
+<span class="dawdle"> ___| ___       ___||  ___ </span><span class="space">    ___  ___  ___  ___  ___</span>
+<span class="dawdle">|   ||   ||   /|   /| |___)</span><span class="space">   |___ |   ||   ||    |___</span>
+<span class="dawdle">|___||__/||/\/ |__/ | |__  </span><span class="space"> .  __/ |__/ |__/||___ |___</span>
+<span class="dawdle">                           </span><span class="space">        |</span></pre>
     <p>
       <br />
       <a href="/join">Join</a> to get you own space at <code>[username].dawdle.space</code> - a personal website
@@ -24,13 +24,22 @@ import Layout from "../layouts/Layout.astro";
 
 <style>
   @keyframes breathe {
-    from {
-      opacity: 0.5;
-    }
-    to {
-      opacity: 1;
-    }
+    0%   { opacity:1; }
+    50%  { opacity:0.1; }
+    100% { opacity:1; }
   }
+
+  @keyframes flicker {
+    0%, 19.5%, 22%, 62.5%, 64%, 64.5%, 70%, 100% {
+        opacity: 0.99;
+        filter: drop-shadow(0px 0px 5px #ff2802);
+    }
+    20%, 21.5%, 63%, 63.5%, 65%, 69.5% {
+        opacity: 0.3;
+        filter: drop-shadow(0px 0px 0px #04ffff);
+    }
+}
+
 
   main {
     padding: 3rem 1rem;
@@ -40,13 +49,18 @@ import Layout from "../layouts/Layout.astro";
     flex: 1;
     justify-content: center;
     margin: 0 auto;
-    max-width: 40rem;
+    max-width: 35rem;
 
     pre {
       font-weight: 100;
       color: var(--accent);
-      animation: breathe 2s infinite alternate;
-      filter: drop-shadow(0px 0px 3px #04ffff);
+
+      > span {
+          filter: drop-shadow(0px 0px 3px #1badfc);
+          &.space {
+              animation: flicker 8s infinite alternate;
+          }
+      }
 
       font-size: 17px;
       letter-spacing: -4px;

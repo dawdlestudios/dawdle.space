@@ -41,7 +41,7 @@ import { api } from "../api";
     }).json()
     .then((res) => {
       if (!res.success) return Promise.reject();
-      window.location.href = "/user";
+      window.location.href = "/me";
     }).catch(() => {
       const error = document.querySelector("[data-login-error]");
         error!.textContent = "Invalid username or password";

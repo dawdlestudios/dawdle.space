@@ -1,6 +1,8 @@
+import { FolderIcon, FolderPlusIcon, Settings2Icon, SettingsIcon } from "lucide-react";
 import { api } from "../../api";
 import { useQuery } from "../../utils/query";
 import styles from "./sites.module.css";
+import { navigate } from "astro:transitions/client";
 
 export const UserSites = () => {
 	const { data, isLoading, error } = useQuery({
@@ -8,7 +10,31 @@ export const UserSites = () => {
 		queryFn: () => api["/api/me/sites"].get().json(),
 	});
 
-	console.log(data);
+	return (
+		<main className={styles.main}>
+			<ul>
+				{data?.map((site) => {
+					return (
+						<li key={site.id} className={styles.site}>
+							<button type="button" onClick={() => navigate(`/site/${site.id}`)}>
+								<div>
+									<h2>{site.domain.replace(".dawdle.space", "")}</h2>
+									<a href={`https://${site.domain}`}>&#10697;{site.domain}</a>
+									<p>{site.customDomain}</p>
+								</div>
+								<FolderIcon size={30} color="white" />
+							</button>
+						</li>
+					);
+				})}
 
-	return <main className={styles.main}>xd</main>;
+				<li className={`${styles.site} ${styles.create}`}>
+					<a type="button" href="/site/create">
+						<h2>Create a new site</h2>
+						<FolderPlusIcon size={30} />
+					</a>
+				</li>
+			</ul>
+		</main>
+	);
 };

@@ -1,7 +1,7 @@
 mod app;
 mod config;
 mod minecraft;
-mod ssh;
+// mod ssh;
 mod utils;
 mod web;
 
@@ -31,16 +31,16 @@ async fn main() -> eyre::Result<()> {
         app.config.web.port,
     );
 
-    let ssh_addr = SocketAddr::new(
-        IpAddr::from_str(&app.config.ssh.interface).unwrap_or(Ipv4Addr::UNSPECIFIED.into()),
-        app.config.ssh.port,
-    );
+    // let ssh_addr = SocketAddr::new(
+    //     IpAddr::from_str(&app.config.ssh.interface).unwrap_or(Ipv4Addr::UNSPECIFIED.into()),
+    //     app.config.ssh.port,
+    // );
 
     let api_server = web::run(app.clone(), api_addr);
-    let ssh_server = ssh::run(app.clone(), ssh_addr);
+    // let ssh_server = ssh::run(app.clone(), ssh_addr);
 
     select! {
         res = api_server => res,
-        res = ssh_server => res,
+        // res = ssh_server => res,
     }
 }

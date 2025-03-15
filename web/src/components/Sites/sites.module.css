@@ -1,23 +1,68 @@
 main.main {
-	padding: 1rem;
-	height: fit-content;
-	display: flex;
-	flex-direction: column;
 	flex: 1;
-	justify-content: center;
-	margin: 0 auto;
-	width: 100%;
-	max-width: 40rem;
+	padding: 1rem;
 
 	ul {
 		margin: 0;
 		padding: 0;
 		list-style: none;
 		margin-bottom: 1rem;
+		display: flex;
+		gap: 1rem;
 	}
 
-	h1 {
-		margin-top: 1rem;
-		margin-bottom: 0.5rem;
+	li.site {
+		border: var(--border);
+		border-radius: var(--border-radius);
+		width: 50%;
+		display: flex;
+		overflow: hidden;
+
+		&.create {
+			border: none;
+			h2 {
+				font-size: 1.1rem;
+			}
+			a {
+				justify-content: center;
+				gap: 1rem;
+			}
+		}
+
+		> a,
+		> button {
+			padding: .1rem .7rem;
+			flex: 1;
+			min-height: 5rem;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			text-decoration: none;
+			transition: all 0.1s ease-in-out;
+			background: #ffffff00;
+
+			&:hover {
+				background: #ffffff0f;
+			}
+
+			> div {
+				display: flex;
+				flex-direction: column;
+				align-items: baseline;
+			}
+			button {
+				all: unset;
+				margin-right: 1rem;
+				color: var(--heading);
+			}
+		}
+
+		@media (max-width: 55rem) {
+			width: 100%;
+		}
+
+		h2 {
+			font-size: 1.2rem;
+		}
 	}
 }

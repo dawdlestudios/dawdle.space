@@ -23,7 +23,7 @@ pub async fn run(app: crate::app::App, addr: SocketAddr) -> Result<()> {
         ..Default::default()
     };
 
-    let mut server = Server { _app: app };
+    let mut server = Server { app };
 
     server.run_on_address(Arc::new(config), addr).await?;
     Ok(())
@@ -31,7 +31,7 @@ pub async fn run(app: crate::app::App, addr: SocketAddr) -> Result<()> {
 
 #[derive(Clone)]
 struct Server {
-    _app: crate::app::App,
+    app: crate::app::App,
 }
 
 impl russh::server::Server for Server {

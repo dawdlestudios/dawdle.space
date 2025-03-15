@@ -12,14 +12,14 @@ const url = new URL(Astro.request.url);
 <Layout title={title}>
   <!-- <SettingsHeader  client:load /> -->
   <ul>
-    <li data-active={url.pathname === "/user"}>
-      <a href="/user">Your Sites</a>
+    <li data-active={url.pathname === "/me"}>
+      <a href="/me">Your Sites</a>
     </li>
-    <li data-active={url.pathname === "/user/settings"}>
-      <a href="/user/settings">Settings</a>
+    <li data-active={url.pathname === "/me/settings"}>
+      <a href="/me/settings">Settings</a>
     </li>
     <li class="signout">
-      <a href="/user/logout">Sign Out</a>
+      <a href="/me/logout">Sign Out</a>
     </li>
   </ul>
   <slot />
