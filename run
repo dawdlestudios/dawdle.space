@@ -56,10 +56,14 @@ if [[ $# -eq 0 ]]; then
 fi
 
 case "$1" in
-    web) web ;;
-    server) server ;;
-    deploy-web) deploy-web ;;
-    deploy-api) deploy-server ;;
-    help|--help|-h) help ;;
-    *) echo "Error: Unknown command '$1'"; help; exit 1 ;;
+web) web ;;
+server) server ;;
+deploy-web) deploy-web ;;
+deploy-api) deploy-server ;;
+help | --help | -h) help ;;
+*)
+    echo "Error: Unknown command '$1'"
+    help
+    exit 1
+    ;;
 esac

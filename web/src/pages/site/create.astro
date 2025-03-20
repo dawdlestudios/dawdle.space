@@ -3,16 +3,30 @@ import SettingsLayout from "../../layouts/SettingsLayout.astro";
 ---
 
 <SettingsLayout title="dawdle.space">
-    Create a new site
+    <main>
+        <h1>Coming Soon</h1>
+        <p>
+            <br />
+            Creating additional sites is not yet available.
+            Please check back later.
+        </p>
+    </main>
 </SettingsLayout>
 
 <style>
-  .files {
-    flex: 1;
+  main {
     display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 
-    h2 {
-      padding: 1rem;
+    h1 {
+      font-size: 2rem;
+    }
+
+    p {
+        max-width: 26rem;
     }
   }
 </style>

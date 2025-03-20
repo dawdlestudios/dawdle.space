@@ -1,12 +1,13 @@
 import { navigate } from "astro:transitions/client";
-import { FolderIcon, FolderPlusIcon, Settings2Icon, SettingsIcon } from "lucide-react";
+import { FolderIcon, FolderPlusIcon } from "lucide-react";
 import { api } from "../../api";
 import { useQuery } from "../../utils/query";
 import styles from "./sites.module.css";
 
 export const UserSites = () => {
-	const { data, isLoading, error } = useQuery({
+	const { data } = useQuery({
 		queryKey: ["sites"],
+		placeholderData: (prev) => prev,
 		queryFn: () => api["/api/me/sites"].get().json(),
 	});
 

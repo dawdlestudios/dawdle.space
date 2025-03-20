@@ -99,6 +99,7 @@ textarea {
 	margin-top: 0.2rem;
 	margin-bottom: 0.5rem;
 	border: 1px solid #ccc;
+	border-radius: var(--border-radius);
 	background-color: #ffffff1b;
 	padding: 0.4rem 0.6rem;
 	color: #fff;
@@ -110,6 +111,7 @@ button {
 	background-color: #fff;
 	color: #000;
 	border: 1px solid #000;
+	border-radius: var(--border-radius);
 	cursor: pointer;
 	width: fit-content;
 }
