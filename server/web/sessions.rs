@@ -1,12 +1,9 @@
 use crate::app::{App, Session};
 use actix_web::{FromRequest, web::Data};
+use futures_lite::{FutureExt, future};
 use time::Duration;
 
 use super::errors::ErrorResponse;
-use futures::{
-    TryFutureExt,
-    future::{self, FutureExt, LocalBoxFuture},
-};
 
 pub const SESSION_COOKIE_MAX_AGE: Duration = Duration::days(7);
 pub const USERNAME_COOKIE_MAX_AGE: Duration = Duration::days(7);
@@ -19,27 +16,27 @@ pub struct Admin();
 
 impl FromRequest for Admin {
     type Error = ErrorResponse;
-    type Future = LocalBoxFuture<'static, Result<Self, Self::Error>>;
+    type Future = future::BoxedLocal<Result<Self, Self::Error>>;
 
     fn from_request(
         req: &actix_web::HttpRequest,
         payload: &mut actix_web::dev::Payload,
     ) -> Self::Future {
         let state = req.app_data::<Data<App>>().unwrap().clone();
+        let session = RequiredSession::from_request(req, payload);
 
-        RequiredSession::from_request(req, payload)
-            .and_then(|session| async move {
-                let Ok(Some(user)) = state.users.get(session.username()).await else {
-                    return Err(ErrorResponse::unauthorized("user not found"));
-                };
+        async move {
+            let Ok(Some(user)) = state.users.get(session.await?.username()).await else {
+                return Err(ErrorResponse::unauthorized("user not found"));
+            };
 
-                if user.role.as_deref() == Some("admin") {
-                    Ok(Admin())
-                } else {
-                    Err(ErrorResponse::unauthorized("insufficient permissions"))
-                }
-            })
-            .boxed_local()
+            if user.role.as_deref() == Some("admin") {
+                Ok(Admin())
+            } else {
+                Err(ErrorResponse::unauthorized("insufficient permissions"))
+            }
+        }
+        .boxed_local()
     }
 }
 
@@ -53,14 +50,14 @@ impl OptionalSession {
 
 impl FromRequest for OptionalSession {
     type Error = ErrorResponse;
-    type Future = LocalBoxFuture<'static, Result<Self, Self::Error>>;
+    type Future = future::BoxedLocal<Result<Self, Self::Error>>;
 
     fn from_request(
         req: &actix_web::HttpRequest,
         _payload: &mut actix_web::dev::Payload,
     ) -> Self::Future {
         let Some(session_token) = req.cookie(SESSION_COOKIE_NAME) else {
-            return future::ok(OptionalSession(None)).boxed_local();
+            return future::ready(Ok(OptionalSession(None))).boxed_local();
         };
 
         let state = req.app_data::<Data<App>>().unwrap().clone();
@@ -85,17 +82,21 @@ impl RequiredSession {
 
 impl FromRequest for RequiredSession {
     type Error = ErrorResponse;
-    type Future = LocalBoxFuture<'static, Result<Self, Self::Error>>;
+    type Future = future::BoxedLocal<Result<Self, Self::Error>>;
 
     fn from_request(
         req: &actix_web::HttpRequest,
         payload: &mut actix_web::dev::Payload,
     ) -> Self::Future {
-        OptionalSession::from_request(req, payload)
-            .and_then(|session| match session.0 {
-                Some(session) => future::ok(RequiredSession(session)),
-                None => future::err(ErrorResponse::unauthorized("session required")),
-            })
-            .boxed_local()
+        let session = OptionalSession::from_request(req, payload);
+
+        async {
+            let session = session.await?;
+            match session.0 {
+                Some(session) => Ok(RequiredSession(session)),
+                None => Err(ErrorResponse::unauthorized("session required")),
+            }
+        }
+        .boxed_local()
     }
 }

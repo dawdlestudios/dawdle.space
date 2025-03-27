@@ -18,7 +18,7 @@ import Layout from "../../layouts/Layout.astro";
         maxlength="20"
         placeholder="Your desired username"
       />
-      <label for="email">Email/Discord Username (required)</label>
+      <label for="email">Email or Discord Username (required)</label>
       <input
         type="text"
         autocomplete="email"
@@ -37,23 +37,14 @@ import Layout from "../../layouts/Layout.astro";
         placeholder="Tell us a little about yourself, why you want to join, how you found out about us, etc."
       ></textarea>
 
-      <p>
-        <br />
-        We will never share your email address with anyone and will never send you
-        automated emails, it is only used for sending you your confirmation email
-        and for contacting you if there are any issues with your site.
-        <br />
-        <br />
-        While we try to keep light moderation, we do have a few rules so we can keep
-        the site safe and fun for everyone.
-        <br />
-      </p>
       <div></div>
       <label for="terms">
         <input type="checkbox" id="terms" name="terms" required />
         I have read and agree to the <a target="_blank" href="/terms"
-          >rules/terms</a
-        >.
+          >terms</a
+        > and <a target="_blank" href="/terms"
+        >privacy policy</a
+      >
       </label>
       <input type="submit" value="Submit" />
     </form>
@@ -135,6 +126,6 @@ import Layout from "../../layouts/Layout.astro";
     flex: 1;
     justify-content: center;
     margin: 0 auto;
-    max-width: 40rem;
+    max-width: 45rem;
   }
 </style>

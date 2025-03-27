@@ -2,6 +2,7 @@ mod app;
 mod config;
 mod minecraft;
 // mod ssh;
+mod screenshot;
 mod utils;
 mod web;
 
