@@ -25,6 +25,7 @@ pub struct App {
 impl App {
     pub async fn new(config: Config) -> Result<Self> {
         std::fs::create_dir_all(config.db_path().parent().unwrap())?;
+        std::fs::create_dir_all(config.screenshots_path())?;
 
         let pool = SqlitePoolOptions::new()
             .connect(&config.db_path().to_string_lossy())

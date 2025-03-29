@@ -69,6 +69,17 @@ impl Config {
         resolve_path(&self.fs.data_dir).join("db.sqlite")
     }
 
+    pub fn screenshots_path(&self) -> std::path::PathBuf {
+        resolve_path(&self.fs.data_dir).join("screenshots")
+    }
+
+    pub fn site_screenshot(&self, site_id: &str) -> Result<std::path::PathBuf> {
+        if !cuid2::is_slug(site_id) {
+            return Err(eyre::eyre!("invalid site id"));
+        }
+        Ok(self.screenshots_path().join(format!("{site_id}.avif")))
+    }
+
     pub fn site_dir(&self, site_id: &str) -> Result<std::path::PathBuf> {
         if !cuid2::is_slug(site_id) {
             return Err(eyre::eyre!("invalid site id"));

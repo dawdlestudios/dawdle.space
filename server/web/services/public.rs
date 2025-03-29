@@ -1,9 +1,10 @@
 use crate::{App, web::errors::ErrorResponse};
 use actix_web::{
-    Responder, get,
+    get,
     web::{Data, Json},
 };
-use serde_json::json;
+use serde::{Deserialize, Serialize};
+use utoipa::ToSchema;
 use utoipa_actix_web::service_config::ServiceConfig;
 
 const PUBLIC: &str = "public";
@@ -12,15 +13,40 @@ pub fn configure(config: &mut ServiceConfig) {
     config.service(get_sites);
 }
 
+#[derive(Debug, Deserialize, Serialize, ToSchema)]
+struct SitesResponse {
+    sites: Vec<SiteResponse>,
+}
+
+#[derive(Debug, Deserialize, Serialize, ToSchema)]
+#[serde(rename_all = "camelCase")]
+struct SiteResponse {
+    id: String,
+    domain: String,
+    owner: String,
+    custom_domain: Option<String>,
+}
+
 #[utoipa::path(
     tag = PUBLIC,
     responses(
-        (status = 200, description = "a list of sites", body = serde_json::Value),
+        (status = 200, description = "a list of sites", body = SitesResponse),
     )
 )]
 #[get("/sites")]
-pub async fn get_sites(_app: Data<App>) -> Result<impl Responder, ErrorResponse> {
-    Ok(Json(json!({
-        "sites": [],
-    })))
+pub async fn get_sites(app: Data<App>) -> Result<Json<SitesResponse>, ErrorResponse> {
+    let sites = app.sites.all();
+
+    let sites = sites
+        .into_iter()
+        .filter(|site| site.site_id != "www")
+        .map(|site| SiteResponse {
+            id: site.site_id,
+            domain: site.domain,
+            owner: site.owner,
+            custom_domain: site.custom_domain,
+        })
+        .collect();
+
+    Ok(Json(SitesResponse { sites }))
 }

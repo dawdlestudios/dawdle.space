@@ -41,7 +41,9 @@ async fn main() -> eyre::Result<()> {
     // let ssh_server = ssh::run(app.clone(), ssh_addr);
 
     select! {
-        res = api_server => res,
-        // res = ssh_server => res,
+        res = api_server => res?,
+        res = app.sites.screenshot_cron(std::time::Duration::from_secs(60 * 60)) => res,
     }
+
+    Ok(())
 }

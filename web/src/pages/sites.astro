@@ -1,7 +1,8 @@
 ---
+import { Explore } from "../components/Explore";
 import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Sites">
-    :)
+    <Explore client:only="react" />
 </Layout>

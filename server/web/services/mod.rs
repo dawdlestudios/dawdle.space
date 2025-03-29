@@ -29,6 +29,6 @@ pub fn configure(config: &mut ServiceConfig) {
         .service(scope("/auth").configure(auth::configure))
         .service(scope("/me").configure(me::configure))
         .service(scope("/public").configure(public::configure))
-        .service(scope("/img").configure(img::configure))
+        .service(scope("/screenshot").configure(img::configure))
         .service(scope("/webdav").map(|c| c.default_service(web::to(webdav::handler))));
 }

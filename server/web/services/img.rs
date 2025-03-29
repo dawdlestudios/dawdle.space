@@ -1,5 +1,6 @@
+use actix_files::NamedFile;
 use actix_web::{
-    Responder, get,
+    Either, HttpResponse, Responder, get,
     web::{self, Data},
 };
 use utoipa_actix_web::service_config::ServiceConfig;
@@ -17,9 +18,17 @@ pub fn configure(config: &mut ServiceConfig) {
     )
 )]
 #[get("/{site_id}")]
-async fn load_image(app: Data<App>, path: web::Path<String>) -> impl Responder {
-    let site = path.into_inner();
-    let image_path = format!("/path/to/images/{}.png", site);
+async fn load_image(
+    app: Data<App>,
+    path: web::Path<String>,
+) -> Either<impl Responder, impl Responder> {
+    let Ok(file) = app
+        .config
+        .site_screenshot(&path)
+        .and_then(|file| NamedFile::open(file).map_err(|_| eyre::eyre!("File not found")))
+    else {
+        return Either::Right(HttpResponse::NotFound().finish());
+    };
 
-    ""
+    Either::Left(file)
 }

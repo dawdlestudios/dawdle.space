@@ -1,9 +1,11 @@
-use std::sync::Arc;
+use std::{sync::Arc, time::Duration};
 
 use dashmap::DashMap;
-use eyre::{Result, bail};
+use eyre::{OptionExt, Result, bail};
 use sqlx::{SqlitePool, prelude::FromRow};
 use time::OffsetDateTime;
+
+use crate::screenshot::{ScreenshotSite, screenshot};
 
 static DEFAULT_HTML: &str = include_str!("../static/default.html");
 
@@ -24,7 +26,7 @@ pub struct Site {
 #[derive(Clone)]
 pub struct AppSites {
     conn: SqlitePool,
-    _config: crate::config::Config,
+    config: crate::config::Config,
 
     domain_to_site_id: Arc<DashMap<String, String>>,
     sites: Arc<DashMap<String, Site>>,
@@ -51,16 +53,61 @@ impl AppSites {
             sites.into_iter().map(|site| (site.site_id.clone(), site)),
         ));
 
-        Ok(Self {
+        let sites = Self {
             conn,
-            _config: config,
+            config,
             domain_to_site_id,
             sites,
-        })
+        };
+
+        let sites2 = sites.clone();
+        tokio::spawn(async move {
+            if let Err(e) = sites2.screenshot_all().await {
+                log::error!("failed to take screenshots: {e}");
+            }
+        });
+
+        Ok(sites)
     }
 
     pub fn all(&self) -> Vec<Site> {
         self.sites.iter().map(|s| s.value().clone()).collect()
+    }
+
+    pub async fn screenshot_cron(&self, interval: Duration) {
+        let mut interval = tokio::time::interval(interval);
+        loop {
+            interval.tick().await;
+            if let Err(e) = self.screenshot_all().await {
+                log::error!("failed to take screenshots: {e}");
+            }
+        }
+    }
+
+    pub async fn screenshot_all(&self) -> Result<()> {
+        let all: Vec<ScreenshotSite> = self
+            .sites
+            .iter()
+            .filter_map(|s| {
+                Some(ScreenshotSite {
+                    url: format!("https://{}", s.value().domain),
+                    dest: self.config.site_screenshot(s.key()).ok()?,
+                })
+            })
+            .collect();
+
+        screenshot(all).await?;
+        Ok(())
+    }
+
+    pub async fn screenshot(&self, site_id: &str) -> Result<()> {
+        let site = self.get(site_id).ok_or_eyre("no site")?;
+        let site = ScreenshotSite {
+            url: format!("https://{}", site.domain),
+            dest: self.config.site_screenshot(&site.site_id)?,
+        };
+        screenshot(vec![site]).await?;
+        Ok(())
     }
 
     pub fn get(&self, site_id: &str) -> Option<Site> {
@@ -130,9 +177,16 @@ impl AppSites {
             .insert(domain.to_string(), site_id.clone());
         self.sites.insert(site_id.clone(), site.clone());
 
-        let dir = self._config.site_dir(&site_id)?;
+        let dir = self.config.site_dir(&site_id)?;
         tokio::fs::create_dir_all(&dir).await?;
         tokio::fs::write(dir.join("index.html"), DEFAULT_HTML).await?;
+
+        let self2 = self.clone();
+        tokio::spawn(async move {
+            if let Err(e) = self2.screenshot(&site_id).await {
+                log::error!("failed to take screenshot: {e}");
+            }
+        });
 
         Ok(site)
     }
