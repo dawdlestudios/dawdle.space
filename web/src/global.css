@@ -39,7 +39,12 @@ html {
 	display: flex;
 }
 
-* {
+html,
+button,
+input,
+select,
+textarea,
+code {
 	font-family: "HP100LX6x8", monospace;
 }
 

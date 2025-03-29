@@ -6,11 +6,11 @@ export const createWebDavClient = (siteId: string): WebDAVClient =>
 		authType: AuthType.None,
 	});
 
-export const useWebDav = (siteId = "") => {
-	const [webdav, setWebdav] = useState(() => createWebDavClient(siteId));
+export const useWebDav = (siteId?: string) => {
+	const [webdav, setWebdav] = useState<WebDAVClient>();
 
 	useEffect(() => {
-		setWebdav(createWebDavClient(siteId));
+		if (siteId) setWebdav(createWebDavClient(siteId));
 	}, [siteId]);
 
 	return webdav;

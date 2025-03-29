@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { api } from "../api";
 import { queryClient, useQuery } from "./query";
 
@@ -18,14 +19,15 @@ export const invalidateSites = () => {
 
 export const useSite = (domain: string) => {
 	const { sites, isLoading } = useSites();
-	const site = sites?.find(
-		(site) =>
-			site.domain === domain ||
-			site.domain.replace(".dawdle.space", "") === domain ||
-			site.customDomain === domain,
+	const site = useMemo(
+		() =>
+			sites?.find(
+				(site) =>
+					site.domain === domain ||
+					site.domain.replace(".dawdle.space", "") === domain ||
+					site.customDomain === domain,
+			),
+		[sites, domain],
 	);
-
-	console.log("site", site);
-
 	return { site, isLoading };
 };

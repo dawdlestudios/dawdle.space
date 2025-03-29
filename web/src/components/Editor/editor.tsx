@@ -1,15 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useImperativeHandle, useRef, useState, type Ref } from "react";
 
 import { Editor as EditorMonaco, type OnMount } from "@monaco-editor/react";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, Loader, Save } from "lucide-react";
 
-import { getUser } from "../../utils/auth";
 import { disabledFileTypes } from "./disabled-files";
 import styles from "./editor.module.css";
 
 import type { editor } from "monaco-editor";
 import type { FileStat, WebDAVClient } from "webdav";
-import { useQuery } from "../../utils/query";
+import { queryClient, useQuery } from "../../utils/query";
 import { useSiteProps, useWebDav } from "../../utils/webdav";
 import { useSite } from "../../utils/hooks";
 
@@ -20,8 +19,6 @@ const dawdleTheme: editor.IStandaloneThemeData = {
 	rules: [],
 	colors: { "editor.background": "#080f14" },
 };
-
-const user = getUser();
 
 const loadFile = async (path: string, webdav: WebDAVClient) => {
 	const size = (await webdav.stat(path)) as FileStat;
@@ -44,63 +41,38 @@ const saveFile = async (path: string, content: string, webdav: WebDAVClient) => 
 };
 
 export const Editor = () => {
-	const editorRef = useRef<editor.IStandaloneCodeEditor | undefined>(undefined);
 	const { path, siteDomain } = useSiteProps();
 	const { site, isLoading } = useSite(siteDomain);
 	const webdav = useWebDav(site?.id);
-
-	const [active, setActive] = useState(false);
+	const editorRef = useRef<EditorInnerRef>(null);
+	const [isSaving, setIsSaving] = useState(false);
 
 	const {
 		data,
 		isLoading: fileIsLoading,
 		error,
 	} = useQuery({
-		queryKey: ["webdav", path],
-		queryFn: () => loadFile(path as string, webdav),
+		enabled: !!webdav && !!path && !isLoading,
+		queryKey: ["webdav", path, site?.id],
+		queryFn: () => webdav && loadFile(path as string, webdav),
 	});
 
-	useEffect(() => {
-		setActive(true);
-		editorRef.current?.render();
-		return () => editorRef.current?.dispose();
-	}, []);
+	const saveData = useCallback(
+		(newData: string) => {
+			if (!webdav || !path || !newData) return;
 
-	const onSave = () => {
-		const value = editorRef.current?.getValue();
-		if (value && path) saveFile(path, value, webdav);
-	};
-
-	const onMount: OnMount = (editor, monaco) => {
-		if (!path) return;
-
-		for (const model of monaco.editor.getModels()) {
-			model.dispose();
-		}
-
-		editor.setModel(null);
-
-		let lang = undefined;
-		if (zshFiles.includes(path.split("/").pop() as string)) lang = "shell";
-
-		editor.setModel(monaco.editor.createModel(data || "", lang, monaco.Uri.file(path)));
-
-		editorRef.current = editor;
-		monaco.editor.defineTheme("dawdle", dawdleTheme);
-		monaco.editor.setTheme("dawdle");
-		monaco.editor.addCommand({ id: "save", run: onSave });
-
-		monaco.editor.addKeybindingRule({
-			keybinding: monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS,
-			command: "save",
-		});
-	};
+			setIsSaving(true);
+			const now = new Date();
+			saveFile(path, newData, webdav).then(() => {
+				queryClient.invalidateQueries({ queryKey: ["webdav", path, site?.id] });
+				setTimeout(() => setIsSaving(false), Math.max(0, 200 - (new Date().getTime() - now.getTime())));
+			});
+		},
+		[webdav, path, site],
+	);
 
 	let loadingMessage = null;
-
-	if (active && !path) loadingMessage = <div className={styles.error}>Missing file path.</div>;
-
-	if (active && disabledFileTypes.includes(path?.split(".").pop() || ""))
+	if (disabledFileTypes.includes(path?.split(".").pop() || ""))
 		loadingMessage = <div className={styles.error}>File type not supported.</div>;
 
 	return (
@@ -120,7 +92,15 @@ export const Editor = () => {
 						</span>,
 					])}
 				</h2>
-				<button type="button" onClick={() => editorRef.current?.trigger(undefined, "save", undefined)}>
+				<button
+					type="button"
+					onClick={() => editorRef.current?.triggerSave()}
+					data-is-saving={isSaving && "true"}
+					className={styles.save}
+				>
+					<div className={styles.loader}>
+						<Loader size={17} />
+					</div>
 					<Save size={17} />
 					Save
 				</button>
@@ -128,17 +108,90 @@ export const Editor = () => {
 			<div>
 				{loadingMessage && loadingMessage}
 				{error && !loadingMessage && <div className={styles.error}>{error.message}</div>}
-				{!isLoading && !fileIsLoading && !error && !loadingMessage && (
-					<EditorMonaco
-						onMount={onMount}
-						options={{
-							fontFamily: "Victor Mono Variable",
-							padding: { top: 20 },
-							model: null,
-						}}
+				{webdav && data !== undefined && !isLoading && !fileIsLoading && !error && !loadingMessage && (
+					<EditorInner
+						initialData={data ?? ""}
+						path={path}
+						ref={editorRef}
+						webdav={webdav}
+						saveData={(data) => saveData(data)}
 					/>
 				)}
 			</div>
 		</div>
+	);
+};
+
+type EditorInnerRef = {
+	triggerSave: () => void;
+};
+
+export const EditorInner = ({
+	webdav,
+	initialData,
+	path,
+	ref,
+	saveData,
+}: {
+	webdav: WebDAVClient;
+	initialData: string;
+	path: string;
+	ref: Ref<EditorInnerRef>;
+	saveData: (data: string) => void;
+}) => {
+	const editorRef = useRef<editor.IStandaloneCodeEditor | undefined>(undefined);
+
+	const onSave = useCallback(() => {
+		const value = editorRef.current?.getValue();
+		saveData(value || "");
+	}, [saveData]);
+
+	useImperativeHandle(
+		ref,
+		() => ({
+			triggerSave: onSave,
+		}),
+		[onSave],
+	);
+
+	useEffect(() => {
+		return () => {
+			editorRef.current?.dispose();
+		};
+	}, []);
+
+	const onMount: OnMount = (editor, monaco) => {
+		if (!path || !webdav) return;
+
+		for (const model of monaco.editor.getModels()) {
+			model.dispose();
+		}
+
+		editor.setModel(null);
+		let lang = undefined;
+		if (zshFiles.includes(path.split("/").pop() as string)) lang = "shell";
+
+		editor.setModel(monaco.editor.createModel(initialData || "", lang, monaco.Uri.file(path)));
+
+		editorRef.current = editor;
+		monaco.editor.defineTheme("dawdle", dawdleTheme);
+		monaco.editor.setTheme("dawdle");
+		monaco.editor.addCommand({ id: "save", run: onSave });
+
+		monaco.editor.addKeybindingRule({
+			keybinding: monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS,
+			command: "save",
+		});
+	};
+
+	return (
+		<EditorMonaco
+			onMount={onMount}
+			options={{
+				fontFamily: "monospace",
+				padding: { top: 20 },
+				model: null,
+			}}
+		/>
 	);
 };
