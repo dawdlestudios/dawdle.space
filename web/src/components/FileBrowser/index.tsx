@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { navigate } from "astro:transitions/client";
 import type { FileStat, WebDAVClient } from "webdav";
@@ -6,7 +6,8 @@ import type { FileStat, WebDAVClient } from "webdav";
 import styles from "./styles.module.css";
 
 import { useQuery } from "../../utils/query";
-import { stripPrefix, useSite, useWebDav } from "../../utils/webdav";
+import { createWebDavClient, stripPrefix, useSiteProps, useWebDav } from "../../utils/webdav";
+import { useSite } from "../../utils/hooks";
 import { ContextMenu } from "./context-menu";
 import { type FileType, icons } from "./icons";
 import { formatSize, sortFiles } from "./util";
@@ -28,18 +29,25 @@ const toFile = (file: FileStat): DawdleFile => ({
 });
 
 export const FileBrowser = () => {
-	const { path: dir, setPath: setDir, siteId } = useSite();
-	const webdav = useWebDav(siteId);
+	const { path: dir, setPath: setDir, siteDomain } = useSiteProps();
+	const { site, isLoading } = useSite(siteDomain);
+
 	const uploadRef = useRef<HTMLInputElement>(null);
+	const [webdav, setWebdav] = useState<WebDAVClient>();
+
+	useEffect(() => {
+		if (site?.id) setWebdav(createWebDavClient(site.id));
+	}, [site]);
 
 	const {
 		data: files,
-		isLoading,
+		isLoading: filesLoading,
 		refetch,
 	} = useQuery({
+		enabled: !!site?.id && !!webdav,
 		queryKey: ["webdav", "dir", dir],
 		queryFn: async () => {
-			const files = (await webdav.getDirectoryContents(dir)) as FileStat[];
+			const files = (await webdav?.getDirectoryContents(dir)) as FileStat[];
 			return sortFiles(files.map(toFile));
 		},
 	});
@@ -49,16 +57,24 @@ export const FileBrowser = () => {
 
 		const promises = Array.from(e.target.files)
 			.filter((file) => file)
-			.map(async (file) => webdav.putFileContents(`${dir}/${file.name}`, await file.arrayBuffer()));
+			.map(async (file) => webdav?.putFileContents(`${dir}/${file.name}`, await file.arrayBuffer()));
 
 		e.target.value = "";
 		Promise.all(promises).then(() => refetch());
 	};
 
+	if (!isLoading && !site) {
+		return (
+			<div className={styles.root}>
+				<h1>Site not found</h1>
+			</div>
+		);
+	}
+
 	return (
 		<div className={styles.root}>
 			<div>
-				<BreadCrumbs goto={setDir} path={dir} />
+				<BreadCrumbs site={site?.customDomain || site?.domain || ""} goto={setDir} path={dir} />
 			</div>
 			{/* allow multiple files */}
 			<input
@@ -75,14 +91,14 @@ export const FileBrowser = () => {
 					const newDir = dir.split("/").slice(0, -1).join("/");
 					setDir(newDir);
 				}}
-				loading={isLoading}
+				loading={filesLoading || isLoading}
 				files={files || []}
 				path={dir}
 				refresh={refetch}
 				onUploadFile={() => uploadRef.current?.click()}
 				onClickFile={(file) => {
 					if (file.type === "directory") return setDir(file.fullPath);
-					navigate(`/edit/${siteId}/${stripPrefix(file.fullPath)}`);
+					navigate(`/edit/${site?.customDomain || site?.domain}/${stripPrefix(file.fullPath)}`);
 				}}
 			/>
 		</div>
@@ -106,7 +122,7 @@ const Directory = (props: {
 	path: string;
 	goBack: () => void;
 	refresh: () => void;
-	webdav: WebDAVClient;
+	webdav?: WebDAVClient;
 }) => {
 	if (props.loading) {
 		return (
@@ -129,20 +145,24 @@ const Directory = (props: {
 					navigate(`/user/edit#${file.fullPath}`);
 				}}
 				onRemove={(file) => {
-					props.webdav.deleteFile(file.fullPath);
-					props.refresh();
+					props.webdav?.deleteFile(file.fullPath).then(() => {
+						props.refresh();
+					});
 				}}
 				onMove={(file, newPath) => {
-					props.webdav.moveFile(file.fullPath, newPath);
-					props.refresh();
+					props.webdav?.moveFile(file.fullPath, newPath).then(() => {
+						props.refresh();
+					});
 				}}
 				onCreateFile={(name) => {
-					props.webdav.putFileContents(`${props.path}/${name}`, "");
-					props.refresh();
+					props.webdav?.putFileContents(`${props.path}/${name}`, "").then(() => {
+						props.refresh();
+					});
 				}}
 				onCreateFolder={(name) => {
-					props.webdav.createDirectory(`${props.path}/${name}`);
-					props.refresh();
+					props.webdav?.createDirectory(`${props.path}/${name}`).then(() => {
+						props.refresh();
+					});
 				}}
 				items={props.files.map((file, i) => ({
 					file,
@@ -160,12 +180,16 @@ const Directory = (props: {
 	);
 };
 
-const BreadCrumbs = ({ path }: { path: string; goto: (path: string) => void }) => {
+const BreadCrumbs = ({
+	path,
+	site,
+}: { site: string; path: string; goto: (path: string) => void }) => {
 	const crumbs = path.split("/").filter((crumb) => crumb !== "");
 
 	return (
 		<div className={styles.breadcrumbs}>
 			<button type="button" className={styles.crumb}>
+				{site}
 				<span className={styles.slash}>{"/"}</span>
 			</button>
 

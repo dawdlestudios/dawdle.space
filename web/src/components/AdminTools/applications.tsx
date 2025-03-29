@@ -140,7 +140,7 @@ export const AdminApplications = () => {
 											label: "Copy Claim Link",
 											onClick: () => {
 												navigator.clipboard.writeText(
-													`https://dawdle.space/user/claim?token=${application.claim_token}&user=${application.username}`,
+													`https://dawdle.space/me/claim?token=${application.claim_token}&user=${application.username}`,
 												);
 											},
 										},

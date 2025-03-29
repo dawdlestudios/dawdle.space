@@ -12,10 +12,10 @@ const url = new URL(Astro.request.url);
 <Layout title={title}>
   <!-- <SettingsHeader  client:load /> -->
   <ul>
-    <li data-active={url.pathname === "/me"}>
+    <li data-active={!url.pathname.startsWith("/me/settings")}>
       <a href="/me">Your Sites</a>
     </li>
-    <li data-active={url.pathname === "/me/settings"}>
+    <li data-active={url.pathname.startsWith("/me/settings")}>
       <a href="/me/settings">Settings</a>
     </li>
     <li class="signout">
@@ -69,14 +69,15 @@ const url = new URL(Astro.request.url);
     }
 
     li {
-      padding: 0.5rem 0;
       border-right: var(--border);
       font-size: 0.8rem;
+      display: flex;
+      align-items: center;
 
       a {
         color: var(--text-dark);
         text-decoration: none;
-        padding: 0 1.5rem;
+        padding: 0.5rem 1.2rem;
       }
     }
 

@@ -1,7 +1,7 @@
 use eyre::Result;
 use std::net::SocketAddr;
 
-use actix_web::middleware::Logger;
+use actix_web::middleware::{Logger, from_fn};
 use actix_web::web::{self, Data};
 use actix_web::{App, HttpServer, guard};
 
@@ -9,6 +9,7 @@ use utoipa::OpenApi;
 use utoipa::openapi::security::{ApiKeyValue, SecurityScheme};
 use utoipa_actix_web::{AppExt, scope};
 
+pub mod aiguard;
 pub mod errors;
 pub mod sessions;
 
@@ -52,7 +53,10 @@ pub async fn run(state: crate::app::App, addr: SocketAddr) -> Result<()> {
         let (app, _api) = App::new()
             .into_utoipa_app()
             .openapi(ApiDoc::openapi())
-            .map(|app| app.wrap(Logger::default()))
+            .map(|app| {
+                app.wrap(Logger::default())
+                    .wrap(from_fn(aiguard::middleware))
+            })
             .service(scope("/api").guard(api_host).configure(services::configure))
             .default_service(web::to(sites::handle))
             .app_data(state.clone())

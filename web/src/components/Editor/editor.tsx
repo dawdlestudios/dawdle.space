@@ -10,7 +10,8 @@ import styles from "./editor.module.css";
 import type { editor } from "monaco-editor";
 import type { FileStat, WebDAVClient } from "webdav";
 import { useQuery } from "../../utils/query";
-import { useSite, useWebDav } from "../../utils/webdav";
+import { useSiteProps, useWebDav } from "../../utils/webdav";
+import { useSite } from "../../utils/hooks";
 
 const zshFiles = [".zshrc", ".zshenv", ".zprofile", ".zlogin", ".zlogout", ".zsh", ".zsh-theme"];
 const dawdleTheme: editor.IStandaloneThemeData = {
@@ -44,12 +45,17 @@ const saveFile = async (path: string, content: string, webdav: WebDAVClient) => 
 
 export const Editor = () => {
 	const editorRef = useRef<editor.IStandaloneCodeEditor | undefined>(undefined);
-	const { siteId, path } = useSite();
-	const webdav = useWebDav(siteId);
+	const { path, siteDomain } = useSiteProps();
+	const { site, isLoading } = useSite(siteDomain);
+	const webdav = useWebDav(site?.id);
 
 	const [active, setActive] = useState(false);
 
-	const { data, isLoading, error } = useQuery({
+	const {
+		data,
+		isLoading: fileIsLoading,
+		error,
+	} = useQuery({
 		queryKey: ["webdav", path],
 		queryFn: () => loadFile(path as string, webdav),
 	});
@@ -122,7 +128,7 @@ export const Editor = () => {
 			<div>
 				{loadingMessage && loadingMessage}
 				{error && !loadingMessage && <div className={styles.error}>{error.message}</div>}
-				{!isLoading && !error && !loadingMessage && (
+				{!isLoading && !fileIsLoading && !error && !loadingMessage && (
 					<EditorMonaco
 						onMount={onMount}
 						options={{

@@ -39,7 +39,7 @@ pub async fn handle(
         .site_dir(&site.site_id)
         .expect("site id has to be valid");
 
-    let Some((path_str, path)) = sanitize_and_check_path(&dir, path) else {
+    let Some((path_str, valid_path)) = sanitize_and_check_path(&dir, path) else {
         return Err(ErrorResponse::not_found("invalid path"));
     };
 
@@ -51,16 +51,28 @@ pub async fn handle(
         ));
     }
 
-    if tokio::fs::metadata(&path)
+    let mut valid_path = valid_path;
+    if site.site_id == "www" {
+        // for everything starting with /site/ (not /site/create) serve /site/site/index.html
+        if path.starts_with("/site/") && !path.starts_with("/site/create") {
+            valid_path = dir.join("site/site/index.html");
+        } else if path.starts_with("/edit/") {
+            valid_path = dir.join("edit/edit/index.html");
+        }
+
+        log::info!("Serving site {}: {}", site.site_id, valid_path.display());
+    }
+
+    if tokio::fs::metadata(&valid_path)
         .await
         .map(|m| m.is_file())
         .unwrap_or(false)
     {
-        let file = NamedFile::open(path).api_not_found()?;
+        let file = NamedFile::open(valid_path).api_not_found()?;
         return Ok(Either::Right(file));
     }
 
-    let Some(selected_file) = find_index(&dir, &path).await else {
+    let Some(selected_file) = find_index(&dir, &valid_path).await else {
         let file = NamedFile::open(dir.join("404.html")).api_not_found()?;
         return Ok(Either::Right(file));
     };

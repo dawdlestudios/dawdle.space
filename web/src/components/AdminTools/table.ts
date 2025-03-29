@@ -2,7 +2,9 @@ import {
 	CellStyleModule,
 	ClientSideRowModelModule,
 	ColumnAutoSizeModule,
+	LargeTextEditorModule,
 	ModuleRegistry,
+	TextEditorModule,
 	ValidationModule,
 } from "ag-grid-community";
 
@@ -11,4 +13,6 @@ ModuleRegistry.registerModules([
 	ValidationModule,
 	ColumnAutoSizeModule,
 	CellStyleModule,
+	TextEditorModule,
+	LargeTextEditorModule,
 ]);

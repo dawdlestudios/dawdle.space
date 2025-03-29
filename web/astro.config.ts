@@ -14,7 +14,7 @@ function setPrerender(): AstroIntegration {
 			"astro:route:setup": ({ route }) => {
 				if (
 					(isDev && route.component.endsWith("/site/[...path].astro")) ||
-					route.component.endsWith("/edit/[...path].astro")
+					(isDev && route.component.endsWith("/edit/[...path].astro"))
 				) {
 					route.prerender = false;
 				}
@@ -45,4 +45,5 @@ export default defineConfig({
 		css: { transformer: "lightningcss" },
 	},
 	trailingSlash: "ignore",
+	output: "static",
 });

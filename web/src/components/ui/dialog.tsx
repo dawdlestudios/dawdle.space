@@ -1,37 +1,50 @@
 import * as RadixDialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
-import { type ReactElement, useState } from "react";
+import { type ReactElement, useImperativeHandle, useRef, useState } from "react";
 import styles from "./dialog.module.css";
 
+export interface DialogRef {
+	setOpen: (open: boolean) => void;
+}
+
 export const Dialog = ({
+	trigger,
 	children,
-	content,
 	description,
 	title,
+	ref,
 }: {
-	children: ({ onClick }: { onClick: () => void }) => ReactElement;
-	content: ReactElement;
+	trigger?: ReactElement | ((onSelect: (e: Event) => void) => ReactElement);
+	children: ReactElement;
 	title?: string;
 	description?: string;
+	ref?: React.Ref<DialogRef>;
 }) => {
+	const triggerRef = useRef<HTMLButtonElement>(null);
 	const [open, setOpen] = useState(false);
 
-	return (
-		<RadixDialog.Root
-			open={open}
-			onOpenChange={(o) => {
-				setOpen(o);
+	useImperativeHandle(ref, () => {
+		return {
+			setOpen: (open: boolean) => {
+				setOpen(open);
+				if (!open) {
+					triggerRef?.current?.click();
+				}
+			},
+		};
+	});
 
-				if (!o)
-					// timeout so we don't trigger ourselves
-					setTimeout(() => {
-						document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
-					}, 0);
-			}}
-		>
-			{children({
-				onClick: () => setOpen(true),
-			})}
+	return (
+		<RadixDialog.Root open={open} onOpenChange={setOpen}>
+			<RadixDialog.Trigger hidden style={{ display: "none" }} asChild>
+				<button type="button" ref={triggerRef} />
+			</RadixDialog.Trigger>
+			{typeof trigger === "function" ? (
+				trigger(() => setOpen(true))
+			) : (
+				<RadixDialog.Trigger asChild>{trigger}</RadixDialog.Trigger>
+			)}
+
 			<RadixDialog.Portal>
 				<RadixDialog.Overlay className={styles.DialogOverlay} />
 				<RadixDialog.Content className={styles.DialogContent} aria-describedby={undefined}>
@@ -43,7 +56,7 @@ export const Dialog = ({
 						</RadixDialog.Description>
 					)}
 
-					{content}
+					{children}
 					<RadixDialog.Close asChild>
 						<button type="button" className={styles.IconButton} aria-label="Close">
 							<X />

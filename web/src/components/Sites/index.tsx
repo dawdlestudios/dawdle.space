@@ -17,7 +17,12 @@ export const UserSites = () => {
 				{data?.map((site) => {
 					return (
 						<li key={site.id} className={styles.site}>
-							<button type="button" onClick={() => navigate(`/site/${site.id}`)}>
+							<button
+								type="button"
+								onClick={() =>
+									navigate(`/site/${site.customDomain || site.domain.replace(".dawdle.space", "")}`)
+								}
+							>
 								<div>
 									<h2>{site.domain.replace(".dawdle.space", "")}</h2>
 									<a href={`https://${site.domain}`}>&#10697;{site.domain}</a>

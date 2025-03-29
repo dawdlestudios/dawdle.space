@@ -6,7 +6,7 @@ export const createWebDavClient = (siteId: string): WebDAVClient =>
 		authType: AuthType.None,
 	});
 
-export const useWebDav = (siteId: string) => {
+export const useWebDav = (siteId = "") => {
 	const [webdav, setWebdav] = useState(() => createWebDavClient(siteId));
 
 	useEffect(() => {
@@ -16,8 +16,8 @@ export const useWebDav = (siteId: string) => {
 	return webdav;
 };
 
-export const useSite = () => {
-	const siteId = window.location.pathname.split("/")[2];
+export const useSiteProps = () => {
+	const siteDomain = window.location.pathname.split("/")[2];
 	const [path, setPathInner] = useState(() => {
 		const dir = window.location.pathname.split("/").slice(3).join("/");
 		return dir;
@@ -25,11 +25,11 @@ export const useSite = () => {
 
 	const setPath = (dir: string) => {
 		setPathInner(stripPrefix(dir));
-		window.history.pushState({}, "", `/site/${siteId}/${stripPrefix(dir)}`);
+		window.history.pushState({}, "", `/site/${siteDomain}/${stripPrefix(dir)}`);
 	};
 
 	return {
-		siteId,
+		siteDomain,
 		path,
 		setPath,
 	};
