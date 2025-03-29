@@ -16,7 +16,15 @@ export const UserSites = () => {
 			<ul>
 				{data?.map((site) => {
 					return (
-						<li key={site.id} className={styles.site}>
+						<li
+							key={site.id}
+							className={styles.site}
+							style={
+								{
+									"--background-image": `url("/api/screenshot/${site.id}")`,
+								} as React.CSSProperties
+							}
+						>
 							<button
 								type="button"
 								onClick={() =>

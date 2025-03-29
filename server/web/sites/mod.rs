@@ -20,9 +20,12 @@ pub async fn handle(
     };
 
     #[cfg(debug_assertions)]
-    let hostname = hostname.strip_suffix(".localhost").unwrap_or(&hostname);
+    let hostname = hostname
+        .strip_suffix(".localhost")
+        .unwrap_or(&hostname)
+        .to_string();
 
-    let Ok(domain) = addr::parse_domain_name(hostname) else {
+    let Ok(domain) = addr::parse_domain_name(&hostname) else {
         return Err(ErrorResponse::bad_request("invalid hostname"));
     };
 
@@ -59,8 +62,6 @@ pub async fn handle(
         } else if path.starts_with("/edit/") {
             valid_path = dir.join("edit/edit/index.html");
         }
-
-        log::info!("Serving site {}: {}", site.site_id, valid_path.display());
     }
 
     if tokio::fs::metadata(&valid_path)

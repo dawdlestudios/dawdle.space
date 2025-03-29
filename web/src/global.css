@@ -44,7 +44,8 @@ button,
 input,
 select,
 textarea,
-code {
+code,
+pre {
 	font-family: "HP100LX6x8", monospace;
 }
 

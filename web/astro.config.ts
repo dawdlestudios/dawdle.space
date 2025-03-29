@@ -13,7 +13,8 @@ function setPrerender(): AstroIntegration {
 			},
 			"astro:route:setup": ({ route }) => {
 				if (
-					(isDev && route.component.endsWith("/site/[...path].astro")) ||
+					(isDev && route.component.endsWith("/site/[...path]/index.astro")) ||
+					(isDev && route.component.endsWith("/site/[...path]/edit.astro")) ||
 					(isDev && route.component.endsWith("/edit/[...path].astro"))
 				) {
 					route.prerender = false;

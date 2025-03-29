@@ -1,7 +1,7 @@
 ---
 import type { GetStaticPaths } from "astro";
-import { UserSite } from "../../components/Site";
-import SettingsLayout from "../../layouts/SettingsLayout.astro";
+import { UserSite } from "../../../components/Site";
+import SettingsLayout from "../../../layouts/SettingsLayout.astro";
 
 export const getStaticPaths = (() => {
 	return [{ params: { path: "site" } }];

@@ -29,7 +29,7 @@ deploy-web() {
     bun run build
 
     echo "  > Copying files to remote host..."
-    rsync -avzP dist genoa:~/dawdle/sites/www
+    rsync -avzP dist/ genoa:~/dawdle/sites/www
 
     echo "  > Done!"
 }

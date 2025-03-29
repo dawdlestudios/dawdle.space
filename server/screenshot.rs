@@ -48,7 +48,7 @@ pub async fn screenshot(sites: Vec<ScreenshotSite>) -> Result<()> {
             .execute("document.activeElement.blur();", vec![])
             .await?;
 
-        sleep(Duration::from_secs(2)).await;
+        sleep(Duration::from_secs(5)).await;
         let pixels = client.screenshot().await?;
 
         set.spawn_blocking(|| {

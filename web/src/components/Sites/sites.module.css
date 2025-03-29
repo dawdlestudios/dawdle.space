@@ -17,6 +17,9 @@ main.main {
 		width: 50%;
 		display: flex;
 		overflow: hidden;
+		background: var(--background-image);
+		background-size: cover;
+		background-position: center;
 
 		&.create {
 			border: none;
@@ -27,6 +30,10 @@ main.main {
 				justify-content: center;
 				gap: 1rem;
 			}
+		}
+
+		> button {
+			backdrop-filter: blur(2px);
 		}
 
 		> a,

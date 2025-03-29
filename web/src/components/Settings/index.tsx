@@ -146,6 +146,14 @@ export const UserSettings = () => {
 				/>
 				<div>{changeMinecraftNote && <p>{changeMinecraftNote}</p>}</div>
 			</form>
+
+			<form className={styles.formInline} onSubmit={onMinecraftUsernameChange}>
+				<h2>Delete Account</h2>
+				<p>
+					Send us a message at <a href="mailto:contact@dawdle.space">contact@dawdle.space</a> to delete
+					your account.
+				</p>
+			</form>
 		</div>
 	);
 };

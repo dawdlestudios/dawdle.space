@@ -17,6 +17,7 @@
 		background: var(--background-light);
 		display: flex;
 		align-items: center;
+		border-radius: var(--border-radius);
 
 		h1 {
 			font-size: 1rem;
@@ -33,7 +34,7 @@
 
 			&:last-of-type {
 				font-weight: 400;
-				color: #9ab1c4;
+				color: #deebf5;
 			}
 
 			> .slash {
