@@ -29,7 +29,7 @@ import Layout from "../../layouts/Layout.astro";
     "astro:page-load",
     async () => {
       if (getUser()) {
-        await fetch("/api/logout", { method: "POST" });
+        await fetch("/api/auth/logout", { method: "POST" });
       }
       setTimeout(() => {
         window.location.href = "/";
