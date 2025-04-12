@@ -13,6 +13,29 @@ export const UserSites = () => {
 		queryFn: () => api["/api/me/sites"].get().json(),
 	});
 
+	const createSite = (formData: FormData) => {
+		const siteName = formData.get("site-name") as string;
+		const makePublic = formData.get("make-public") === "on";
+
+		api["/api/me/site"]
+			.post({
+				json: {
+					name: `${siteName}.dawdle.space`,
+					hidden: !makePublic,
+				},
+			})
+			.json()
+			.then((_site) => {
+				navigate(`/site/${siteName}`);
+			})
+			.catch(() => {
+				const siteNameInput = document.getElementById("site-name") as HTMLInputElement;
+				siteNameInput.setCustomValidity("This site name is already taken");
+				siteNameInput.reportValidity();
+				siteNameInput.setCustomValidity("");
+			});
+	};
+
 	return (
 		<main className={styles.main}>
 			<ul>
@@ -58,13 +81,16 @@ export const UserSites = () => {
 					<form
 						onSubmit={(e) => {
 							e.preventDefault();
+							const formData = new FormData(e.currentTarget);
+							createSite(formData);
 						}}
 						className={styles.form}
 					>
 						<div>
 							<p>
-								Choose a name where your new site will be available from (letters, numbers, and dashes only)
+								Feel free to create as many sites as you want, just make sure to give them a unique name.
 							</p>
+
 							<div>
 								<input
 									id="site-name"
@@ -76,8 +102,21 @@ export const UserSites = () => {
 								/>
 								<span>.dawdle.space</span>
 							</div>
+							<p>
+								Choose a name where your new site will be available from (letters, numbers, and dashes
+								only).
+								{/* You can also use a custom domain later. */}
+							</p>
+
+							<div>
+								<input id="make-public" type="checkbox" name="make-public" defaultChecked />
+								<label htmlFor="make-public">Show this site on dawdle.space</label>
+							</div>
+							<p>
+								Decide if you want your site to be visible in the site directory. This can be changed later.
+							</p>
 						</div>
-						<button type="submit">Create</button>
+						<button type="submit">Create your new site</button>
 					</form>
 				</Dialog>
 			</ul>

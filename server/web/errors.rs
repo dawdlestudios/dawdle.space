@@ -2,6 +2,7 @@ use std::fmt::{Debug, Display, Formatter};
 
 use actix_web::ResponseError;
 use actix_web::http::StatusCode;
+use serde_json::json;
 
 #[derive(Clone)]
 pub struct ErrorResponse(StatusCode, String);
@@ -58,6 +59,19 @@ impl Display for ErrorResponse {
 impl ResponseError for ErrorResponse {
     fn status_code(&self) -> StatusCode {
         self.0
+    }
+
+    fn error_response(&self) -> actix_web::HttpResponse<awc::body::BoxBody> {
+        actix_web::HttpResponseBuilder::new(self.status_code())
+            .content_type("application/json")
+            .body(
+                json! ({
+                    "status": self.0.as_u16(),
+                    "error": self.0.canonical_reason().unwrap_or("unknown"),
+                    "message": self.1
+                })
+                .to_string(),
+            )
     }
 }
 

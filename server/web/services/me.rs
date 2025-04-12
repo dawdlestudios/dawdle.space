@@ -20,6 +20,7 @@ pub fn configure(config: &mut ServiceConfig) {
         .service(change_password)
         .service(update_minecraft_username)
         .service(sites)
+        .service(create_site)
         .service(get_site_token)
         .service(reset_site_token);
 }
@@ -61,6 +62,9 @@ struct SiteResponse {
     domain: String,
     #[serde(rename = "customDomain")]
     custom_domain: Option<String>,
+
+    hidden: bool,
+    disabled: bool,
 }
 
 #[utoipa::path(
@@ -82,6 +86,8 @@ pub async fn sites(
             id: site.site_id,
             domain: site.domain,
             custom_domain: site.custom_domain,
+            hidden: site.hidden,
+            disabled: site.disabled,
         })
         .collect::<Vec<_>>();
 
@@ -145,6 +151,7 @@ pub async fn reset_site_token(
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 pub struct CreateSiteRequest {
     name: String,
+    hidden: bool,
 }
 
 #[utoipa::path(
@@ -159,7 +166,7 @@ pub async fn create_site(
     app: Data<App>,
     body: Json<CreateSiteRequest>,
 ) -> Result<Json<SiteResponse>, ErrorResponse> {
-    if app.users.get(&body.name).await.api_not_found()?.is_some() {
+    if app.sites.resolve_hostname(&body.name).is_some() {
         return Err(ErrorResponse::bad_request(
             "site or user with this name already exists",
         ));
@@ -167,7 +174,7 @@ pub async fn create_site(
 
     let site = app
         .sites
-        .create(session.username(), &body.name)
+        .create(&body.name, session.username(), body.hidden)
         .await
         .api_internal_error()?;
 
@@ -175,6 +182,8 @@ pub async fn create_site(
         id: site.site_id,
         domain: site.domain,
         custom_domain: site.custom_domain,
+        hidden: site.hidden,
+        disabled: site.disabled,
     }))
 }
 

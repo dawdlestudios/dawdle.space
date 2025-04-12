@@ -19,10 +19,10 @@ ul.sites {
 		@media (min-width: 600px) {
 			width: 50%;
 		}
-
+		/* 
 		@media (min-width: 1200px) {
 			width: 33.33%;
-		}
+		} */
 
 		img {
 			width: 100%;

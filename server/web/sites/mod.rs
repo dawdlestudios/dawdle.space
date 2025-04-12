@@ -37,6 +37,10 @@ pub async fn handle(
         return Err(ErrorResponse::not_found("site not found"));
     };
 
+    if site.disabled {
+        return Err(ErrorResponse::not_found("site not found"));
+    }
+
     let dir = app
         .config
         .site_dir(&site.site_id)

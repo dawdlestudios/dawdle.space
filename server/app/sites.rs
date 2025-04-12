@@ -21,6 +21,9 @@ pub struct Site {
     // token required to update the site via sftp/webdav/etc.
     // this is generated when the site is created, and can be reset by the owner.
     pub access_token: Option<String>,
+
+    pub hidden: bool,   // if true, the site will not be shown in the list of sites
+    pub disabled: bool, // if true, the site will not be accessible to the public
 }
 
 #[derive(Clone)]
@@ -144,9 +147,21 @@ impl AppSites {
         site_id.and_then(|site_id| self.sites.get(&site_id).map(|s| s.value().clone()))
     }
 
-    pub async fn create(&self, domain: &str, owner: &str) -> Result<Site> {
+    pub async fn create(&self, domain: &str, owner: &str, hidden: bool) -> Result<Site> {
         let site_id = cuid2::slug();
         let access_token = cuid2::cuid();
+
+        if !domain
+            .strip_suffix(".dawdle.space")
+            .map(|d| {
+                d.chars().all(|c| c.is_ascii_alphanumeric() || c == '-')
+                    && d.len() > 3
+                    && d.len() < 63
+            })
+            .unwrap_or(false)
+        {
+            bail!("invalid domain");
+        };
 
         let site = Site {
             site_id: site_id.clone(),
@@ -156,6 +171,8 @@ impl AppSites {
             custom_domain: None,
             redirect_to_custom_domain: false,
             access_token: Some(access_token.clone()),
+            disabled: false,
+            hidden,
         };
 
         if self.domain_to_site_id.contains_key(domain) {

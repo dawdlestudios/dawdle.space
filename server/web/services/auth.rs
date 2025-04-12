@@ -196,6 +196,7 @@ pub async fn claim(
         .create(
             &format!("{username}.dawdle.space", username = token.username),
             &token.username,
+            false,
         )
         .await
         .api_internal_error()?;

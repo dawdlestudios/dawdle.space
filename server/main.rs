@@ -22,7 +22,7 @@ async fn main() -> eyre::Result<()> {
         let _ = app.users.create(&username, &password, Some("admin")).await;
         let _ = app
             .sites
-            .create(&format!("{}.dawdle.space", username), &username)
+            .create(&format!("{}.dawdle.space", username), &username, false)
             .await;
     }
 

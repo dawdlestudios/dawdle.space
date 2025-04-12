@@ -81,12 +81,15 @@ main.main {
 	flex-direction: column;
 	height: 100%;
 
-	gap: 1rem;
 	> div {
 		margin-top: 1rem;
-		gap: 1rem;
 		display: flex;
 		flex-direction: column;
+	}
+
+	p {
+		font-size: 0.8rem;
+		margin-bottom: 1rem;
 	}
 
 	button {

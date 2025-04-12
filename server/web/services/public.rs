@@ -40,11 +40,16 @@ pub async fn get_sites(app: Data<App>) -> Result<Json<SitesResponse>, ErrorRespo
     let sites = sites
         .into_iter()
         .filter(|site| site.site_id != "www")
-        .map(|site| SiteResponse {
-            id: site.site_id,
-            domain: site.domain,
-            owner: site.owner,
-            custom_domain: site.custom_domain,
+        .filter_map(|site| {
+            if site.hidden || site.disabled {
+                return None;
+            }
+            Some(SiteResponse {
+                id: site.site_id,
+                domain: site.domain,
+                owner: site.owner,
+                custom_domain: site.custom_domain,
+            })
         })
         .collect();
 
