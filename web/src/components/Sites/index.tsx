@@ -3,6 +3,8 @@ import { FolderIcon, FolderPlusIcon } from "lucide-react";
 import { api } from "../../api";
 import { useQuery } from "../../utils/query";
 import styles from "./sites.module.css";
+import { Dialog } from "../ui/dialog";
+import { useState } from "react";
 
 export const UserSites = () => {
 	const { data } = useQuery({
@@ -42,12 +44,42 @@ export const UserSites = () => {
 					);
 				})}
 
-				<li className={`${styles.site} ${styles.create}`}>
-					<a type="button" href="/site/create">
-						<h2>Create a new site</h2>
-						<FolderPlusIcon size={30} />
-					</a>
-				</li>
+				<Dialog
+					title="Create a new site"
+					trigger={
+						<li className={`${styles.site} ${styles.create}`}>
+							<button type="button">
+								<h2>Create a new site</h2>
+								<FolderPlusIcon color="white" size={30} />
+							</button>
+						</li>
+					}
+				>
+					<form
+						onSubmit={(e) => {
+							e.preventDefault();
+						}}
+						className={styles.form}
+					>
+						<div>
+							<p>
+								Choose a name where your new site will be available from (letters, numbers, and dashes only)
+							</p>
+							<div>
+								<input
+									id="site-name"
+									type="text"
+									name="site-name"
+									placeholder="your-cool-site"
+									required
+									pattern="[a-zA-Z0-9\-]+"
+								/>
+								<span>.dawdle.space</span>
+							</div>
+						</div>
+						<button type="submit">Create</button>
+					</form>
+				</Dialog>
 			</ul>
 		</main>
 	);

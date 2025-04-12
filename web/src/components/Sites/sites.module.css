@@ -8,13 +8,14 @@ main.main {
 		list-style: none;
 		margin-bottom: 1rem;
 		display: flex;
+		flex-direction: column;
 		gap: 1rem;
 	}
 
 	li.site {
+		min-height: 8rem;
 		border: var(--border);
 		border-radius: var(--border-radius);
-		width: 50%;
 		display: flex;
 		overflow: hidden;
 		background: var(--background-image);
@@ -23,10 +24,11 @@ main.main {
 
 		&.create {
 			border: none;
+			min-height: 5rem;
 			h2 {
 				font-size: 1.1rem;
 			}
-			a {
+			button {
 				justify-content: center;
 				gap: 1rem;
 			}
@@ -70,6 +72,42 @@ main.main {
 
 		h2 {
 			font-size: 1.2rem;
+		}
+	}
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+
+	gap: 1rem;
+	> div {
+		margin-top: 1rem;
+		gap: 1rem;
+		display: flex;
+		flex-direction: column;
+	}
+
+	button {
+		cursor: pointer;
+		border: var(--border);
+		background: none;
+		padding: 0.5rem;
+		color: #fff;
+
+		&:hover {
+			color: #ffffff;
+			background: #ffffff1f;
+		}
+
+		&[data-secondary] {
+			background: #ffffff1a;
+
+			&:hover {
+				color: #fff;
+				background: #ffffff45;
+			}
 		}
 	}
 }
