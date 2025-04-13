@@ -61,7 +61,7 @@ impl ResponseError for ErrorResponse {
         self.0
     }
 
-    fn error_response(&self) -> actix_web::HttpResponse<awc::body::BoxBody> {
+    fn error_response(&self) -> actix_web::HttpResponse<actix_web::body::BoxBody> {
         actix_web::HttpResponseBuilder::new(self.status_code())
             .content_type("application/json")
             .body(

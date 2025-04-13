@@ -6,6 +6,11 @@ import Layout from "../../layouts/Layout.astro";
   <main>
     <!-- <h3>Already a member? <a href="/login">Login</a></h3> -->
     <h2>Thanks for your interest in joining dawdle.space!</h2>
+    <p>
+        To prevent spam, your submission will be reviewed by a human before you can start using the site.
+        Please fill out the form below and we will get back to you as soon as possible.
+        If you have any questions, feel free to reach out to us at <a href="mailto:hi@dawdle.space">hi@dawdle.space</a>
+    </p>
     <form id="joinform">
       <label for="username">Username (required)</label>
       <input
@@ -18,9 +23,9 @@ import Layout from "../../layouts/Layout.astro";
         maxlength="20"
         placeholder="Your desired username"
       />
-      <label for="email">Email or Discord Username (required)</label>
+      <label for="email">Email (required)</label>
       <input
-        type="text"
+        type="email"
         autocomplete="email"
         id="email"
         name="email"

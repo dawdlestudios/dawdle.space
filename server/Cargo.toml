@@ -35,7 +35,9 @@ dav-server={version="0.7", features=["actix-web", "actix-compat"]}
 # web dependencies
 addr="0.15"
 comrak="0.38"
-awc={version="3.0", features=["rustls"]}
+
+reqwest={version="0.12", features=["json", "cookies", "rustls-tls-webpki-roots-no-provider"]}
+rustls={version="0.23"}
 
 russh={version="0.51"}
 russh-sftp={version="2.0.8"}
@@ -49,3 +51,16 @@ utoipa-actix-web={version="0.1"}
 
 fantoccini={version="0.21", default-features=false, features=["rustls-tls"]}
 image={version="0.25", default-features=false, features=["avif", "png", "rayon"]}
+
+lettre={version="0.11", default-features=false, features=[
+    "pool",
+    "builder",
+    "smtp-transport",
+    "aws-lc-rs",
+    "tokio1",
+    "webpki-roots",
+    "tokio1-rustls",
+]}
+
+regex="1"
+html-escape="0.2"

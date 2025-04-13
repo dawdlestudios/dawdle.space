@@ -33,8 +33,10 @@ impl App {
 
         migrate!("./migrations").run(&pool).await?;
 
+        let mail = crate::mail::Mail::try_new(&config)?;
+
         let users = AppUsers::new(pool.clone(), config.clone());
-        let applications = AppApplications::new(pool.clone(), config.clone());
+        let applications = AppApplications::new(pool.clone(), config.clone(), mail);
         let sessions = AppSessions::new(pool.clone());
         let sites = AppSites::new(pool.clone(), config.clone()).await?;
 

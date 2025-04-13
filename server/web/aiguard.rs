@@ -1,10 +1,9 @@
 use actix_web::{
     Error,
-    body::MessageBody,
+    body::{EitherBody, MessageBody},
     dev::{ServiceRequest, ServiceResponse},
     middleware::Next,
 };
-use awc::body::EitherBody;
 
 static AI_USER_AGENTS: &[&str] = &[
     "AI2Bot",

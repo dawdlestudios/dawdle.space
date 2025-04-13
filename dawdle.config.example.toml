@@ -10,6 +10,11 @@ interface="127.0.0.1"
 port=8008
 interface="127.0.0.1"
 
+[mail]
+brevo_api_key="password"
+from_address="hi@dawdle.space"
+from_name="dawdle.space"
+
 [minecraft]
 restadmin_url="https://minecraft.dawdle.space/api"
 restadmin_token="password"

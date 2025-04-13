@@ -1,5 +1,6 @@
 mod app;
 mod config;
+mod mail;
 mod minecraft;
 mod screenshot;
 mod utils;

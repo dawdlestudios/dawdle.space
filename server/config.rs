@@ -6,8 +6,19 @@ pub struct Config {
     pub fs: FileSystemConfig,
     pub ssh: SSHConfig,
     pub web: WebConfig,
+    pub mail: MailConfig,
     pub minecraft: MinecraftConfig,
     pub create_admin_user: Option<(String, String)>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct MailConfig {
+    pub brevo_api_key: String,
+    // pub smtp_port: u16,
+    // pub smtp_user: String,
+    // pub smtp_pass: String,
+    pub from_address: String,
+    pub from_name: String,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]

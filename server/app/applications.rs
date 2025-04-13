@@ -9,6 +9,7 @@ use crate::utils::{hash_pw, is_valid_username};
 #[derive(Clone)]
 pub struct AppApplications {
     conn: SqlitePool,
+    mail: crate::mail::Mail,
     _config: crate::config::Config,
 }
 
@@ -26,35 +27,15 @@ pub struct Application {
 }
 
 impl AppApplications {
-    pub fn new(conn: SqlitePool, config: crate::config::Config) -> Self {
+    pub fn new(conn: SqlitePool, config: crate::config::Config, mail: crate::mail::Mail) -> Self {
         Self {
             conn,
+            mail,
             _config: config,
         }
     }
 
     pub async fn all(&self) -> Result<Vec<Application>> {
-        // let mut stmt = self
-        //     .conn
-        //     .prepare("SELECT application_id, requested_username, email, about, approved, claimed, claim_token, created_at FROM applications")
-        //     .await?;
-        // let rows = stmt.query(()).await?;
-
-        // let applications = rows.into_stream().map(|row| {
-        //     let row = row?;
-        //     eyre::Ok(Application {
-        //         id: row.get(0)?,
-        //         username: row.get(1)?,
-        //         email: row.get(2)?,
-        //         about: row.get(3)?,
-        //         approved: row.get(4)?,
-        //         claimed: row.get(5)?,
-        //         claim_token: row.get(6)?,
-        //         date: to_time(row.get(7)?)?,
-        //     })
-        // });
-
-        // applications.try_collect::<Vec<_>>().await
         let applications = sqlx::query_as!(
             Application,
             r#"
@@ -74,6 +55,25 @@ impl AppApplications {
         )
         .execute(&self.conn)
         .await?;
+
+        let application = sqlx::query!(
+            "SELECT requested_username, email FROM applications WHERE application_id = ?",
+            id,
+        )
+        .fetch_one(&self.conn)
+        .await?;
+
+        self.mail
+            .send(
+                &application.email,
+                "Your application has been approved",
+                crate::mail::messages::application_confirmed(
+                    &application.requested_username,
+                    &token,
+                ),
+            )
+            .await?;
+
         Ok(())
     }
 
@@ -84,6 +84,7 @@ impl AppApplications {
         )
         .execute(&self.conn)
         .await?;
+
         Ok(())
     }
 
@@ -128,6 +129,14 @@ impl AppApplications {
         )
         .execute(&self.conn)
         .await?;
+
+        self.mail
+            .send(
+                email,
+                "We've received your application",
+                crate::mail::messages::application_received(&username),
+            )
+            .await?;
 
         Ok(())
     }

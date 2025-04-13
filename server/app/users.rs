@@ -24,6 +24,8 @@ pub struct User {
 
     pub minecraft_username: Option<String>,
     pub minecraft_uuid: Option<String>,
+
+    pub email: Option<String>,
 }
 
 impl AppUsers {
@@ -43,7 +45,7 @@ impl AppUsers {
     pub async fn all(&self) -> Result<Vec<User>> {
         let users = sqlx::query_as!(
             User,
-            "SELECT username, created_at, role, minecraft_username, minecraft_uuid FROM users",
+            "SELECT username, created_at, role, minecraft_username, minecraft_uuid, email FROM users",
         )
         .fetch_all(&self.conn)
         .await?;
@@ -101,7 +103,7 @@ impl AppUsers {
     pub async fn get(&self, username: &str) -> Result<Option<User>> {
         let user = sqlx::query_as!(
             User,
-            "SELECT username, created_at, role, minecraft_username, minecraft_uuid FROM users WHERE username = ?",
+            "SELECT username, created_at, role, minecraft_username, minecraft_uuid, email FROM users WHERE username = ?",
             username
         )
         .fetch_optional(&self.conn)
@@ -123,6 +125,7 @@ impl AppUsers {
 
         Ok(())
     }
+
     pub async fn update_minecraft_username(
         &self,
         username: &str,
