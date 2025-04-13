@@ -1,4 +1,4 @@
-const STYLES: &'static str = "<style>
+const STYLES: &str = "<style>
 p {
   font-family: monospace
 }
@@ -16,7 +16,7 @@ a {
 }
 </style>";
 
-const FOOTER: &'static str = "<p style=\"font-family: monospace\">
+const FOOTER: &str = "<p style=\"font-family: monospace\">
 &nbsp;/\\_/\\<br/>
 (&nbsp;o.o&nbsp;)&nbsp;&nbsp;&nbsp;Your dawdle.space team :)<br/>
 &nbsp;>&nbsp;^&nbsp;<<br/>
@@ -26,7 +26,7 @@ const FOOTER: &'static str = "<p style=\"font-family: monospace\">
   <a href=\"{{ unsubscribe }}\">click here to unsubscribe</a>.
 </p>";
 
-const FOOTER_PLAIN: &'static str = "
+const FOOTER_PLAIN: &str = "
  /\\_/\\
 ( o.o )   Your dawdle.space team :)
  > ^ <
@@ -68,12 +68,12 @@ pub fn application_confirmed(username: &str, token: &str) -> (String, String) {
         html_mail(format!(
 "<p style=\"font-family: monospace\">
 Welcome to <a href=\"https://dawdle.space/\"><strong>dawdle.space</strong></a>!<br/><br/>
-You're account has been approved. Click here to verify your email and claim your account: <a href=\"https://dawdle.space/me/claim?user={username}&token={token}\">https://dawdle.space/me/claim?user={username}&token={token}</a>.
+Your account has been approved. Click here to verify your email and claim your account: <a href=\"https://dawdle.space/me/claim?user={username}&token={token}\">https://dawdle.space/me/claim?user={username}&token={token}</a>.
 </p>"
         )),
         plain_mail(format!(
 "Welcome to dawdle.space!\n
-You're account has been approved.
+Your account has been approved.
 Click here to verify your email and claim your account: https://dawdle.space/me/claim?user={username}&token={token}"
         ))
     )
