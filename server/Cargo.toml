@@ -30,11 +30,11 @@ argon2={version="0.5", features=["std"]}
 ssh-key={version="0.6", features=["ed25519"]}
 
 # webdav
-dav-server={version="0.7", features=["actix-web", "actix-compat"]}
+dav-server={version="0.8", features=["actix-web", "actix-compat"]}
 
 # web dependencies
 addr="0.15"
-comrak="0.38"
+# comrak="=0.38"
 
 reqwest={version="0.12", default-features=false, features=[
     "json",
@@ -43,11 +43,11 @@ reqwest={version="0.12", default-features=false, features=[
 ]}
 rustls={version="0.23", features=["aws_lc_rs"]}
 
-russh={version="0.51"}
+russh={version="0.52"}
 russh-sftp={version="2.0.8"}
 async-trait="0.1"
 
-sqlx={version="0.8.3", features=["runtime-tokio", "sqlite", "time"]}
+sqlx={version="0.8", features=["runtime-tokio", "sqlite", "time"]}
 actix-web={version="4.9", features=["cookies"]}
 actix-files="0.6"
 utoipa={version="5.3", features=["time", "actix_extras"]}
