@@ -5,3 +5,8 @@ default-members=["server"]
 
 [profile.dev.package.sqlx-macros]
 opt-level=3
+
+[workspace.package]
+version="0.1.0"
+edition="2024"
+rust-version="1.87"
