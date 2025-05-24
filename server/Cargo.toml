@@ -29,14 +29,12 @@ dashmap="6.1"
 rand="0.9"
 time={version="0.3", features=["serde"]}
 argon2={version="0.5", features=["std"]}
-ssh-key={version="0.6", features=["ed25519"]}
 
 # webdav
 dav-server={version="0.8", features=["actix-web", "actix-compat"]}
 
 # web dependencies
 addr="0.15"
-# comrak="=0.38"
 
 reqwest={version="0.12", default-features=false, features=[
     "json",
@@ -44,10 +42,6 @@ reqwest={version="0.12", default-features=false, features=[
     "rustls-tls-webpki-roots-no-provider",
 ]}
 rustls={version="0.23", features=["aws_lc_rs"]}
-
-russh={version="0.52"}
-russh-sftp={version="2.1"}
-async-trait="0.1"
 
 sqlx={version="0.8", features=["runtime-tokio", "sqlite", "time"]}
 actix-web={version="4.9", features=["cookies"]}
@@ -57,16 +51,3 @@ utoipa-actix-web={version="0.1"}
 
 fantoccini={version="0.21", default-features=false, features=["rustls-tls"]}
 image={version="0.25", default-features=false, features=["avif", "png", "rayon"]}
-
-lettre={version="0.11", default-features=false, features=[
-    "pool",
-    "builder",
-    "smtp-transport",
-    "aws-lc-rs",
-    "tokio1",
-    "webpki-roots",
-    "tokio1-rustls",
-]}
-
-regex="1"
-html-escape="0.2"
