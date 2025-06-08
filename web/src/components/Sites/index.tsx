@@ -1,10 +1,10 @@
 import { navigate } from "astro:transitions/client";
 import { FolderIcon, FolderPlusIcon } from "lucide-react";
+import { useState } from "react";
 import { api } from "../../api";
 import { useQuery } from "../../utils/query";
-import styles from "./sites.module.css";
 import { Dialog } from "../ui/dialog";
-import { useState } from "react";
+import styles from "./sites.module.css";
 
 export const UserSites = () => {
 	const { data } = useQuery({

@@ -31,7 +31,7 @@ impl App {
             .connect(&config.db_path().to_string_lossy())
             .await?;
 
-        migrate!("./migrations").run(&pool).await?;
+        migrate!("./server/migrations").run(&pool).await?;
 
         let mail = crate::mail::Mail::try_new(&config)?;
 

@@ -5,9 +5,9 @@ import type { FileStat, WebDAVClient } from "webdav";
 
 import styles from "./styles.module.css";
 
+import { useSite } from "../../utils/hooks";
 import { useQuery } from "../../utils/query";
 import { createWebDavClient, stripPrefix, useSiteProps, useWebDav } from "../../utils/webdav";
-import { useSite } from "../../utils/hooks";
 import { ContextMenu } from "./context-menu";
 import { type FileType, icons } from "./icons";
 import { formatSize, sortFiles } from "./util";
