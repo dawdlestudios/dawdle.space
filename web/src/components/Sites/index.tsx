@@ -1,6 +1,5 @@
 import { navigate } from "astro:transitions/client";
 import { FolderIcon, FolderPlusIcon } from "lucide-react";
-import { useState } from "react";
 import { api } from "../../api";
 import { useQuery } from "../../utils/query";
 import { Dialog } from "../ui/dialog";
@@ -88,7 +87,8 @@ export const UserSites = () => {
 					>
 						<div>
 							<p>
-								Feel free to create as many sites as you want, just make sure to give them a unique name.
+								Feel free to create as many sites as you want, just make sure to give them a unique
+								name.
 							</p>
 
 							<div>
@@ -103,8 +103,8 @@ export const UserSites = () => {
 								<span>.dawdle.space</span>
 							</div>
 							<p>
-								Choose a name where your new site will be available from (letters, numbers, and dashes
-								only).
+								Choose a name where your new site will be available from (letters, numbers, and
+								dashes only).
 								{/* You can also use a custom domain later. */}
 							</p>
 
@@ -113,7 +113,8 @@ export const UserSites = () => {
 								<label htmlFor="make-public">Show this site on dawdle.space</label>
 							</div>
 							<p>
-								Decide if you want your site to be visible in the site directory. This can be changed later.
+								Decide if you want your site to be visible in the site directory. This can be
+								changed later.
 							</p>
 						</div>
 						<button type="submit">Create your new site</button>

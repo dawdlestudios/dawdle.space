@@ -53,12 +53,12 @@ export const ClaimUsername = () => {
 		<main className={styles.main}>
 			<h2>{(newUser && `Almost there, ${newUser}!`) || " "}</h2>
 			<p>
-				You're here because you've been accepted to <strong>dawdle.space</strong>. Below, you can choose
-				your new password.
+				You're here because you've been accepted to <strong>dawdle.space</strong>. Below, you can
+				choose your new password.
 			</p>
 			<p>
-				You can find the terms ("rules") and privacy policy (which you've already agreed to by signing
-				up) at the bottom of the page.
+				You can find the terms ("rules") and privacy policy (which you've already agreed to by
+				signing up) at the bottom of the page.
 			</p>
 
 			<form onSubmit={handleSubmit}>

@@ -1,26 +1,49 @@
 {
-	"$schema": "https://biomejs.dev/schemas/1.4.1/schema.json",
-	"organizeImports": {
-		"enabled": true
+	"$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
+	"assist": {
+		"enabled": true,
+		"actions": {
+			"recommended": true,
+			"source": { "recommended": true, "organizeImports": "off" }
+		}
 	},
 	"formatter": {
 		"lineWidth": 100,
-		"indentStyle": "tab",
-		"indentWidth": 1
+		"indentStyle": "tab"
 	},
 	"linter": {
 		"enabled": true,
 		"rules": {
 			"recommended": true,
 			"suspicious": {
-				"noArrayIndexKey": "off"
+				"noArrayIndexKey": "off",
+				"noDuplicateProperties": "off"
+			},
+			"nursery": {
+				"useUniqueElementIds": "off"
 			},
 			"complexity": {
 				"noUselessFragments": "off"
+			},
+			"style": {
+				"noDescendingSpecificity": "off"
 			}
 		}
 	},
 	"files": {
-		"ignore": ["**/node_modules/*", "**/dist/*", "**/spec.ts*", "**/.astro/*"]
-	}
+		"includes": ["**", "!**/dist/*", "!**/spec.ts*", "!**/.astro/*"]
+	},
+	"overrides": [
+		{
+			"includes": ["**/*.astro"],
+			"linter": {
+				"rules": {
+					"correctness": {
+						"noUnusedImports": "off",
+						"noUnusedVariables": "off"
+					}
+				}
+			}
+		}
+	]
 }

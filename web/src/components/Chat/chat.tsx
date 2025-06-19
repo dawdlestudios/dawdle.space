@@ -13,7 +13,7 @@ const isHttp = (url: string) => {
 	try {
 		const { href } = new URL(url);
 		return /^https?:\/\//i.test(href) && href;
-	} catch (err) {
+	} catch (_err) {
 		return false;
 	}
 };
@@ -26,6 +26,7 @@ export const Chat = () => {
 		setLoaded(true);
 	}, []);
 
+	// biome-ignore-start lint/correctness/useHookAtTopLevel: wrong
 	if (typeof window !== "undefined")
 		useLayoutEffect(() => {
 			if (!messages.length) return;
@@ -34,6 +35,7 @@ export const Chat = () => {
 				chat.scrollTo(0, chat.scrollHeight);
 			}
 		}, [messages]);
+	// biome-ignore-end lint/correctness/useHookAtTopLevel: wrong
 
 	const messagesByDay: [string, ChatMessage[]][] = messages.reduce(
 		(acc, msg) => {
@@ -119,7 +121,7 @@ const ChatMessageComp = ({ message }: { message: ChatMessage }) => {
 
 			<div className={styles.message}>
 				{message.message.split(" ").map((line, i) => {
-					let formattedMessage: ReactElement | undefined = undefined;
+					let formattedMessage: ReactElement | undefined;
 					if (isHttp(line))
 						formattedMessage = (
 							<a href={line} target="_blank" rel="noopener noreferrer" key={`link-${i}`}>
@@ -158,6 +160,7 @@ const ChatMessageComp = ({ message }: { message: ChatMessage }) => {
 const socketUrl = () =>
 	`${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.host}/api/chat`;
 
+// biome-ignore-start lint/correctness/useHookAtTopLevel: wrong
 const useChat = () => {
 	if (typeof window === "undefined") {
 		return {
@@ -196,7 +199,7 @@ const useChat = () => {
 			let msg: ChatResponse;
 			try {
 				msg = JSON.parse(event.data);
-			} catch (e) {
+			} catch (_e) {
 				return;
 			}
 
@@ -261,3 +264,4 @@ const useChat = () => {
 		changeRoom: () => {},
 	};
 };
+// biome-ignore-end lint/correctness/useHookAtTopLevel: wrong

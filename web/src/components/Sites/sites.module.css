@@ -40,7 +40,7 @@ main.main {
 
 		> a,
 		> button {
-			padding: .1rem .7rem;
+			padding: 0.1rem 0.7rem;
 			flex: 1;
 			min-height: 5rem;
 			display: flex;

@@ -33,7 +33,11 @@ dav-server={version="0.8", features=["actix-web", "actix-compat"]}
 # web dependencies
 addr="0.15"
 
-reqwest={version="0.12", default-features=false, features=["json", "cookies", "rustls-tls-webpki-roots-no-provider"]}
+reqwest={version="0.12", default-features=false, features=[
+    "json",
+    "cookies",
+    "rustls-tls-webpki-roots-no-provider",
+]}
 rustls={version="0.23", features=["aws_lc_rs"]}
 
 sqlx={version="0.8", features=["runtime-tokio", "sqlite", "time"]}
@@ -42,7 +46,7 @@ actix-files="0.6"
 utoipa={version="5.3", features=["time", "actix_extras"]}
 utoipa-actix-web={version="0.1"}
 
-fantoccini={version="0.21", default-features=false, features=["rustls-tls"]}
+fantoccini={version="0.22", default-features=false, features=["rustls-tls"]}
 image={version="0.25", default-features=false, features=["avif", "png", "rayon"]}
 
 [profile.dev.package.sqlx-macros]

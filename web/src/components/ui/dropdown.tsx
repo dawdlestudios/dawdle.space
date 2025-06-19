@@ -9,7 +9,10 @@ type DropdownField = {
 export const Dropdown = ({
 	fields,
 	children,
-}: { fields: (DropdownField | false)[]; children: React.ReactNode }) => {
+}: {
+	fields: (DropdownField | false)[];
+	children: React.ReactNode;
+}) => {
 	return (
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger>{children}</DropdownMenu.Trigger>

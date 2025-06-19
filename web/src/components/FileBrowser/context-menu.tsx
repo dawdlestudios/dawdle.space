@@ -68,7 +68,10 @@ export const ContextMenu = (props: {
 							}}
 						/>
 					</Dialog>
-					<Dialog title={`Delete ${target.type === "directory" ? "Folder" : "File"}`} ref={refDelete}>
+					<Dialog
+						title={`Delete ${target.type === "directory" ? "Folder" : "File"}`}
+						ref={refDelete}
+					>
 						<DeleteDialog
 							file={target}
 							onDelete={() => {
@@ -149,7 +152,7 @@ export const ContextMenu = (props: {
 									</div>
 								</RadixContextMenu.Item>
 								<RadixContextMenu.Item
-									onSelect={(e) => refDelete.current?.setOpen(true)}
+									onSelect={(_e) => refDelete.current?.setOpen(true)}
 									className={styles.ContextMenuItem}
 								>
 									{target.type === "directory" ? "Delete Folder" : "Delete File"}

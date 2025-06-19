@@ -7,7 +7,7 @@ import styles from "./styles.module.css";
 
 import { useSite } from "../../utils/hooks";
 import { useQuery } from "../../utils/query";
-import { createWebDavClient, stripPrefix, useSiteProps, useWebDav } from "../../utils/webdav";
+import { createWebDavClient, stripPrefix, useSiteProps } from "../../utils/webdav";
 import { ContextMenu } from "./context-menu";
 import { type FileType, icons } from "./icons";
 import { formatSize, sortFiles } from "./util";
@@ -57,7 +57,9 @@ export const FileBrowser = () => {
 
 		const promises = Array.from(e.target.files)
 			.filter((file) => file)
-			.map(async (file) => webdav?.putFileContents(`${dir}/${file.name}`, await file.arrayBuffer()));
+			.map(async (file) =>
+				webdav?.putFileContents(`${dir}/${file.name}`, await file.arrayBuffer()),
+			);
 
 		e.target.value = "";
 		Promise.all(promises).then(() => refetch());
@@ -183,7 +185,11 @@ const Directory = (props: {
 const BreadCrumbs = ({
 	path,
 	site,
-}: { site: string; path: string; goto: (path: string) => void }) => {
+}: {
+	site: string;
+	path: string;
+	goto: (path: string) => void;
+}) => {
 	const crumbs = path.split("/").filter((crumb) => crumb !== "");
 
 	return (
@@ -207,7 +213,11 @@ const FileBrowserItem = ({
 	file,
 	fileIndex,
 	onClick,
-}: { file: DawdleFile; fileIndex: number; onClick: () => void }) => {
+}: {
+	file: DawdleFile;
+	fileIndex: number;
+	onClick: () => void;
+}) => {
 	return (
 		<button type="button" className={styles.item} onClick={onClick} data-file={fileIndex}>
 			{file.name === ".." ? (

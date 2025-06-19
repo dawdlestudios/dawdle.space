@@ -12,7 +12,9 @@ export const SettingsHeader = () => {
 		<main id="settings" className={styles.header}>
 			<h2>
 				{(username && `Welcome ${username}!`) || <>&nbsp;</>}
-				{username && <a href={`https://${username}.dawdle.space`}>&#10697; {username}.dawdle.space</a>}
+				{username && (
+					<a href={`https://${username}.dawdle.space`}>&#10697; {username}.dawdle.space</a>
+				)}
 			</h2>
 			{/* <p>
 				You can upload files to your account below. Alternatively, you can also connect via{" "}
@@ -150,8 +152,8 @@ export const UserSettings = () => {
 			<form className={styles.formInline} onSubmit={onMinecraftUsernameChange}>
 				<h2>Delete Account</h2>
 				<p>
-					Send us a message at <a href="mailto:contact@dawdle.space">contact@dawdle.space</a> to delete
-					your account.
+					Send us a message at <a href="mailto:contact@dawdle.space">contact@dawdle.space</a> to
+					delete your account.
 				</p>
 			</form>
 		</div>

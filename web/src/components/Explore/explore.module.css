@@ -43,7 +43,7 @@ ul.sites {
 			bottom: 0;
 			left: 0;
 			right: 0;
-			padding: .5rem .7rem;
+			padding: 0.5rem 0.7rem;
 			opacity: 0.1;
 			transition: opacity 0.1s ease-in-out;
 

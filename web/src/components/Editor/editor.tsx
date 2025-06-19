@@ -65,7 +65,7 @@ export const Editor = () => {
 			const now = new Date();
 			saveFile(path, newData, webdav).then(() => {
 				queryClient.invalidateQueries({ queryKey: ["webdav", path, site?.id] });
-				setTimeout(() => setIsSaving(false), Math.max(0, 200 - (new Date().getTime() - now.getTime())));
+				setTimeout(() => setIsSaving(false), Math.max(0, 200 - (Date.now() - now.getTime())));
 			});
 		},
 		[webdav, path, site],
@@ -108,15 +108,20 @@ export const Editor = () => {
 			<div>
 				{loadingMessage && loadingMessage}
 				{error && !loadingMessage && <div className={styles.error}>{error.message}</div>}
-				{webdav && data !== undefined && !isLoading && !fileIsLoading && !error && !loadingMessage && (
-					<EditorInner
-						initialData={data ?? ""}
-						path={path}
-						ref={editorRef}
-						webdav={webdav}
-						saveData={(data) => saveData(data)}
-					/>
-				)}
+				{webdav &&
+					data !== undefined &&
+					!isLoading &&
+					!fileIsLoading &&
+					!error &&
+					!loadingMessage && (
+						<EditorInner
+							initialData={data ?? ""}
+							path={path}
+							ref={editorRef}
+							webdav={webdav}
+							saveData={(data) => saveData(data)}
+						/>
+					)}
 			</div>
 		</div>
 	);
@@ -168,7 +173,7 @@ export const EditorInner = ({
 		}
 
 		editor.setModel(null);
-		let lang = undefined;
+		let lang: string | undefined;
 		if (zshFiles.includes(path.split("/").pop() as string)) lang = "shell";
 
 		editor.setModel(monaco.editor.createModel(initialData || "", lang, monaco.Uri.file(path)));
