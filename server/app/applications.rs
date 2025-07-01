@@ -115,7 +115,7 @@ impl AppApplications {
     pub async fn apply(&self, username: &str, email: &str, about: &str) -> Result<()> {
         let username = username.to_lowercase();
         if !is_valid_username(&username) {
-            log::error!("invalid username: {}", username);
+            log::error!("invalid username: {username}");
             bail!("invalid username");
         }
 

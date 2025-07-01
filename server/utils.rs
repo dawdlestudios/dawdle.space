@@ -21,9 +21,9 @@ impl<T: Debug> Debug for RingBuffer<T> {
         write!(f, "RingBuffer {{ buffer: [")?;
         for (i, item) in self.buffer.iter().enumerate() {
             if i == self.start {
-                write!(f, "({:?}), ", item)?;
+                write!(f, "({item:?}), ")?;
             } else {
-                write!(f, "{:?}, ", item)?;
+                write!(f, "{item:?}, ")?;
             }
         }
         write!(

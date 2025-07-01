@@ -15,7 +15,7 @@ pub async fn handler(
     req: DavRequest,
 ) -> Result<Either<impl Responder, HttpResponse>, ErrorResponse> {
     let path = req.request.uri().path().to_string();
-    println!("path: {}", path);
+    println!("path: {path}");
     let path = path
         .strip_prefix("/api/webdav/")
         .ok_or_else(|| ErrorResponse::bad_request("invalid path"))?;

@@ -72,7 +72,7 @@ impl Config {
         let config = std::fs::read_to_string(config_path.clone())?;
         let config: Config = toml::from_str(&config)?;
 
-        log::info!("loaded config from {}", config_path);
+        log::info!("loaded config from {config_path}");
         Ok(config)
     }
 
