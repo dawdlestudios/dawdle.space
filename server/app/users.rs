@@ -158,17 +158,17 @@ impl AppUsers {
         .fetch_optional(&mut *tx)
         .await?;
 
-        if let Some(rec) = existing_user {
-            if rec.username != username {
-                return Err(eyre!("minecraft user already registered"));
-            }
+        if let Some(rec) = existing_user
+            && rec.username != username
+        {
+            return Err(eyre!("minecraft user already registered"));
         }
 
         // Remove old if different
-        if let Some(old_uuid) = user.minecraft_uuid {
-            if old_uuid != new_minecraft_user.id {
-                minecraft::whitelist_remove(&old_uuid, &self.config.minecraft).await?;
-            }
+        if let Some(old_uuid) = user.minecraft_uuid
+            && old_uuid != new_minecraft_user.id
+        {
+            minecraft::whitelist_remove(&old_uuid, &self.config.minecraft).await?;
         }
 
         sqlx::query!(
