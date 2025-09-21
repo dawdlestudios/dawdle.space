@@ -93,8 +93,8 @@ export const ContextMenu = (props: {
 						if (!(e.target instanceof HTMLElement)) return setTarget(null);
 
 						const file_idx = e.target?.getAttribute("data-file");
-						if (file_idx && props.items.length > Number.parseInt(file_idx)) {
-							const file = props.items[Number.parseInt(file_idx)].file;
+						if (file_idx && props.items.length > Number.parseInt(file_idx, 10)) {
+							const file = props.items[Number.parseInt(file_idx, 10)].file;
 							setTarget(file);
 							return;
 						}

@@ -1,49 +1,50 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.1.1/schema.json",
-	"assist": {
-		"enabled": true,
-		"actions": {
-			"recommended": true,
-			"source": { "recommended": true, "organizeImports": "off" }
-		}
-	},
-	"formatter": {
-		"lineWidth": 100,
-		"indentStyle": "tab"
-	},
-	"linter": {
-		"enabled": true,
-		"rules": {
-			"recommended": true,
-			"suspicious": {
-				"noArrayIndexKey": "off",
-				"noDuplicateProperties": "off"
-			},
-			"nursery": {
-				"useUniqueElementIds": "off"
-			},
-			"complexity": {
-				"noUselessFragments": "off"
-			},
-			"style": {
-				"noDescendingSpecificity": "off"
-			}
-		}
-	},
-	"files": {
-		"includes": ["**", "!**/dist/*", "!**/spec.ts*", "!**/.astro/*"]
-	},
-	"overrides": [
-		{
-			"includes": ["**/*.astro"],
-			"linter": {
-				"rules": {
-					"correctness": {
-						"noUnusedImports": "off",
-						"noUnusedVariables": "off"
-					}
-				}
-			}
-		}
-	]
+  "$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "recommended": true,
+      "source": { "recommended": true, "organizeImports": "off" }
+    }
+  },
+  "formatter": {
+    "lineWidth": 100,
+    "indentStyle": "tab"
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "suspicious": {
+        "noArrayIndexKey": "off",
+        "noDuplicateProperties": "off"
+      },
+      "complexity": {
+        "noUselessFragments": "off",
+        "noImportantStyles": "off"
+      },
+      "style": {
+        "noDescendingSpecificity": "off"
+      },
+      "correctness": {
+        "useUniqueElementIds": "off"
+      }
+    }
+  },
+  "files": {
+    "includes": ["**", "!**/dist/*", "!**/spec.ts*", "!**/.astro/*"]
+  },
+  "overrides": [
+    {
+      "includes": ["**/*.astro"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedImports": "off",
+            "noUnusedVariables": "off"
+          }
+        }
+      }
+    }
+  ]
 }
