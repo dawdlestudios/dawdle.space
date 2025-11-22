@@ -5,7 +5,7 @@ import Layout from "../layouts/Layout.astro";
 <Layout title="Login">
   <main>
     <h1>
-      Login
+      Welcome back!
       <span data-login-error class="error"></span>
     </h1>
     <form id="loginform">
@@ -13,39 +13,38 @@ import Layout from "../layouts/Layout.astro";
       <input required type="text" name="username" id="username" />
       <label for="password">Password</label>
       <input required type="password" name="password" id="password" />
-      <input type="submit" value="Login" />
+      <div>
+        <input type="submit" value="Login" />
+        {" "}or join <a href="/join">here</a>
+      </div>
     </form>
-    <!-- <div class="ssh">
-      <p>
-        If you've added your SSH key to your account, you can also connect to
-        your account using the <a href="/wiki/ssh"><kbd>ssh</kbd></a> command.
-      </p>
-      <pre><code>$ ssh username@dawdle.space</code></pre>
-    </div> -->
   </main>
 </Layout>
 
 <script>
-import { api } from "../api";
+  import { api } from "../api";
 
   const handleSubmit = (e: SubmitEvent) => {
     e.preventDefault();
     e.stopPropagation();
     const formData = new FormData(e.currentTarget as HTMLFormElement);
 
-    api["/api/auth/login"].post({
-      json: {
-        username: formData.get("username") as string,
-        password:  formData.get("password") as string,
-      }
-    }).json()
-    .then((res) => {
-      if (!res.success) return Promise.reject();
-      window.location.href = "/me";
-    }).catch(() => {
-      const error = document.querySelector("[data-login-error]");
+    api["/api/auth/login"]
+      .post({
+        json: {
+          username: formData.get("username") as string,
+          password: formData.get("password") as string,
+        },
+      })
+      .json()
+      .then((res) => {
+        if (!res.success) return Promise.reject();
+        window.location.href = "/me";
+      })
+      .catch(() => {
+        const error = document.querySelector("[data-login-error]");
         error!.textContent = "Invalid username or password";
-    });
+      });
 
     e.preventDefault();
   };
@@ -70,12 +69,21 @@ import { api } from "../api";
   }
 
   h1 {
-    margin-bottom: 1rem;
+    margin-bottom: 0.4rem;
+    display: flex;
+    flex-direction: column;
 
     .error {
       color: red;
       font-size: 0.8rem;
+      height: 1rem;
+      margin-top: -0.4rem;
     }
+  }
+
+  input {
+    font-size: 1.2rem;
+    margin-bottom: 1.2rem;
   }
 
   form {

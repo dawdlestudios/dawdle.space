@@ -26,6 +26,9 @@ pub async fn screenshot(sites: Vec<ScreenshotSite>) -> Result<()> {
             "args": [
                 "--headless",
             ],
+            "prefs": {
+                "layout.css.prefers-color-scheme.content-override": 0,
+            }
         }
     });
 

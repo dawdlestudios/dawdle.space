@@ -27,7 +27,7 @@ export const Explore = () => {
 							>
 								<img src={`/api/screenshot/${site.id}`} aria-label="site screenshot" />
 								<div className={styles.info}>
-									<h2>{site.customDomain || site.domain}</h2>
+									<h2>{site.customDomain || site.domain?.replace(".dawdle.space", "")}</h2>
 								</div>
 							</a>
 						</li>

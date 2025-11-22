@@ -1,4 +1,4 @@
-@font-face {
+/* @font-face {
 	font-family: "HP100LX6x8";
 	src: url("/fonts/HP_100LX_6x8.woff") format("woff");
 	font-display: block;
@@ -8,7 +8,10 @@
 	font-family: "HP100LX8x8";
 	src: url("/fonts/HP_100LX_8x8.woff") format("woff");
 	font-display: block;
-}
+} */
+
+@import "@fontsource/syne-mono";
+@import "@fontsource/unifontex";
 
 :root {
 	--background: #000100c4;
@@ -19,10 +22,10 @@
 	--heading: #e5e5e5;
 	--link-color: #ffffff;
 
-	--accent: #e9e8f0;
-	--border-color: var(--accent);
+	--accent: rgba(237, 238, 239, 0.903);
+	--border-color: rgba(255, 255, 255, 0.475);
 	--border-width: 2px;
-	--border-radius: 8px;
+	--border-radius: 5px;
 	--border: var(--border-width) solid var(--border-color);
 }
 
@@ -40,13 +43,32 @@ html {
 }
 
 html,
-button,
-input,
-select,
-textarea,
+p,
 code,
-pre {
-	font-family: "HP100LX6x8", monospace;
+pre,
+textarea,
+input,
+p a {
+	font-family: "UnifontEX", monospace;
+}
+
+button,
+input[type="submit"],
+input[type="button"],
+select,
+label,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a {
+	font-family: "Syne Mono", monospace;
+}
+
+label {
+	margin-bottom: -0.1rem;
 }
 
 #backgroundcontainer {

@@ -20,6 +20,7 @@ pub fn configure(config: &mut ServiceConfig) {
         .service(delete_application)
         .service(update_application_username)
         .service(get_users)
+        .service(get_sites)
         .service(delete_user);
 }
 

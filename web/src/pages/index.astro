@@ -1,9 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
 ---
+
 <!-- ground="linear-gradient(90deg, rgba(0, 0, 255, 0.04), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0), rgba(255, 0, 0, 0.04))" -->
 <Layout title="dawdle.space">
-<main>
+  <main>
     <pre>
 <span class="dawdle">    |              ||</span>
 <span class="dawdle"> ___| ___       ___||  ___ </span><span class="space">    ___  ___  ___  ___  ___</span>
@@ -12,34 +13,54 @@ import Layout from "../layouts/Layout.astro";
 <span class="dawdle">                           </span><span class="space">        |</span></pre>
     <p>
       <br />
-      <a href="/join">Join</a> to get you own space at <code>[username].dawdle.space</code> - a personal website
-      for your art, blogs, games, writing, and more.
+      <a href="/join">Join</a> to get you own space at <code
+        >[username].dawdle.space</code
+      > - a personal website for your art, blogs, games, writing, and more.
     </p>
     <p>
-      <br /><!-- You can find some of the sites on dawdle.space <a href="/explore">here</a>. -->
-      We also have a small <a href="/updates">update feed</a> if you want to see what's new.
+      <br
+      /><!-- You can find some of the sites on dawdle.space <a href="/explore">here</a>. -->
+      We also have a small <a href="/updates">update feed</a> if you want to see
+      what's new.
     </p>
   </main>
 </Layout>
 
 <style>
   @keyframes breathe {
-    0%   { opacity:1; }
-    50%  { opacity:0.1; }
-    100% { opacity:1; }
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.1;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 
   @keyframes flicker {
-    0%, 19.5%, 22%, 62.5%, 64%, 64.5%, 70%, 100% {
-        opacity: 0.99;
-        filter: drop-shadow(0px 0px 5px #ff2802);
+    0%,
+    19.5%,
+    22%,
+    62.5%,
+    64%,
+    64.5%,
+    70%,
+    100% {
+      opacity: 0.99;
+      filter: drop-shadow(0px 0px 5px #ff2802);
     }
-    20%, 21.5%, 63%, 63.5%, 65%, 69.5% {
-        opacity: 0.3;
-        filter: drop-shadow(0px 0px 0px #04ffff);
+    20%,
+    21.5%,
+    63%,
+    63.5%,
+    65%,
+    69.5% {
+      opacity: 0.3;
+      filter: drop-shadow(0px 0px 0px #04ffff);
     }
-}
-
+  }
 
   main {
     padding: 3rem 1rem;
@@ -56,16 +77,16 @@ import Layout from "../layouts/Layout.astro";
       color: var(--accent);
 
       > span {
-          filter: drop-shadow(0px 0px 3px #1badfc);
-          &.space {
-              animation: flicker 8s infinite alternate;
-          }
+        filter: drop-shadow(0px 0px 3px #1badfc);
+        &.space {
+          animation: flicker 8s infinite alternate;
+        }
       }
 
-      font-size: 17px;
-      letter-spacing: -4px;
-      line-height: 1.1em;
-
+      user-select: none;
+      letter-spacing: -2.4px;
+      font-size: 24px;
+      line-height: 0.9em;
 
       @media (max-width: 600px) {
         font-size: calc(3vw);
@@ -74,13 +95,13 @@ import Layout from "../layouts/Layout.astro";
 
     code {
       background: var(--code-background);
-      padding: .2rem .3rem;
+      padding: 0.2rem 0.3rem;
       border-radius: 0.3rem;
     }
 
     p {
       margin-top: 0.5rem;
-      line-height: 1.7;
+      line-height: 1.4;
     }
 
     ul {
