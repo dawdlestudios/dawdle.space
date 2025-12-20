@@ -35,7 +35,7 @@ main.main {
 		}
 
 		> button {
-			backdrop-filter: blur(2px);
+			backdrop-filter: brightness(0.3) blur(2px);
 		}
 
 		> a,
@@ -81,6 +81,11 @@ main.main {
 	flex-direction: column;
 	height: 100%;
 
+	label {
+		font-size: 1.23rem;
+		margin-left: 0.3rem;
+	}
+
 	> div {
 		margin-top: 1rem;
 		display: flex;
@@ -88,8 +93,8 @@ main.main {
 	}
 
 	p {
-		font-size: 0.8rem;
 		margin-bottom: 1rem;
+		font-size: 1rem;
 	}
 
 	button {
@@ -98,6 +103,8 @@ main.main {
 		background: none;
 		padding: 0.5rem;
 		color: #fff;
+		font-size: 1.1rem;
+		margin-top: 1rem;
 
 		&:hover {
 			color: #ffffff;

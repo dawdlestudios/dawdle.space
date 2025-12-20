@@ -50,10 +50,10 @@ impl AppSessions {
         let session = sqlx::query_as!(
             Session,
             r#"
-            SELECT 
-                username, 
-                created_at, 
-                last_active, 
+            SELECT
+                username,
+                created_at,
+                last_active,
                 logged_out
             FROM sessions WHERE session_token = ?
             "#,

@@ -33,7 +33,7 @@ export const UserSettings = () => {
 	});
 
 	const [changePasswordNote, setChangePasswordNote] = useState<string | null>(null);
-	const [changeMinecraftNote, setChangeMinecraftNote] = useState<string | null>(null);
+	const [_changeMinecraftNote, setChangeMinecraftNote] = useState<string | null>(null);
 
 	if (isLoading) {
 		return (
@@ -134,7 +134,7 @@ export const UserSettings = () => {
 				<div>{changePasswordNote && <p>{changePasswordNote}</p>}</div>
 			</form>
 
-			<form className={styles.formInline} onSubmit={onMinecraftUsernameChange}>
+			{/* <form className={styles.formInline} onSubmit={onMinecraftUsernameChange}>
 				<h2>
 					Game Servers
 					<input type="submit" value="Save" />
@@ -147,7 +147,7 @@ export const UserSettings = () => {
 					name="minecraftUsername"
 				/>
 				<div>{changeMinecraftNote && <p>{changeMinecraftNote}</p>}</div>
-			</form>
+			</form> */}
 
 			<form className={styles.formInline} onSubmit={onMinecraftUsernameChange}>
 				<h2>Delete Account</h2>

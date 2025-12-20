@@ -24,6 +24,10 @@ ul.sites {
 			width: 33.33%;
 		}
 
+		@media (min-width: 1000px) {
+			width: 25%;
+		}
+
 		img {
 			width: 100%;
 			height: 100%;

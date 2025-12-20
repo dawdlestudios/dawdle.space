@@ -86,11 +86,6 @@ export const UserSites = () => {
 						className={styles.form}
 					>
 						<div>
-							<p>
-								Feel free to create as many sites as you want, just make sure to give them a unique
-								name.
-							</p>
-
 							<div>
 								<input
 									id="site-name"
@@ -112,10 +107,6 @@ export const UserSites = () => {
 								<input id="make-public" type="checkbox" name="make-public" defaultChecked />
 								<label htmlFor="make-public">Show this site on dawdle.space</label>
 							</div>
-							<p>
-								Decide if you want your site to be visible in the site directory. This can be
-								changed later.
-							</p>
 						</div>
 						<button type="submit">Create your new site</button>
 					</form>

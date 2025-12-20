@@ -41,10 +41,11 @@ form.keys {
 }
 
 form.formInline {
-	margin-top: 1rem;
 	p {
 		margin-bottom: 1rem;
 	}
+	max-width: 30rem;
+	width: 100%;
 
 	display: flex;
 	flex-direction: column;
@@ -67,6 +68,11 @@ form.formInline {
 	padding: 2.5rem;
 	padding-bottom: 2rem;
 	padding-top: 1rem;
+	flex: 1;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
 
 	h2 {
 		margin-top: 1.5rem;
@@ -75,7 +81,9 @@ form.formInline {
 		justify-content: space-between;
 
 		input {
-			margin: 0;
+			font-size: 1rem;
+			margin-top: 0;
+			margin-bottom: 0;
 		}
 
 		button {

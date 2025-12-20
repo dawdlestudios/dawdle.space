@@ -48,14 +48,11 @@ code,
 pre,
 textarea,
 input,
+button,
 p a {
 	font-family: "UnifontEX", monospace;
 }
 
-button,
-input[type="submit"],
-input[type="button"],
-select,
 label,
 h1,
 h2,
@@ -130,7 +127,7 @@ textarea {
 	border: 1px solid #ccc;
 	border-radius: var(--border-radius);
 	background-color: #ffffff1b;
-	padding: 0.4rem 0.6rem;
+	padding: 0.4rem 0.7rem;
 	color: #fff;
 }
 

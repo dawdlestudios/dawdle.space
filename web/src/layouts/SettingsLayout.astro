@@ -3,7 +3,7 @@ import { SettingsHeader } from "../components/Settings";
 import Layout from "./Layout.astro";
 
 interface Props {
-	title: string;
+  title: string;
 }
 const { title } = Astro.props;
 const url = new URL(Astro.request.url);
@@ -51,8 +51,6 @@ const url = new URL(Astro.request.url);
 </script>
 
 <style>
-  
-
   ul {
     display: flex;
     list-style: none;
@@ -61,16 +59,15 @@ const url = new URL(Astro.request.url);
     border-bottom: var(--border);
 
     li[data-active="true"] {
-      background: var(--border-color);
       a {
-        color: #141f28;
+        color: #fff;
         font-weight: 800;
       }
     }
 
     li {
       border-right: var(--border);
-      font-size: 0.8rem;
+      font-size: 1rem;
       display: flex;
       align-items: center;
 
