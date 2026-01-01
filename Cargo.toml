@@ -2,7 +2,7 @@
 name="dawdle-server"
 version="0.1.0"
 edition="2024"
-rust-version="1.90"
+rust-version="1.92"
 
 [[bin]]
 name="dawdle-server"
@@ -32,12 +32,7 @@ dav-server={version="0.8", features=["actix-web", "actix-compat"]}
 # web dependencies
 addr="0.15"
 
-reqwest={version="0.12", default-features=false, features=[
-    "json",
-    "cookies",
-    "rustls-tls-webpki-roots-no-provider",
-]}
-rustls={version="0.23", features=["aws_lc_rs"]}
+reqwest={version="0.13", default-features=false, features=["json", "cookies", "rustls"]}
 
 sqlx={version="0.8", features=["runtime-tokio", "sqlite", "time"]}
 actix-web={version="4.12", features=["cookies"]}

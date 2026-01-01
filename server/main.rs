@@ -15,9 +15,6 @@ use tokio::select;
 #[actix_web::main]
 async fn main() -> eyre::Result<()> {
     env_logger::builder().filter_level(LevelFilter::Info).init();
-    rustls::crypto::aws_lc_rs::default_provider()
-        .install_default()
-        .expect("Failed to install crypto provider");
 
     let config = config::Config::load()?;
     let app = App::new(config.clone()).await?;
