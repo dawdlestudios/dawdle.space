@@ -7,9 +7,10 @@ main.main {
 		padding: 0;
 		list-style: none;
 		margin-bottom: 1rem;
-		display: flex;
-		flex-direction: column;
+
+		display: grid;
 		gap: 1rem;
+		grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
 	}
 
 	li.site {

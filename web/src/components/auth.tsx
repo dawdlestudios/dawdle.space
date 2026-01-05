@@ -3,18 +3,10 @@ const username = getUser();
 
 export const LoginLink = () => {
 	if (username) {
-		return (
-			<li className="login">
-				<a href="/me">{username}</a>
-			</li>
-		);
+		return <a href="/me">{username}</a>;
 	}
 
-	return (
-		<li className="login">
-			<a href="/login">login</a>
-		</li>
-	);
+	return <a href="/login">login</a>;
 };
 
 export const Username = () => {

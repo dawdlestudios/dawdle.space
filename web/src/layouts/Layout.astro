@@ -30,7 +30,9 @@ const url = new URL(Astro.request.url);
     <!-- <li data-active={url.pathname.startsWith("/chat")}>
       <a href="/chat">chat</a>
     </li> -->
-    <LoginLink client:only="react" transition:persist />
+    <li class="login">
+      <LoginLink client:only="react" transition:persist />
+    </li>
   </ul>
   <div class="page">
     <slot />
@@ -55,64 +57,55 @@ const url = new URL(Astro.request.url);
     }
 
     .tabs {
+      display: grid;
+      grid-template-columns: repeat(3, max-content) 1fr max-content;
       background: var(--background);
-      display: flex;
-      list-style: none;
-      overflow: hidden;
-      padding: 0;
-      margin: 0;
       border: var(--border);
       border-top-left-radius: var(--border-radius);
       border-top-right-radius: var(--border-radius);
       border-bottom: none;
-      height: fit-content;
+      margin: 0;
+      padding: 0;
+      list-style: none;
 
-      :global(li a) {
-        padding: 0 0.9rem;
+      li {
+        padding: 0.5rem 0;
+      }
+
+      li :global(a) {
+        padding: 0.5rem 0.9rem;
         color: var(--text-dark);
         font-weight: 400;
         text-decoration: none;
-
         &:hover {
           color: #fff;
         }
       }
 
-      :global(li) {
-        &[data-active="true"] {
-          /* background: var(--accent); */
-          a {
-            color: #fff;
-            font-weight: 600;
-          }
-        }
-
-        padding: 0.5rem 0;
-        /* border-right: var(--border); */
+      li[data-active="true"] :global(a) {
+        color: #fff;
+        font-weight: 600;
       }
 
-      :global(.login) {
-        margin-left: auto;
-        border-right: none;
+      .login {
+        grid-column: -1;
       }
 
       @media (max-width: 600px) {
-        justify-content: space-around;
-        min-width: 100%;
-        max-width: calc(100vw - 2rem);
+        grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+        justify-items: stretch;
+
+        .login {
+          grid-column: unset;
+        }
 
         :global(li) {
           text-align: center;
-          flex: 1;
-          border-right: none;
           margin: 0;
-          &:last-of-type {
-            margin-left: 0;
-          }
+        }
 
-          a {
-            padding: 0;
-          }
+        :global(li a) {
+          padding: 0.5rem 0;
         }
       }
     }
